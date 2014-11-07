@@ -13,6 +13,9 @@
     },
     "async/async.d.ts": {
       "commit": "b9b6d6b3d5b69349c014f564895cdf6d585ae09b"
+    },
+    "mysql/mysql.d.ts": {
+      "commit": "b9b6d6b3d5b69349c014f564895cdf6d585ae09b"
     }
   }
 }
