@@ -3,7 +3,7 @@ export function addRoutes(metaData: utils.MetaDataBuilder) {
   
   metaData.addFrontendRoute({
     idPath: ["dashboard", "events", "createEvent"],
-    component: "CreateEvenPage",
+    component: "CreateEventPage",
     name: "createEventPage",
     path: "create",
   });

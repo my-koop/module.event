@@ -1,7 +1,7 @@
 function addRoutes(metaData) {
     metaData.addFrontendRoute({
         idPath: ["dashboard", "events", "createEvent"],
-        component: "CreateEvenPage",
+        component: "CreateEventPage",
         name: "createEventPage",
         path: "create"
     });
