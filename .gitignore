@@ -27,5 +27,6 @@ node_modules
 # Users Environment Variables
 .lock-wscript
 *.sublime-workspace
+/typings/mysql*
 /typings/mykoop*
 !/typings/mykoop-event

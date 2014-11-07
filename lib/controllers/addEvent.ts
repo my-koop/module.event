@@ -6,10 +6,10 @@ function addEvent(req: express.Request, res: express.Response) {
   var self: mkevent.Module = this;
   var data = {        
     type        : req.param("type"),
-    startDate   : req.param("startDate"),
-    endDate     : req.param("endDate"),
-    startAmount : req.param("startAmount"),
-    endAmount   : req.param("endAmount")
+    startDate   : new Date(req.param("startDate")),
+    endDate     : new Date(req.param("endDate") || null),
+    startAmount : parseFloat(req.param("startAmount")) || null,
+    endAmount   : parseFloat(req.param("endAmount")) || null
   };
 
   self.addEvent(data, function(err) {
