@@ -49,13 +49,13 @@ var CreateEventPage = React.createClass({
       if(err) {
         console.error(err);
         return self.setState({
-          errorMessage: __("inventory::event_new", {context:"failed"}),
+          errorMessage: __("inventory::eventNew", {context:"failed"}),
           success: false
         });
       }
       return self.setState({
         errorMessage: null,
-        success: __("inventory::event_new", {context:"success"})
+        success: __("inventory::eventNew", {context:"success"})
       });
     });
   },

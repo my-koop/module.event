@@ -4,17 +4,24 @@
 // Definitions: https://github.com/my-koop/type.definitions
 
 /// <reference path="../mykoop/mykoop.d.ts" />
+/// <reference path="./interfaces.d.ts" />
+
 declare module mkevent {
 
-  export interface ModuleClass1 {
-    value: string;
-    id: number;
-  }
   export interface Module extends mykoop.IModule {
-    method1(
-      inParam: {id:number; value:string},
-      callback: (err: Error, res ?: ModuleClass1) => void
-    ): void;
+    addEvent(
+      updateData: EventInterfaces.AddEventData,
+      callback: (err: Error) => void
+    );
+  }
+
+  export interface Event {
+    id: number;
+    type: string;
+    startDate : Date;
+    endDate : Date;
+    startAmount : number;
+    endAmount : number;
   }
 
 }

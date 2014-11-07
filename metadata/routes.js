@@ -1,9 +1,9 @@
 function addRoutes(metaData) {
     metaData.addFrontendRoute({
-        idPath: ["public", "example"],
-        component: "Component1",
-        name: "example",
-        path: "/example"
+        idPath: ["dashboard", "events", "createEvent"],
+        component: "CreateEvenPage",
+        name: "createEventPage",
+        path: "create"
     });
 }
 exports.addRoutes = addRoutes;
