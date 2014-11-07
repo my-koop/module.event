@@ -4,11 +4,12 @@ var logger = getLogger(module);
 
 function addEvent(req: express.Request, res: express.Response) {
   var self: mkevent.Module = this;
-  var data = {
-    // name: req.param("name"),
-    // code: parseInt(req.param("code")),
-    // price: parseFloat(req.param("price")),
-    // threshold: parseInt(req.param("threshold"))
+  var data = {        
+    type        : req.param("type"),
+    startDate   : req.param("startDate"),
+    endDate     : req.param("endDate"),
+    startAmount : req.param("startAmount"),
+    endAmount   : req.param("endAmount")
   };
 
   self.addEvent(data, function(err) {

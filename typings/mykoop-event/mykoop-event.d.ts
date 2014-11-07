@@ -25,4 +25,3 @@ declare module mkevent {
   }
 
 }
-

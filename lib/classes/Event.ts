@@ -10,8 +10,8 @@ class Event implements mkevent.Event {
   constructor(row: any) {
     this.id           = Number(row.id);
     this.type         = row.type;
-    this.startDate    = Date(row.startDate);
-    this.endDate      = Date(row.endDate);
+    this.startDate    = row.startDate;
+    this.endDate      = row.endDate;
     this.startAmount  = Number(row.startAmount) || 0.00;
     this.endAmount    = Number(row.endAmount) || 0.00;
   }

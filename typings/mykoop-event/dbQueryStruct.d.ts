@@ -1,12 +1,10 @@
-declare module EventInterfaces {
+declare module EventDbQueryStruct {
 
-  export interface AddEventData {
-  	type            : string;
+  export interface EventData {
+	type            : string;
 	startDate       : Date;
 	endDate         : Date;
 	startAmount     : number;
 	endAmount       : number;
   }
-
-
 }

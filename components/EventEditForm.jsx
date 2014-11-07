@@ -1,11 +1,9 @@
 var React    = require("react/addons");
 var BSInput  = require("react-bootstrap/Input");
 var BSAlert  = require("react-bootstrap/Alert");
-var MKEvent  = require("../lib/classes/Event");
-
 var actions  = require("actions");
-var _  = require("lodash");
-var __ = require("language").__;
+var _        = require("lodash");
+var __       = require("language").__;
 
 var EventEditForm = React.createClass({
   // Decided for a one layer linkedState, because much simpler and faster
@@ -14,7 +12,7 @@ var EventEditForm = React.createClass({
 
   propTypes: {
     event: React.PropTypes.shape({
-      type        : React.PropTypes.oneOf(MKEvent.EventTypeEnum);
+      type        : React.PropTypes.oneOf(['workshop', 'cashier']),
       startDate   : React.PropTypes.object,
       endDate     : React.PropTypes.object,
       startAmount : React.PropTypes.number,
@@ -54,13 +52,13 @@ var EventEditForm = React.createClass({
         />
         {/*FIXME Datepicker with time */}
         <BSInput
-          type="number"
+          type="text"
           label={__("event::startDate")}
           valueLink={this.linkState("startDate")}
         />
         {/*FIXME Datepicker with time */}
         <BSInput
-          type="number"
+          type="text"
           label={__("event::endDate")}
           valueLink={this.linkState("endDate")}
         />
