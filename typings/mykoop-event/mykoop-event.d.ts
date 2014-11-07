@@ -4,6 +4,7 @@
 // Definitions: https://github.com/my-koop/type.definitions
 
 /// <reference path="../mykoop/mykoop.d.ts" />
+/// <reference path="./dbQueryStruct.d.ts" />
 /// <reference path="./interfaces.d.ts" />
 
 declare module mkevent {
