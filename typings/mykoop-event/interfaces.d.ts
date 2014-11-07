@@ -1,5 +1,4 @@
 declare module EventInterfaces {
-
   export interface AddEventData {
   	type            : string;
 	startDate       : Date;
@@ -7,6 +6,4 @@ declare module EventInterfaces {
 	startAmount     : number;
 	endAmount       : number;
   }
-
-
 }

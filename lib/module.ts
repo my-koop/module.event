@@ -27,6 +27,7 @@ class Module extends utils.BaseModule implements mkevent.Module {
 
     this.db.getConnection(function(err, connection, cleanup) {
       if(err) {
+        logger.error("Couldn't add new event");
         return callback(err);
       }
 

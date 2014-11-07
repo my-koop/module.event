@@ -9,7 +9,7 @@ var endpoints = {
             }
         },
         add: {
-            path: "/event/event",
+            path: "/event/",
             method: "post"
         },
         get: {
@@ -17,7 +17,7 @@ var endpoints = {
             method: "get"
         },
         remove: {
-            path: "/events/:id",
+            path: "/event/:id",
             method: "delete"
         }
     }
