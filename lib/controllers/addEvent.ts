@@ -15,7 +15,7 @@ function addEvent(req: express.Request, res: express.Response) {
   self.addEvent(data, function(err) {
     if (err) {
       logger.error(err);
-      return res.sendStatus(500);
+      return res.error(err);
     }
 
     res.end();

@@ -67,7 +67,7 @@ var EventEditForm = React.createClass({
           label={__("event::startAmount")}
           valueLink={this.linkState("startAmount")}
         />
-         <BSInput
+        <BSInput
           type="number"
           label={__("event::endAmount")}
           valueLink={this.linkState("endAmount")}

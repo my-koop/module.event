@@ -15,12 +15,9 @@ class Event implements mkevent.Event {
     this.startAmount  = Number(row.startAmount) || 0.00;
     this.endAmount    = Number(row.endAmount) || 0.00;
   }
-
-  public EventTypeEnum = {
-    workshop: "workshop",
-    cashier: "cashier"
-  };
 }
+
+//TODO Add eventTypeEnum
 
 
 export = Event;

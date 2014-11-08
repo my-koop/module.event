@@ -1,10 +1,9 @@
-import metaData = require("../../metadata/index");
-import utils = require("mykoop-utils");
-
-import validation = require("../validation/index");
+import metaData 	= require("../../metadata/index");
+import utils 		= require("mykoop-utils");
+import validation 	= require("../validation/index");
 
 // Controllers
-import addEvent                  = require ("./addEvent");
+import addEvent   	= require ("./addEvent");
 
 var endPoints = metaData.endpoints;
 

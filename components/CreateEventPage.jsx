@@ -1,17 +1,16 @@
-var React = require("react/addons");
-var BSButton = require("react-bootstrap/Button");
-var BSButtonGroup = require("react-bootstrap/ButtonGroup");
-var BSCol = require("react-bootstrap/Col");
-var BSAlert = require("react-bootstrap/Alert");
-var BSModal = require("react-bootstrap/Modal");
-
-var reactRouter = require("react-router");
-var routeData = require("dynamic-metadata").routes;
-
-var actions  = require("actions");
-var __ = require("language").__;
-
+var React           = require("react/addons");
+var BSButton        = require("react-bootstrap/Button");
+var BSButtonGroup   = require("react-bootstrap/ButtonGroup");
+var BSCol           = require("react-bootstrap/Col");
+var BSAlert         = require("react-bootstrap/Alert");
+var BSModal         = require("react-bootstrap/Modal");
+var reactRouter     = require("react-router");
+var routeData       = require("dynamic-metadata").routes;
+var actions         = require("actions");
+var __              = require("language").__;
+var MKSpinner       = require("mykoop-core/components/Spinner");
 var MKEventEditForm = require("./EventEditForm");
+var MKAlert         = require("mykoop-core/components/Alert");
 
 var CreateEventPage = React.createClass({
 
@@ -32,7 +31,7 @@ var CreateEventPage = React.createClass({
 
   onFinish: function() {
     reactRouter.transitionTo(
-      routeData.dashboard.children.event.children.event.name
+      //Fix me : Add correct route when it is created
     );
   },
 
@@ -43,19 +42,21 @@ var CreateEventPage = React.createClass({
       event: event
     });
 
+    MKSpinner.showGlobalSpinner();
     actions.event.add({
       data: event
     }, function(err, body) {
+      MKSpinner.hideGlobalSpinner();
       if(err) {
         console.error(err);
         return self.setState({
-          errorMessage: __("inventory::eventNew", {context:"failed"}),
-          success: false
+          errorMessage: __("event::eventNew", {context:"failed"}),
+          success: null
         });
       }
       return self.setState({
         errorMessage: null,
-        success: __("inventory::eventNew", {context:"success"})
+        success: __("event::eventNew", {context:"success"})
       });
     });
   },
@@ -87,11 +88,9 @@ var CreateEventPage = React.createClass({
     } else {
       body = (
         <div>
-          {this.state.errorMessage ?
-            <BSAlert bsStyle="danger">
-              {this.state.errorMessage}
-            </BSAlert>
-          : null}
+          <MKAlert bsStyle="danger" permanent>
+            {this.state.errorMessage}
+          </MKAlert>
           <MKEventEditForm event={this.state.event} ref="eventForm" />
           <BSButton
             onClick={this.onSave}
@@ -107,7 +106,7 @@ var CreateEventPage = React.createClass({
     return (
       <div>
         <h1>
-          {__("inventory::createEventWelcome")}
+          {__("event::createEventWelcome")}
         </h1>
         <BSCol md={4}>
           {body}
