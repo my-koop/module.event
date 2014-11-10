@@ -14,6 +14,10 @@ declare module mkevent {
       updateData: EventInterfaces.AddEventData,
       callback: (err: Error) => void
     );
+
+    getEvents(
+      callback: (err: Error, result: Event[]) => void
+    );
   }
 
   export interface Event {

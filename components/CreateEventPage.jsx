@@ -30,9 +30,7 @@ var CreateEventPage = React.createClass({
   },
 
   onFinish: function() {
-    reactRouter.transitionTo(
-      //Fix me : Add correct route when it is created
-    );
+    reactRouter.transitionTo(routeData.dashboard.children.event.list);
   },
 
   onSave: function() {
