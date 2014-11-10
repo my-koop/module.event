@@ -3,8 +3,8 @@ import utils 		= require("mykoop-utils");
 import validation 	= require("../validation/index");
 
 // Controllers
-import addEvent   	= require ("./addEvent");
-import getEvents     = require ("./getEvents");
+import addEvent   = require ("./addEvent");
+import getEvents  = require ("./getEvents");
 
 var endPoints = metaData.endpoints;
 
