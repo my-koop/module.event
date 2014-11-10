@@ -2,7 +2,7 @@
 var validate = require("mykoop-utils/common").validation;
 var Event    = require("../classes/Event");
 
-var updateDataConstraint = {
+var dataConstraint = {
   type: {
     presence: true
     //Fixme: add EventType restriction 
@@ -24,5 +24,5 @@ var updateDataConstraint = {
 }
 
 export function addEvent(obj) {
-  return validate(obj, updateDataConstraint);
+  return validate(obj, dataConstraint);
 }

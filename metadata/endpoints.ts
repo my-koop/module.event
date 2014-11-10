@@ -2,15 +2,15 @@ var endpoints = {
   event: {
     update: {
       path: "/event/:id",
-      method: "put",
-      validation: {
-        resolve: "validation",
-        value: "updateEvent"
-      }
+      method: "put"
     },
     add: {
       path: "/event/",
-      method: "post"
+      method: "post",
+      validation: {
+        resolve: "validation",
+        value: "addEvent"
+      }
     },
     get: {
       path: "/events/:id",
