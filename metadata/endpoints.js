@@ -1,12 +1,24 @@
 var endpoints = {
-    example: {
-        get1: {
-            path: "/example/:id",
-            method: "get",
+    event: {
+        update: {
+            path: "/event/:id",
+            method: "put"
+        },
+        add: {
+            path: "/event/",
+            method: "post",
             validation: {
                 resolve: "validation",
-                value: "get1"
+                value: "addEvent"
             }
+        },
+        get: {
+            path: "/events/:id",
+            method: "get"
+        },
+        remove: {
+            path: "/event/:id",
+            method: "delete"
         }
     }
 };
