@@ -9,7 +9,10 @@ var endPoints = metaData.endpoints;
 
 export function attachControllers(binder) {
    binder.attach(
-    {endPoint: endPoints.event.add},
+    {
+    	endPoint: endPoints.event.add,
+    	validation: validation.addEvent
+    },
     addEvent
   );
 }

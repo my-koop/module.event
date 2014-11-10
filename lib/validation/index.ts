@@ -1,44 +1,28 @@
 // see http://validatejs.org/ for documentation on how to do contraints
 var validate = require("mykoop-utils/common").validation;
-var __       = require("language").__;
 var Event    = require("../classes/Event");
 
 var updateDataConstraint = {
-  id: {
-    presence: true,
-    numericality: {
-      onlyInteger: true,
-      greaterThan: 0
-    }
-  },
   type: {
-    presence: true,
-    //Fixme add type restriction
-    message: __("event::illegalEventType")
+    presence: true
+    //Fixme: add EventType restriction 
   },
   startDate: {
-    presence: true,
-    message: __("event::startDateInvalid")
-  },
-  endDate: {
-    presence: true,
-    message: __("event::endDateInvalid")
+    presence: true
   },
   startAmount: {
     presence: true,
     numericality: {
-      greaterThan: 0,
-      message: __("event::startAmountInvalid")
+      greaterThan: 0
     }
   },
   endAmount: {
-    presence: true,
     numericality: {
-      greaterThan: 0,
-      message: __("event::endAmountInvalid")
+      greaterThan: 0
     }
   }
 }
-export function updateEvent(obj) {
+
+export function addEvent(obj) {
   return validate(obj, updateDataConstraint);
 }

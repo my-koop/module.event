@@ -17,7 +17,4 @@ class Event implements mkevent.Event {
   }
 }
 
-//TODO Add eventTypeEnum
-
-
 export = Event;
