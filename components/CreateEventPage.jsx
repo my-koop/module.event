@@ -30,7 +30,7 @@ var CreateEventPage = React.createClass({
   },
 
   onFinish: function() {
-    reactRouter.transitionTo(routeData.dashboard.children.event.list);
+    reactRouter.transitionTo(routeData.dashboard.children.events.children.list.name);
   },
 
   onSave: function() {

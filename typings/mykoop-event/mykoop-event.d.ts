@@ -16,7 +16,7 @@ declare module mkevent {
     );
 
     getEvents(
-      callback: (err: Error, result: Event[]) => void
+      callback: (err: Error, result?: Event[]) => void
     );
   }
 
