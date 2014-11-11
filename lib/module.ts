@@ -3,6 +3,7 @@ import controllerList   = require("./controllers/index");
 import getLogger        = require("mykoop-logger");
 import async            = require("async");
 import Event            = require("./classes/Event");
+import _                = require("lodash");
 
 var logger              = getLogger(module);
 var DatabaseError       = utils.errors.DatabaseError;
@@ -32,15 +33,7 @@ class Module extends utils.BaseModule implements mkevent.Module {
           // We cleanup already because we don't need the connection anymore.
           cleanup();
 
-          if (err) {
-            return callback(err);
-          }
-
-          for (var i in rows) {
-             events.push(new Event(rows[i]));
-          }
-
-          callback(null, events);
+          callback(err && new DatabaseError(err), _.map(rows, function(row) { return new Event(row); }));
       });
     });
   }
