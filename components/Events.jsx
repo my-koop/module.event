@@ -10,35 +10,25 @@ var actions           = require("actions");
 var Events = React.createClass({
   getInitialState: function() {
     return {
-      items: []
+      events: []
     }
   },
 
   componentWillMount: function() {
     var self = this;
 
-    actions.inventory.list(function (err, res) {
+    actions.event.list(function (err, res) {
       if (err) {
         console.error(err);
         return;
       }
 
-      self.setState({items: res.items});
+      self.setState({events: res.events});
     });
   },
 
-  actionsGenerator: function(item) {
+  actionsGenerator: function(event) {
     return [
-      {
-        icon: "edit",
-        tooltip: {
-          text: __("inventory::editItem"),
-          overlayProps: {
-            placement: "top"
-          }
-        },
-        modalTrigger: <MKItemEditModal item={item} />
-      },
       {
         icon: "remove",
         warningMessage: __("general::areYouSure"),
@@ -49,8 +39,8 @@ var Events = React.createClass({
           }
         },
         callback: function() {
-          var id = item.id;
-          actions.inventory.item.remove(
+          var id = event.id;
+          actions.event.remove(
           {
             data: {
               id : id
@@ -61,7 +51,7 @@ var Events = React.createClass({
               return;
             }
 
-            alert(__("inventory::removedItemMessage") + ": " + event.name);
+            alert(__("inventory::removedEventMessage") + ": " + event.name);
           });
         }
       }
@@ -74,17 +64,17 @@ var Events = React.createClass({
     // TableSorter Config
     var CONFIG = {
       columns: {
-        id: {
-          name: __("event::eventId"),
-        },
         name: {
           name: __("event::name"),
+        },
+        type: {
+          name: __("event::type"),
         },
         startDate: {
           name: __("event::startDate"),
         },
-        endingDate: {
-          name: __("event::endingDate"),
+        endDate: {
+          name: __("event::endDate"),
         },
         startAmount: {
           name: __("event::startAmount"),

@@ -30,10 +30,17 @@ class Module extends utils.BaseModule implements mkevent.Module {
         "SELECT ?? FROM ??",
         [Event.COLUMNS_DB, "event"],
         function(err, rows) {
-          // We cleanup already because we don't need the connection anymore.
           cleanup();
 
-          callback(err && new DatabaseError(err), _.map(rows, function(row) { return new Event(row); }));
+          if (err) {
+            return callback(err);
+          }
+
+          for (var i in rows) {
+             events.push(new Event(rows[i]));
+          }
+
+          callback(null, events);
       });
     });
   }
