@@ -40,6 +40,7 @@ class Module extends utils.BaseModule implements mkevent.Module {
 
   addEvent(data: EventInterfaces.AddEventData, callback: (err?: Error) => void) {
     var queryData: EventDbQueryStruct.EventData = {
+      name          : data.name,
       type          : data.type,
       startDate     : data.startDate,
       endDate       : data.endDate,

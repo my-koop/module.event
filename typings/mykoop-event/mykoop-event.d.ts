@@ -22,6 +22,7 @@ declare module mkevent {
 
   export interface Event {
     id: number;
+    name: string;
     type: string;
     startDate : Date;
     endDate : Date;
