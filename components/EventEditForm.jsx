@@ -1,9 +1,11 @@
-var React    = require("react/addons");
-var BSInput  = require("react-bootstrap/Input");
-var BSAlert  = require("react-bootstrap/Alert");
-var actions  = require("actions");
-var _        = require("lodash");
-var __       = require("language").__;
+var React             = require("react/addons");
+var BSInput           = require("react-bootstrap/Input");
+var BSAlert           = require("react-bootstrap/Alert");
+var actions           = require("actions");
+var _                 = require("lodash");
+var __                = require("language").__;
+var BSDropdownButton  = require("react-bootstrap/DropdownButton");
+var BSMenuItem        = require("react-bootstrap/MenuItem");
 
 var EventEditForm = React.createClass({
   // Decided for a one layer linkedState, because much simpler and faster
@@ -53,11 +55,10 @@ var EventEditForm = React.createClass({
           valueLink={this.linkState("name")}
         />
         {/*FIXME Use dropdown */}
-        <BSInput
-          type="text"
-          label={__("event::type")}
-          valueLink={this.linkState("type")}
-        />
+        <BSDropdownButton title={__("event::type")}>
+          <BSMenuItem key="workshop">{__("event::workshop")}</BSMenuItem>
+          <BSMenuItem key="cashier">{__("event::cashier")}</BSMenuItem>
+        </BSDropdownButton>
         {/*FIXME Datepicker with time */}
         <BSInput
           type="text"
