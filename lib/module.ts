@@ -3,7 +3,6 @@ import controllerList   = require("./controllers/index");
 import getLogger        = require("mykoop-logger");
 import async            = require("async");
 import Event            = require("./classes/Event");
-import _                = require("lodash");
 
 var logger              = getLogger(module);
 var DatabaseError       = utils.errors.DatabaseError;
