@@ -18,6 +18,11 @@ declare module mkevent {
     getEvents(
       callback: (err: Error, result?: Event[]) => void
     );
+
+    deleteEvent(
+      idEvent : Number,
+      callback: (err: Error, result: Event[]) => void
+    );
   }
 
   export interface Event {
