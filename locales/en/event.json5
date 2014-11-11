@@ -1,3 +1,14 @@
 {
-
+  eventNew_failed: "The event couldn't be added",
+  eventNew_success: "The event was added",
+  createEventWelcome: "Creating an event",
+  type : "Type",
+  startDate : "Start date",
+  endDate : "End date",
+  startAmount : "Start amount",
+  endAmount : "End amount", 
+  workshop : "Workshop",
+  cashier : "Cashier", 
+  removedEventMessage : "Event was removed",
+  newEvent: "Add event",
 }

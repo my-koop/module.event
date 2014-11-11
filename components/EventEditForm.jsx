@@ -49,7 +49,7 @@ var EventEditForm = React.createClass({
       <div {...others} >
         <BSInput
           type="text"
-          label={__("event::name")}
+          label={__("general::name")}
           valueLink={this.linkState("name")}
         />
         <BSInput
