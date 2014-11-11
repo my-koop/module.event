@@ -22,14 +22,13 @@ class Module extends utils.BaseModule implements mkevent.Module {
 
     this.db.getConnection(function(err, connection, cleanup) {
       if(err) {
-        return callback(err);
+        return callback(new DatabaseError(err));
       }
 
       var query = connection.query(
         "SELECT ?? FROM ??",
         [Event.COLUMNS_DB, "event"],
         function(err, rows) {
-          // We cleanup already because we don't need the connection anymore.
           cleanup();
 
           if (err) {
