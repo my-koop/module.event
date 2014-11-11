@@ -1,11 +1,13 @@
 import utils            = require("mykoop-utils");
 import controllerList   = require("./controllers/index");
 import getLogger        = require("mykoop-logger");
-var logger              = getLogger(module);
 import async            = require("async");
 import Event            = require("./classes/Event");
+
+var logger              = getLogger(module);
 var DatabaseError       = utils.errors.DatabaseError;
 var ApplicationError    = utils.errors.ApplicationError;
+
 
 class Module extends utils.BaseModule implements mkevent.Module {
   private db: mkdatabase.Module;
@@ -15,8 +17,34 @@ class Module extends utils.BaseModule implements mkevent.Module {
     controllerList.attachControllers(new utils.ModuleControllersBinder(this));
   }
 
+  getEvents(callback: (err: Error, result?: Event[]) => void) {
+    var events = [];
+
+    this.db.getConnection(function(err, connection, cleanup) {
+      if(err) {
+        return callback(new DatabaseError(err));
+      }
+
+      var query = connection.query(
+        "SELECT ?? FROM ??",
+        [Event.COLUMNS_DB, "event"],
+        function(err, rows) {
+          cleanup();
+
+          if (err) {
+            return callback(err);
+          }
+
+          for (var i in rows) {
+             events.push(new Event(rows[i]));
+          }
+
+          callback(null, events);
+      });
+    });
+  }
+
   addEvent(data: EventInterfaces.AddEventData, callback: (err?: Error) => void) {
-    
     var queryData: EventDbQueryStruct.EventData = {
       type          : data.type,
       startDate     : data.startDate,
@@ -43,7 +71,7 @@ class Module extends utils.BaseModule implements mkevent.Module {
             "INSERT INTO event SET ?",
             [queryData],
             function(err, result) {
-              callback(err ? new DatabaseError(err) : null, result);
+              callback(err && new DatabaseError(err), result);
             }
           );
         }

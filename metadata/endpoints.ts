@@ -1,5 +1,9 @@
 var endpoints = {
   event: {
+    list: {
+      path: "/event/list",
+      method: "get"
+    },
     update: {
       path: "/event/:id",
       method: "put"
