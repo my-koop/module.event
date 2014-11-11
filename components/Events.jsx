@@ -51,7 +51,7 @@ var Events = React.createClass({
               return;
             }
 
-            alert(__("inventory::removedEventMessage") + ": " + event.name);
+            alert(__("event::removedEventMessage") + ": " + event.name);
           });
         }
       }
@@ -65,7 +65,7 @@ var Events = React.createClass({
     var CONFIG = {
       columns: {
         name: {
-          name: __("event::name"),
+          name: __("general::name"),
         },
         type: {
           name: __("event::type"),
@@ -83,7 +83,7 @@ var Events = React.createClass({
           name: __("event::endAmount"),
         },
         actions: {
-          name: __("event::actions"),
+          name: __("general::actions"),
           isStatic: true,
           cellGenerator: function(event) {
             return (

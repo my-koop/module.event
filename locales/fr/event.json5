@@ -2,7 +2,6 @@
   eventNew_failed: "L'événement n'a pu être ajouté",
   eventNew_success: "L'événement a été ajouté",
   createEventWelcome: "Ajout d'un evénement",
-  name : "Nom", 
   type : "Type",
   startDate : "Date début",
   endDate : "Date fin",
@@ -11,6 +10,5 @@
   workshop : "Atelier",
   cashier : "Caisse", 
   removedEventMessage : "L'événement a été supprimé",
-  actions : "Actions",
-  eventNew: "Ajouter un événement"
+  newEvent: "Ajouter un événement",
 }
