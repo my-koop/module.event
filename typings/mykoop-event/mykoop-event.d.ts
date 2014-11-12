@@ -21,7 +21,7 @@ declare module mkevent {
 
     deleteEvent(
       idEvent : Number,
-      callback: (err: Error, result: Event[]) => void
+      callback: (err: Error, result?: boolean) => void
     );
   }
 

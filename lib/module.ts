@@ -84,7 +84,7 @@ class Module extends utils.BaseModule implements mkevent.Module {
     });
   }
 
-  deleteEvent(id: Number, callback: (err?: Error) => void) {
+  deleteEvent(id: Number, callback: (err?: Error, result?: boolean) => void) {
     this.db.getConnection(function(err, connection, cleanup) {
       if(err) {
         return callback(err);
