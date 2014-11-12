@@ -45,6 +45,7 @@ var EventEditForm = React.createClass({
 
   render: function () {
     var others = _.omit(this.props, 'event');
+
     return (
       <div {...others} >
         <BSInput
@@ -54,6 +55,7 @@ var EventEditForm = React.createClass({
         />
         <BSInput
           type="select"
+          defaultValue="cashier"
           label={__("event::type")}
           valueLink={this.linkState("type")}
         >

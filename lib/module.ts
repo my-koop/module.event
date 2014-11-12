@@ -79,7 +79,7 @@ class Module extends utils.BaseModule implements mkevent.Module {
         }
       ], function(err) {
         cleanup();
-        callback(new DatabaseError(err));
+        callback(err);
       })
     });
   }
