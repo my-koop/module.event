@@ -8,6 +8,7 @@ var __                = require("language").__;
 var actions           = require("actions");
 var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
 var formatDate        = require("language").formatDate;
+var localSession      = require("session").local; 
 
 var Events = React.createClass({
   getInitialState: function() {
@@ -79,7 +80,7 @@ var Events = React.createClass({
           {
             data: {
               idEvent : event.id,
-              idUser  : 2 //FIXME : get actual connected user id
+              idUser  : localSession.user.id
             }
           }, function(err, res){
             if (err) {
