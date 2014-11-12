@@ -11,4 +11,5 @@
   cashier : "Caisse", 
   removedEventMessage : "L'événement a été supprimé",
   newEvent: "Ajouter un événement",
+  eventWelcome : "Liste des événements"
 }

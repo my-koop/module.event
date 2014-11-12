@@ -65,7 +65,7 @@ var Events = React.createClass({
     var CONFIG = {
       columns: {
         name: {
-          name: __("general::name"),
+          name: __("name"),
         },
         type: {
           name: __("event::type"),
@@ -83,7 +83,7 @@ var Events = React.createClass({
           name: __("event::endAmount"),
         },
         actions: {
-          name: __("general::actions"),
+          name: __("actions"),
           isStatic: true,
           cellGenerator: function(event) {
             return (
