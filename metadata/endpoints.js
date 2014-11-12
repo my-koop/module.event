@@ -25,7 +25,8 @@ var endpoints = {
             method: "delete"
         },
         register: {
-            path: "event/register/:idEvent/:idUser"
+            path: "/event/register/:idEvent/:idUser",
+            method: "put"
         }
     }
 };

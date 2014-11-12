@@ -64,6 +64,33 @@ var Events = React.createClass({
             MKAlertTrigger.showAlert(__("event::removedEventMessage") + ": " + event.name);
           });
         }
+      },
+      {
+        icon: "check",
+        warningMessage: __("areYouSure"),
+        tooltip: {
+          text: __("event::registerToEventPrompt"),
+          overlayProps: {
+            placement: "top"
+          }
+        },
+        callback: function() {
+          actions.event.register(
+          {
+            data: {
+              idEvent : event.id,
+              idUser  : 2 //FIXME : get actual connected user id
+            }
+          }, function(err, res){
+            if (err) {
+              console.error(err);
+              MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
+              return;
+            }
+
+            MKAlertTrigger.showAlert(__("event::registeredToEventConfirmation") + ": " + event.name);
+          });
+        }
       }
     ];
   },
