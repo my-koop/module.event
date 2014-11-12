@@ -7,4 +7,10 @@ declare module EventDbQueryStruct {
     startAmount     : number;
     endAmount       : number;
   }
+
+  export interface EventUserData {
+    idUser          : number;
+    idEvent         : number;
+    registered      : boolean;
+  }
 }

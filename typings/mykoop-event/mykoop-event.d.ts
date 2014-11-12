@@ -23,6 +23,11 @@ declare module mkevent {
       idEvent : Number,
       callback: (err: Error, result?: boolean) => void
     );
+
+    registerToEvent(
+      registerData: EventInterfaces.RegisterEventData,
+      callback: (err: Error, result?: boolean) => void
+    );
   }
 
   export interface Event {

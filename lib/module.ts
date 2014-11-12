@@ -103,6 +103,37 @@ class Module extends utils.BaseModule implements mkevent.Module {
     });
   }
 
+  registerToEvent(data: EventInterfaces.RegisterEventData, callback: (err?: Error, result?: boolean) => void) {
+    var queryData: EventDbQueryStruct.EventUserData = {
+      idUser     : data.idUser,
+      idEvent    : data.idEvent,
+      registered : data.registered
+    };
+
+    this.db.getConnection(function(err, connection, cleanup) {
+      if(err) {
+        logger.error("Couldn't register to event");
+        return callback(new DatabaseError(err));
+      }
+
+      async.waterfall([
+        function(callback) {
+          logger.verbose("Registering to event", queryData);
+          connection.query(
+            "INSERT INTO event_user SET ?",
+            [queryData],
+            function(err, result) {
+              callback(err && new DatabaseError(err), result);
+            }
+          );
+        }
+      ], function(err) {
+        cleanup();
+        callback(err);
+      })
+    });
+  }
+
 }
 
 export = Module;
