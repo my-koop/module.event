@@ -33,7 +33,7 @@ class Module extends utils.BaseModule implements mkevent.Module {
           cleanup();
 
           if (err) {
-            return callback(err);
+            return callback(new DatabaseError(err));
           }
 
           for (var i in rows) {
@@ -79,7 +79,7 @@ class Module extends utils.BaseModule implements mkevent.Module {
         }
       ], function(err) {
         cleanup();
-        callback(err);
+        callback(new DatabaseError(err));
       })
     });
   }
