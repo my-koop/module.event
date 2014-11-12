@@ -26,7 +26,13 @@ var Events = React.createClass({
         return;
       }
 
-      self.setState({events: res.events});
+      var events = res.events;
+      _.forEach(events, function(event) {
+        events.startDate = new Date(events.startDate);
+        events.endDate = new Date(events.endDate);
+      });
+      
+      self.setState({events: events});
     });
   },
 
