@@ -30,8 +30,8 @@ var Events = React.createClass({
 
       var events = res.events;
       _.forEach(events, function(event) {
-        events.startDate = new Date(events.startDate);
-        events.endDate = new Date(events.endDate);
+        event.startDate = formatDate(new Date(event.startDate));
+        event.endDate = event.endDate != null ? formatDate(new Date(event.endDate)) : "";
       });
 
       self.setState({events: events});
@@ -97,15 +97,9 @@ var Events = React.createClass({
         },
         startDate: {
           name: __("event::startDate"),
-           cellGenerator: function(event, i) {
-            return formatDate(new Date(event.startDate));
-          },
         },
         endDate: {
           name: __("event::endDate"),
-           cellGenerator: function(event, i) {
-            return event.endDate != null ? formatDate(new Date(event.endDate)) : "";
-          },
         },
         startAmount: {
           name: __("event::startAmount"),
