@@ -23,6 +23,10 @@ var endpoints = {
     remove: {
       path: "/event/:id",
       method: "delete"
+    },
+    register: {
+      path: "/event/register/:idEvent/:idUser",
+      method: "put"
     }
   }
 }
