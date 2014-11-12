@@ -82,6 +82,27 @@ class Module extends utils.BaseModule implements mkevent.Module {
       })
     });
   }
+
+  deleteEvent(id: Number, callback: (err?: Error, result?: boolean) => void) {
+    this.db.getConnection(function(err, connection, cleanup) {
+      if(err) {
+        return callback(err);
+      }
+      var query = connection.query(
+        "DELETE from event WHERE idEvent = ?",
+        [id],
+        function(err, res) {
+          cleanup();
+
+          if (err) {
+            return callback(new DatabaseError(err));
+          }
+
+          callback(null, res.affectedRows !== 0);
+      });
+    });
+  }
+
 }
 
 export = Module;

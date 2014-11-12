@@ -5,6 +5,7 @@ import validation 	= require("../validation/index");
 // Controllers
 import addEvent   = require ("./addEvent");
 import getEvents  = require ("./getEvents");
+import deleteEvent  = require ("./deleteEvent");
 
 var endPoints = metaData.endpoints;
 
@@ -20,5 +21,10 @@ export function attachControllers(binder) {
   binder.attach(
     {endPoint: endPoints.event.list},
     getEvents
+  );
+
+  binder.attach(
+    {endPoint: endPoints.event.remove},
+    deleteEvent
   );
 }

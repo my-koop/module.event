@@ -1,3 +1,15 @@
 {
-
+  eventNew_failed: "L'événement n'a pu être ajouté",
+  eventNew_success: "L'événement a été ajouté",
+  createEventWelcome: "Ajout d'un evénement",
+  type : "Type",
+  startDate : "Date début",
+  endDate : "Date fin",
+  startAmount : "Ouverture de caisse",
+  endAmount : "Fermeture de caisse", 
+  workshop : "Atelier",
+  cashier : "Caisse", 
+  removedEventMessage : "L'événement a été supprimé",
+  newEvent: "Ajouter un événement",
+  eventWelcome : "Liste des événements"
 }
