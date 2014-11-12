@@ -31,7 +31,7 @@ var Events = React.createClass({
         events.startDate = new Date(events.startDate);
         events.endDate = new Date(events.endDate);
       });
-      
+
       self.setState({events: events});
     });
   },
@@ -89,10 +89,7 @@ var Events = React.createClass({
         endDate: {
           name: __("event::endDate"),
            cellGenerator: function(event, i) {
-            if(event.endDate != null)
-              return formatDate(new Date(event.endDate));
-
-            return "";
+            return event.endDate != null ? formatDate(new Date(event.endDate)) : "";
           },
         },
         startAmount: {
