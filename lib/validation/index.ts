@@ -5,11 +5,10 @@ var Event    = require("../classes/Event");
 var dataConstraint = {
   name: {
     presence: true
-    //Fixme: add EventType restriction 
   },
   type: {
-    presence: true
-    //Fixme: add EventType restriction 
+    presence: true,
+    inclusion: ["workshop", "cashier"]
   },
   startDate: {
     presence: true

@@ -6,6 +6,8 @@ var MKTableSorter     = require("mykoop-core/components/TableSorter");
 var MKListModButtons  = require("mykoop-core/components/ListModButtons");
 var __                = require("language").__;
 var actions           = require("actions");
+var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
+var formatDate        = require("language").formatDate;
 
 var Events = React.createClass({
   getInitialState: function() {
@@ -19,11 +21,18 @@ var Events = React.createClass({
 
     actions.event.list(function (err, res) {
       if (err) {
+        MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
         console.error(err);
         return;
       }
 
-      self.setState({events: res.events});
+      var events = res.events;
+      _.forEach(events, function(event) {
+        events.startDate = new Date(events.startDate);
+        events.endDate = new Date(events.endDate);
+      });
+
+      self.setState({events: events});
     });
   },
 
@@ -48,10 +57,11 @@ var Events = React.createClass({
           }, function(err, res){
             if (err) {
               console.error(err);
+              MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
               return;
             }
 
-            alert(__("event::removedEventMessage") + ": " + event.name);
+            MKAlertTrigger.showAlert(__("event::removedEventMessage") + ": " + event.name);
           });
         }
       }
@@ -72,9 +82,15 @@ var Events = React.createClass({
         },
         startDate: {
           name: __("event::startDate"),
+           cellGenerator: function(event, i) {
+            return formatDate(new Date(event.startDate));
+          },
         },
         endDate: {
           name: __("event::endDate"),
+           cellGenerator: function(event, i) {
+            return event.endDate != null ? formatDate(new Date(event.endDate)) : "";
+          },
         },
         startAmount: {
           name: __("event::startAmount"),

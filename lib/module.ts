@@ -23,7 +23,7 @@ class Module extends utils.BaseModule implements mkevent.Module {
 
     this.db.getConnection(function(err, connection, cleanup) {
       if(err) {
-        return callback(err);
+        return callback(new DatabaseError(err));
       }
 
       var query = connection.query(
