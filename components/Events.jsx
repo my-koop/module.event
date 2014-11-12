@@ -8,6 +8,8 @@ var __                = require("language").__;
 var actions           = require("actions");
 var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
 var formatDate        = require("language").formatDate;
+var router            = require("react-router");
+var getRouteName      = require("mykoop-utils/frontend/getRouteName");
 
 var Events = React.createClass({
   getInitialState: function() {
@@ -38,6 +40,19 @@ var Events = React.createClass({
 
   actionsGenerator: function(event) {
     return [
+      {
+        icon: "edit",
+        tooltip: {
+          text: __("event::editEventTooltip"),
+          overlayProps: {
+            placement: "top"
+          }
+        },
+        callback: function(){
+          // /event/:id   /event?id=2
+          router.transitionTo(getRouteName(["dashboard", "events", "createEvent"]),{id : event.id})
+        }
+      },
       {
         icon: "trash",
         warningMessage: __("areYouSure"),

@@ -83,6 +83,38 @@ class Module extends utils.BaseModule implements mkevent.Module {
       })
     });
   }
+
+  updateEvent(data: EventInterfaces.UpdateEventData, callback: (err?: Error) => void) {
+    var queryData: EventDbQueryStruct.EventData = {
+      name          : data.name,
+      type          : data.type,
+      startDate     : data.startDate,
+      endDate       : data.endDate,
+      startAmount   : data.startAmount,
+      endAmount     : data.endAmount
+    };
+
+    var id = data.id;
+
+    this.db.getConnection(function(err, connection, cleanup) {
+      if(err) {
+        return callback(new DatabaseError(err));
+      }
+
+      var query = connection.query(
+        "UPDATE event SET ? WHERE idEvent = ?",
+        [queryData, id],
+        function(err) {
+          cleanup();
+
+          if (err) {
+            return callback(new DatabaseError(err));
+          }
+
+          callback();
+      });
+    });
+  }
 }
 
 export = Module;
