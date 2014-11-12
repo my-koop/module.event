@@ -12,6 +12,7 @@ var EventEditForm = React.createClass({
 
   propTypes: {
     event: React.PropTypes.shape({
+      name        : React.PropTypes.string,
       type        : React.PropTypes.oneOf(['workshop', 'cashier']),
       startDate   : React.PropTypes.object,
       endDate     : React.PropTypes.object,
@@ -22,6 +23,7 @@ var EventEditForm = React.createClass({
 
   getEvent: function() {
     return {
+      name        : this.state.name,
       type        : this.state.type,
       startDate   : this.state.startDate,
       endDate     : this.state.endDate,
@@ -32,6 +34,7 @@ var EventEditForm = React.createClass({
 
   getInitialState: function() {
     return {
+      name        : this.props.event.name,
       type        : this.props.event.type,
       startDate   : this.props.event.startDate,
       endDate     : this.props.event.endDate,
@@ -42,14 +45,23 @@ var EventEditForm = React.createClass({
 
   render: function () {
     var others = _.omit(this.props, 'event');
+
     return (
       <div {...others} >
-        {/*FIXME Use dropdown */}
         <BSInput
           type="text"
+          label={__("name")}
+          valueLink={this.linkState("name")}
+        />
+        <BSInput
+          type="select"
+          defaultValue="cashier"
           label={__("event::type")}
           valueLink={this.linkState("type")}
-        />
+        >
+          <option value="workshop">{__("event::workshop")}</option>
+          <option value="cashier">{__("event::cashier")}</option>
+        </BSInput>
         {/*FIXME Datepicker with time */}
         <BSInput
           type="text"

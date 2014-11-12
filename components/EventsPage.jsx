@@ -1,8 +1,9 @@
-var React = require("react/addons");
-var __ = require("language").__;
-var BSButton = require("react-bootstrap/Button");
+var React       = require("react/addons");
+var __          = require("language").__;
+var BSButton    = require("react-bootstrap/Button");
 var reactRouter = require("react-router");
-var routeData = require("dynamic-metadata").routes;
+var routeData   = require("dynamic-metadata").routes;
+var MKEvents     = require("./Events");
 
 var EventsPage = React.createClass({
   goToNewEventPage: function() {
@@ -21,7 +22,7 @@ var EventsPage = React.createClass({
         >
           {__("event::newEvent")}
         </BSButton>
-     
+        <MKEvents />
       </div>
     );
   }

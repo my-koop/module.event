@@ -3,9 +3,12 @@ var validate = require("mykoop-utils/common").validation;
 var Event    = require("../classes/Event");
 
 var dataConstraint = {
-  type: {
+  name: {
     presence: true
-    //Fixme: add EventType restriction 
+  },
+  type: {
+    presence: true,
+    inclusion: ["workshop", "cashier"]
   },
   startDate: {
     presence: true

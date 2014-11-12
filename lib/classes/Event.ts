@@ -1,6 +1,7 @@
 class Event implements mkevent.Event {
-  public static COLUMNS_DB = ["id", "type", "startDate", "endDate", "startAmount", "endAmount"];
+  public static COLUMNS_DB = ["idEvent", "name", "type", "startDate", "endDate", "startAmount", "endAmount"];
   public  id              : number;
+  public  name            : string;
   public  type            : string;
   public  startDate       : Date;
   public  endDate         : Date;
@@ -8,7 +9,8 @@ class Event implements mkevent.Event {
   public  endAmount       : number;
 
   constructor(row: any) {
-    this.id           = Number(row.id);
+    this.id           = Number(row.idEvent);
+    this.name         = row.name;
     this.type         = row.type;
     this.startDate    = row.startDate;
     this.endDate      = row.endDate;

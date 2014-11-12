@@ -4,7 +4,8 @@ var logger = getLogger(module);
 
 function addEvent(req: express.Request, res: express.Response) {
   var self: mkevent.Module = this;
-  var data = {        
+  var data = {
+    name        : req.param("name"),
     type        : req.param("type"),
     startDate   : new Date(req.param("startDate")),
     endDate     : new Date(req.param("endDate") || null),

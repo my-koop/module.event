@@ -18,10 +18,16 @@ declare module mkevent {
     getEvents(
       callback: (err: Error, result?: Event[]) => void
     );
+
+    deleteEvent(
+      idEvent : Number,
+      callback: (err: Error, result?: boolean) => void
+    );
   }
 
   export interface Event {
     id: number;
+    name: string;
     type: string;
     startDate : Date;
     endDate : Date;
