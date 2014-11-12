@@ -8,7 +8,7 @@ var __                = require("language").__;
 var actions           = require("actions");
 var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
 var formatDate        = require("language").formatDate;
-var localSession      = require("session").local; 
+var localSession      = require("session").local;
 
 var Events = React.createClass({
   getInitialState: function() {
@@ -38,15 +38,13 @@ var Events = React.createClass({
   },
 
   actionsGenerator: function(event) {
-    return [
+    var actionDescriptors = [
       {
         icon: "trash",
         warningMessage: __("areYouSure"),
         tooltip: {
           text: __("remove"),
-          overlayProps: {
-            placement: "top"
-          }
+          overlayProps: {placement: "top"}
         },
         callback: function() {
           var id = event.id;
@@ -65,35 +63,39 @@ var Events = React.createClass({
             MKAlertTrigger.showAlert(__("event::removedEventMessage") + ": " + event.name);
           });
         }
-      },
-      {
-        icon: "check",
-        warningMessage: __("areYouSure"),
-        tooltip: {
-          text: __("event::registerToEventPrompt"),
-          overlayProps: {
-            placement: "top"
-          }
-        },
-        callback: function() {
-          actions.event.register(
-          {
-            data: {
-              idEvent : event.id,
-              idUser  : localSession.user.id
-            }
-          }, function(err, res){
-            if (err) {
-              console.error(err);
-              MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
-              return;
-            }
-
-            MKAlertTrigger.showAlert(__("event::registeredToEventConfirmation") + ": " + event.name);
-          });
-        }
       }
     ];
+    if(localSession.user) {
+      actionDescriptors.push(
+        {
+          icon: "check",
+          warningMessage: __("areYouSure"),
+          tooltip: {
+            text: __("event::registerToEventPrompt"),
+            overlayProps: {placement: "top"}
+          },
+          callback: function() {
+            actions.event.register(
+            {
+              data: {
+                idEvent : event.id,
+                idUser  : localSession.user.id
+              }
+            }, function(err, res){
+              if (err || !res.success) {
+                console.error(err);
+                MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
+                return;
+              }
+              if(res.success) {
+                MKAlertTrigger.showAlert(__("event::registeredToEventConfirmation") + ": " + event.name);
+              }
+            });
+          }
+        }
+      );
+    }
+    return actionDescriptors;
   },
 
   render: function() {
@@ -101,12 +103,19 @@ var Events = React.createClass({
 
     // TableSorter Config
     var CONFIG = {
+      defaultOrdering: [
+        "name", "type", "startDate", "endDate",
+        "startAmount", "endAmount", "actions"
+      ],
       columns: {
         name: {
           name: __("name"),
         },
         type: {
           name: __("event::type"),
+          cellGenerator: function(event) {
+            return __("event::" + event.type);
+          }
         },
         startDate: {
           name: __("event::startDate"),

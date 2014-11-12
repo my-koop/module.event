@@ -1,16 +1,18 @@
-import metaData 	= require("../../metadata/index");
-import utils 		= require("mykoop-utils");
-import validation 	= require("../validation/index");
+import metaData   = require("../../metadata/index");
+import utils      = require("mykoop-utils");
+import validation = require("../validation/index");
+import Express    = require("express");
 
 // Controllers
 import addEvent   = require ("./addEvent");
 import getEvents  = require ("./getEvents");
 import deleteEvent  = require ("./deleteEvent");
-import registerToEvent  = require ("./registerToEvent");
 
 var endPoints = metaData.endpoints;
 
-export function attachControllers(binder) {
+export function attachControllers(
+  binder: utils.ModuleControllersBinder<mkevent.Module>
+) {
   binder.attach(
     {
       endPoint: endPoints.event.add,
@@ -31,6 +33,14 @@ export function attachControllers(binder) {
 
   binder.attach(
     {endPoint: endPoints.event.register},
-    registerToEvent
+    binder.makeSimpleController("registerToEvent",
+    {
+      parseFunc: function(req: Express.Request): EventInterfaces.RegisterEventData {
+        return {
+          idUser : Number(req.param("idUser")),
+          idEvent: Number(req.param("idEvent"))
+        };
+      }
+    })
   );
 }

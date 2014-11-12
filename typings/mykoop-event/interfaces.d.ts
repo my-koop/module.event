@@ -11,6 +11,5 @@ declare module EventInterfaces {
   export interface RegisterEventData {
     idUser          : number;
     idEvent         : number;
-    registered      : boolean;
   }
 }

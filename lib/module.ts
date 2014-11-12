@@ -55,7 +55,7 @@ class Module extends utils.BaseModule implements mkevent.Module {
     };
 
     //When textbox is empty, it returns 0 instead of null, which is timestamp  for January 1 1969
-    if(queryData.endDate.getFullYear() == 1969){ 
+    if(queryData.endDate.getFullYear() == 1969){
       queryData.endDate = null;
     }
 
@@ -103,20 +103,23 @@ class Module extends utils.BaseModule implements mkevent.Module {
     });
   }
 
-  registerToEvent(data: EventInterfaces.RegisterEventData, callback: (err?: Error, result?: boolean) => void) {
+  registerToEvent(
+    data: EventInterfaces.RegisterEventData,
+    callback: (err?: Error, result?: {success: boolean}) => void
+  ) {
     var queryData: EventDbQueryStruct.EventUserData = {
       idUser     : data.idUser,
       idEvent    : data.idEvent,
-      registered : data.registered
+      registered : true
     };
 
     this.db.getConnection(function(err, connection, cleanup) {
       if(err) {
-        logger.error("Couldn't register to event");
         return callback(new DatabaseError(err));
       }
 
       async.waterfall([
+        // FIXME:: make sure idUser and idEvent exists and are valid
         function(callback) {
           logger.verbose("Registering to event", queryData);
           connection.query(
@@ -127,9 +130,9 @@ class Module extends utils.BaseModule implements mkevent.Module {
             }
           );
         }
-      ], function(err) {
+      ], function(err, result: any) {
         cleanup();
-        callback(err);
+        callback(err, {success: result && result.affectedRows === 1});
       })
     });
   }

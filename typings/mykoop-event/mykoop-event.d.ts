@@ -26,7 +26,7 @@ declare module mkevent {
 
     registerToEvent(
       registerData: EventInterfaces.RegisterEventData,
-      callback: (err: Error, result?: boolean) => void
+      callback: (err: Error, result?: {success: boolean}) => void
     );
   }
 
