@@ -6,6 +6,8 @@ var MKTableSorter     = require("mykoop-core/components/TableSorter");
 var MKListModButtons  = require("mykoop-core/components/ListModButtons");
 var __                = require("language").__;
 var actions           = require("actions");
+var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
+var formatDate        = require("language").formatDate;
 
 var Events = React.createClass({
   getInitialState: function() {
@@ -19,6 +21,7 @@ var Events = React.createClass({
 
     actions.event.list(function (err, res) {
       if (err) {
+        MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
         console.error(err);
         return;
       }
@@ -30,10 +33,10 @@ var Events = React.createClass({
   actionsGenerator: function(event) {
     return [
       {
-        icon: "remove",
-        warningMessage: __("general::areYouSure"),
+        icon: "trash",
+        warningMessage: __("areYouSure"),
         tooltip: {
-          text: __("general::remove"),
+          text: __("remove"),
           overlayProps: {
             placement: "top"
           }
@@ -48,10 +51,11 @@ var Events = React.createClass({
           }, function(err, res){
             if (err) {
               console.error(err);
+              MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
               return;
             }
 
-            alert(__("inventory::removedEventMessage") + ": " + event.name);
+            MKAlertTrigger.showAlert(__("event::removedEventMessage") + ": " + event.name);
           });
         }
       }
@@ -65,16 +69,25 @@ var Events = React.createClass({
     var CONFIG = {
       columns: {
         name: {
-          name: __("event::name"),
+          name: __("name"),
         },
         type: {
           name: __("event::type"),
         },
         startDate: {
           name: __("event::startDate"),
+           cellGenerator: function(event, i) {
+            return formatDate(new Date(event.startDate));
+          },
         },
         endDate: {
           name: __("event::endDate"),
+           cellGenerator: function(event, i) {
+            if(event.endDate != null)
+              return formatDate(new Date(event.endDate));
+
+            return "";
+          },
         },
         startAmount: {
           name: __("event::startAmount"),
@@ -83,7 +96,7 @@ var Events = React.createClass({
           name: __("event::endAmount"),
         },
         actions: {
-          name: __("event::actions"),
+          name: __("actions"),
           isStatic: true,
           cellGenerator: function(event) {
             return (
