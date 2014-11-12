@@ -19,12 +19,11 @@ declare module mkevent {
       callback: (err: Error, result?: Event[]) => void
     );
 
-
     updateEvent(
       updateData: EventInterfaces.AddEventData,
       callback: (err: Error, result?: boolean) => void
     );
-    
+
     deleteEvent(
       idEvent : Number,
       callback: (err: Error, result?: boolean) => void

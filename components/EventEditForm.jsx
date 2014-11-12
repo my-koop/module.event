@@ -11,14 +11,7 @@ var EventEditForm = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
   propTypes: {
-    event: React.PropTypes.shape({
-      name        : React.PropTypes.string,
-      type        : React.PropTypes.oneOf(['workshop', 'cashier']),
-      startDate   : React.PropTypes.object,
-      endDate     : React.PropTypes.object,
-      startAmount : React.PropTypes.number,
-      endAmount   : React.PropTypes.number
-    }).isRequired
+    id : React.PropTypes.number
   },
 
   getEvent: function() {
@@ -34,17 +27,13 @@ var EventEditForm = React.createClass({
 
   getInitialState: function() {
     return {
-      name        : this.props.event.name,
-      type        : this.props.event.type,
-      startDate   : this.props.event.startDate,
-      endDate     : this.props.event.endDate,
-      startAmount : this.props.event.startAmount,
-      endAmount   : this.props.event.endAmount
+      id : this.props.id
     }
   },
 
   render: function () {
     var others = _.omit(this.props, 'event');
+    console.log(this.props.params);
 
     return (
       <div {...others} >

@@ -60,6 +60,7 @@ var CreateEventPage = React.createClass({
   },
 
   render: function() {
+    console.log(this.props.params.id);
     var body;
     if(this.state.success) {
       body = (
@@ -89,7 +90,7 @@ var CreateEventPage = React.createClass({
           <MKAlert bsStyle="danger" permanent>
             {this.state.errorMessage}
           </MKAlert>
-          <MKEventEditForm event={this.state.event} ref="eventForm" />
+          <MKEventEditForm id={this.props.params.id} ref="eventForm" />
           <BSButton
             onClick={this.onSave}
             className="pull-right"

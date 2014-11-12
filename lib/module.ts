@@ -8,7 +8,6 @@ var logger              = getLogger(module);
 var DatabaseError       = utils.errors.DatabaseError;
 var ApplicationError    = utils.errors.ApplicationError;
 
-
 class Module extends utils.BaseModule implements mkevent.Module {
   private db: mkdatabase.Module;
 
