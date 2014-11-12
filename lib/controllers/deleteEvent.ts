@@ -7,8 +7,7 @@ function deleteEvent(req: express.Request, res: express.Response) {
   var idEvent = parseInt(req.param("id"));
   self.deleteEvent(idEvent, function(err) {
     if (err) {
-      logger.error(err);
-      return res.sendStatus(500);
+      return res.error(err);
     }
 
     res.end();

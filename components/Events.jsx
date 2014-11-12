@@ -30,10 +30,10 @@ var Events = React.createClass({
   actionsGenerator: function(event) {
     return [
       {
-        icon: "remove",
-        warningMessage: __("general::areYouSure"),
+        icon: "trash",
+        warningMessage: __("areYouSure"),
         tooltip: {
-          text: __("general::remove"),
+          text: __("remove"),
           overlayProps: {
             placement: "top"
           }
