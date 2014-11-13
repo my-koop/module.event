@@ -12,5 +12,7 @@
   cashier : "Cashier", 
   removedEventMessage : "Event was removed",
   newEvent: "Add event",
-  eventWelcome : "Events list"
+  eventWelcome : "Events list",
+  registeredToEventConfirmation : "You have been registered to the event",
+  registerToEventPrompt : "Do you want to register to this event ?"
 }
