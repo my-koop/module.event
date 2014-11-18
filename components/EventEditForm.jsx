@@ -1,9 +1,12 @@
 var React    = require("react/addons");
 var BSInput  = require("react-bootstrap/Input");
-var BSAlert  = require("react-bootstrap/Alert");
+
+var MKDateTimePicker = require("mykoop-core/components/DateTimePicker");
+
 var actions  = require("actions");
 var _        = require("lodash");
 var __       = require("language").__;
+var formatDate = require("language").formatDate;
 
 var EventEditForm = React.createClass({
   // Decided for a one layer linkedState, because much simpler and faster
@@ -27,11 +30,13 @@ var EventEditForm = React.createClass({
 
   getInitialState: function() {
     return {
-      id : this.props.id
+      id : this.props.id,
+      type: "cashier"
     }
   },
 
   render: function () {
+    var self = this;
     var others = _.omit(this.props, 'event');
     console.log(this.props.params);
 
@@ -51,18 +56,26 @@ var EventEditForm = React.createClass({
           <option value="workshop">{__("event::workshop")}</option>
           <option value="cashier">{__("event::cashier")}</option>
         </BSInput>
-        {/*FIXME Datepicker with time */}
-        <BSInput
-          type="text"
-          label={__("event::startDate")}
-          valueLink={this.linkState("startDate")}
-        />
-        {/*FIXME Datepicker with time */}
-        <BSInput
-          type="text"
-          label={__("event::endDate")}
-          valueLink={this.linkState("endDate")}
-        />
+        <label>
+          {__("event::startDate")}
+          <MKDateTimePicker
+            onChange={function(date, str) {
+              self.setState({
+                startDate: str
+              });
+            }}
+          />
+        </label>
+        <label>
+          {__("event::endDate")}
+          <MKDateTimePicker
+            onChange={function(date, str) {
+              self.setState({
+                endDate: str
+              });
+            }}
+          />
+        </label>
         <BSInput
           type="number"
           label={__("event::startAmount")}

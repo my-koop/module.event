@@ -8,9 +8,10 @@ var reactRouter     = require("react-router");
 var routeData       = require("dynamic-metadata").routes;
 var actions         = require("actions");
 var __              = require("language").__;
-var MKSpinner       = require("mykoop-core/components/Spinner");
-var MKEventEditForm = require("./EventEditForm");
-var MKAlert         = require("mykoop-core/components/Alert");
+
+var MKSpinner        = require("mykoop-core/components/Spinner");
+var MKEventEditForm  = require("./EventEditForm");
+var MKAlert          = require("mykoop-core/components/Alert");
 
 var CreateEventPage = React.createClass({
 
