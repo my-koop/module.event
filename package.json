@@ -2,7 +2,9 @@
   "name": "mykoop-event",
   "role": "event",
   "mykoop": {
-    "dependencies": {}
+    "dependencies": {
+      "database": "^1.0.0-rc"
+    }
   },
   "version": "1.0.0-rc",
   "description": "event module for My Koop",

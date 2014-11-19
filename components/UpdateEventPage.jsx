@@ -13,7 +13,7 @@ var MKSpinner        = require("mykoop-core/components/Spinner");
 var MKEventEditForm  = require("./EventEditForm");
 var MKAlert          = require("mykoop-core/components/Alert");
 
-var CreateEventPage = React.createClass({
+var UpdateEventPage = React.createClass({
 
   getInitialState: function() {
     return {
@@ -49,18 +49,19 @@ var CreateEventPage = React.createClass({
       if(err) {
         console.error(err);
         return self.setState({
-          errorMessage: __("event::eventNew", {context:"failed"}),
+          errorMessage: __("event::eventUpdate", {context:"failed"}),
           success: null
         });
       }
       return self.setState({
         errorMessage: null,
-        success: __("event::eventNew", {context:"success"})
+        success: __("event::eventUpdate", {context:"success"})
       });
     });
   },
 
   render: function() {
+    console.log("TEST " + this.props.params.id);
     var body;
     if(this.state.success) {
       body = (
@@ -105,7 +106,7 @@ var CreateEventPage = React.createClass({
     return (
       <div>
         <h1>
-          {__("event::createEventWelcome")}
+          {__("event::updateEventWelcome")}
         </h1>
         <BSCol md={4}>
           {body}
@@ -115,4 +116,4 @@ var CreateEventPage = React.createClass({
   }
 });
 
-module.exports = CreateEventPage;
+module.exports = UpdateEventPage;

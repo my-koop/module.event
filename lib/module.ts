@@ -187,7 +187,6 @@ class Module extends utils.BaseModule implements mkevent.Module {
 
           if(rows.length == 1){
             event = new Event(rows[0]);
-            console.log(event.name);
             callback(null, event);
           }else{
             return callback(new DatabaseError(err));

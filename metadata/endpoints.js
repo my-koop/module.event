@@ -5,8 +5,8 @@ var endpoints = {
             method: "get"
         },
         update: {
-            path: "/event/:id",
-            method: "put"
+            path: "/event/update/:id",
+            method: "post"
         },
         add: {
             path: "/event/",

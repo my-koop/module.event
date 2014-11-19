@@ -35,9 +35,9 @@ var EventEditForm = React.createClass({
     }
   },
 
-  componentWillMount: function() {
+  componentWillReceiveProps: function(nextProps) {
     var self = this;
-
+    console.log("test");
     actions.event.get({
       data: {
         id : 271 //FIXME : Get the id that is passed...
@@ -49,8 +49,7 @@ var EventEditForm = React.createClass({
         return;
       }
 
-      self.setState({event: res.event}); //FIX ME : Not returning the event (getting undefined)
-      console.log("Name : " + event.name)
+      self.setState({event: res}); //FIX ME : Not returning the event (getting undefined)
     });
   },
 
