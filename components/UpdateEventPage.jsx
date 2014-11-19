@@ -61,7 +61,6 @@ var UpdateEventPage = React.createClass({
   },
 
   render: function() {
-    console.log("TEST " + this.props.params.id);
     var body;
     if(this.state.success) {
       body = (

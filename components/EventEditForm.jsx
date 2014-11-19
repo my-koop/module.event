@@ -29,39 +29,41 @@ var EventEditForm = React.createClass({
 
   getInitialState: function() {
     return {
-      id : this.props.id,
-      type: "cashier",
       event: null
     }
   },
 
   componentWillReceiveProps: function(nextProps) {
     var self = this;
-    console.log("test");
-    actions.event.get({
-      data: {
-        id : 271 //FIXME : Get the id that is passed...
-      }
-    }, function (err, res) {
-      if (err) {
-        MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
-        console.error(err);
-        return;
-      }
-
-      self.setState({event: res}); //FIX ME : Not returning the event (getting undefined)
-    });
+    console.log("componentWillReceiveProps");
+   
   },
 
   render: function () {
     var self = this;
     var others = _.omit(this.props, 'event');
 
+
+    // actions.event.get({
+    //   data: {
+    //     id : this.props.id //FIXME : Get the id that is passed...
+    //   }
+    // }, function (err, res) {
+    //   if (err) {
+    //     MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
+    //     console.error(err);
+    //     return;
+    //   }
+    //   self.setState({event: res}); //FIX ME : Not returning the event (getting undefined)
+    // });
+
+    console.log(this.state.event);
     return (
       <div {...others} >
         <BSInput
           type="text"
           label={__("name")}
+          defaultValue={this.state.event}
           valueLink={this.linkState("name")}
         />
         <BSInput
