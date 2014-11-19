@@ -168,6 +168,34 @@ class Module extends utils.BaseModule implements mkevent.Module {
     });
   }
 
+  getEvent(data: EventInterfaces.GetEventData, callback: (err: Error, result?: Event) => void) {
+    var event = null;
+
+    this.db.getConnection(function(err, connection, cleanup) {
+      if(err) {
+        return callback(new DatabaseError(err));
+      }
+      var query = connection.query(
+        "SELECT * FROM event WHERE idEvent=?",
+        [data.id],
+        function(err, rows) {
+          cleanup();
+
+          if (err) {
+            return callback(new DatabaseError(err));
+          }
+
+          if(rows.length == 1){
+            event = new Event(rows[0]);
+            console.log(event.name);
+            callback(null, event);
+          }else{
+            return callback(new DatabaseError(err));
+          }
+      });
+    });
+  }
+
 }
 
 export = Module;

@@ -7,9 +7,14 @@ declare module EventInterfaces {
     startAmount     : number;
     endAmount       : number;
   }
+
   export interface RegisterEventData {
     idUser          : number;
     idEvent         : number;
+  }
+
+  export interface GetEventData {
+    id              : number;
   }
 
   export interface UpdateEventData {

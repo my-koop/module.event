@@ -1,12 +1,11 @@
-var React    = require("react/addons");
-var BSInput  = require("react-bootstrap/Input");
-
-var MKDateTimePicker = require("mykoop-core/components/DateTimePicker");
-
-var actions  = require("actions");
-var _        = require("lodash");
-var __       = require("language").__;
-var formatDate = require("language").formatDate;
+var React             = require("react/addons");
+var BSInput           = require("react-bootstrap/Input");
+var MKDateTimePicker  = require("mykoop-core/components/DateTimePicker");
+var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
+var actions           = require("actions");
+var _                 = require("lodash");
+var __                = require("language").__;
+var formatDate        = require("language").formatDate;
 
 var EventEditForm = React.createClass({
   // Decided for a one layer linkedState, because much simpler and faster
@@ -31,14 +30,33 @@ var EventEditForm = React.createClass({
   getInitialState: function() {
     return {
       id : this.props.id,
-      type: "cashier"
+      type: "cashier",
+      event: null
     }
+  },
+
+  componentWillMount: function() {
+    var self = this;
+
+    actions.event.get({
+      data: {
+        id : 271 //FIXME : Get the id that is passed...
+      }
+    }, function (err, res) {
+      if (err) {
+        MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
+        console.error(err);
+        return;
+      }
+
+      self.setState({event: res.event}); //FIX ME : Not returning the event (getting undefined)
+      console.log("Name : " + event.name)
+    });
   },
 
   render: function () {
     var self = this;
     var others = _.omit(this.props, 'event');
-    console.log(this.props.params);
 
     return (
       <div {...others} >

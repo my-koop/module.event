@@ -49,4 +49,18 @@ export function attachControllers(
       }
     })
   );
+
+  binder.attach(
+    {endPoint: endPoints.event.get},
+    binder.makeSimpleController("getEvent",
+    {
+      parseFunc: function(req: Express.Request): EventInterfaces.GetEventData {
+        return {
+          id: Number(req.param("id"))
+        };
+      }
+    })
+  );
+
+
 }
