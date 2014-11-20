@@ -1,9 +1,11 @@
-var React       = require("react/addons");
-var __          = require("language").__;
-var BSButton    = require("react-bootstrap/Button");
-var reactRouter = require("react-router");
-var routeData   = require("dynamic-metadata").routes;
-var MKEvents     = require("./Events");
+var React             = require("react/addons");
+var __                = require("language").__;
+var BSButton          = require("react-bootstrap/Button");
+var reactRouter       = require("react-router");
+var routeData         = require("dynamic-metadata").routes;
+var MKEventsAdmin     = require("./EventsAdmin");
+var localSession      = require("session").local;
+var MKEventsPublic    = require("./EventsPublic");
 
 var EventsPage = React.createClass({
   goToNewEventPage: function() {
@@ -11,6 +13,9 @@ var EventsPage = React.createClass({
   },
 
   render: function() {
+    //FIXME Do the check with the permissions when it is implemented
+    var MKEventsPage = localSession.user ? <MKEventsPublic /> : <MKEventsAdmin />;
+
     return (
       <div>
         <h1>
@@ -22,7 +27,8 @@ var EventsPage = React.createClass({
         >
           {__("event::newEvent")}
         </BSButton>
-        <MKEvents />
+       
+        {MKEventsPage}
       </div>
     );
   }

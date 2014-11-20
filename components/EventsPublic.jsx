@@ -39,32 +39,8 @@ var Events = React.createClass({
 
   actionsGenerator: function(event) {
     var actionDescriptors = [
-      {
-        icon: "trash",
-        warningMessage: __("areYouSure"),
-        tooltip: {
-          text: __("remove"),
-          overlayProps: {placement: "top"}
-        },
-        callback: function() {
-          var id = event.id;
-          actions.event.remove(
-          {
-            data: {
-              id : id
-            }
-          }, function(err, res){
-            if (err) {
-              console.error(err);
-              MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
-              return;
-            }
-
-            MKAlertTrigger.showAlert(__("event::removedEventMessage") + ": " + event.name);
-          });
-        }
-      }
     ];
+
     if(localSession.user) {
       actionDescriptors.push(
         {
@@ -105,7 +81,7 @@ var Events = React.createClass({
     var CONFIG = {
       defaultOrdering: [
         "name", "type", "startDate", "endDate",
-        "startAmount", "endAmount", "actions"
+        "actions"
       ],
       columns: {
         name: {
@@ -122,12 +98,6 @@ var Events = React.createClass({
         },
         endDate: {
           name: __("event::endDate"),
-        },
-        startAmount: {
-          name: __("event::startAmount"),
-        },
-        endAmount: {
-          name: __("event::endAmount"),
         },
         actions: {
           name: __("actions"),
