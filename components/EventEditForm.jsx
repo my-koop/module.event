@@ -29,41 +29,54 @@ var EventEditForm = React.createClass({
 
   getInitialState: function() {
     return {
-      event: null
+      eventObj: null,
+      id: null
     }
   },
 
   componentWillReceiveProps: function(nextProps) {
-    var self = this;
     console.log("componentWillReceiveProps");
-   
+    
+  },
+
+  componentWillMount: function() {
+    console.log("componentWillMount");
+    this.getEventFromDb();
+  },
+
+  componentDidMount: function () {
+    console.log("componentDidMount");
+    
+  },
+
+  getEventFromDb: function() {
+    var self = this;
+    actions.event.get({
+      data: {
+        id : this.props.id
+      }
+    }, function (err, res) {
+      if (err) {
+        MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
+        console.error(err);
+        return;
+      }
+      self.setState({eventObj: res}); //FIX ME : Not actually assigning in state
+      console.log(res);
+    });
   },
 
   render: function () {
+    console.log("render");
     var self = this;
     var others = _.omit(this.props, 'event');
-
-
-    // actions.event.get({
-    //   data: {
-    //     id : this.props.id //FIXME : Get the id that is passed...
-    //   }
-    // }, function (err, res) {
-    //   if (err) {
-    //     MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
-    //     console.error(err);
-    //     return;
-    //   }
-    //   self.setState({event: res}); //FIX ME : Not returning the event (getting undefined)
-    // });
-
-    console.log(this.state.event);
+  
     return (
       <div {...others} >
         <BSInput
           type="text"
           label={__("name")}
-          defaultValue={this.state.event}
+          defaultValue={this.state.eventObj}
           valueLink={this.linkState("name")}
         />
         <BSInput
