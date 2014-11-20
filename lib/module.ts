@@ -126,7 +126,15 @@ class Module extends utils.BaseModule implements mkevent.Module {
             "INSERT INTO event_user SET ?",
             [queryData],
             function(err, result) {
-              callback(err && new DatabaseError(err), result);
+              if(err && err.code === "ER_DUP_ENTRY") {
+                return callback(new ApplicationError(
+                  err,
+                  {
+                    name: "duplicate"
+                  }
+                ));
+              }
+              callback(err && new DatabaseError(err));
             }
           );
         }
