@@ -5,7 +5,6 @@ var reactRouter       = require("react-router");
 var routeData         = require("dynamic-metadata").routes;
 var MKEventsAdmin     = require("./EventsAdmin");
 var localSession      = require("session").local;
-var MKEventsPublic    = require("./EventsPublic");
 
 var EventsPage = React.createClass({
   goToNewEventPage: function() {
@@ -13,9 +12,6 @@ var EventsPage = React.createClass({
   },
 
   render: function() {
-    //FIXME Do the check with the permissions when it is implemented
-    var MKEventsPage = localSession.user ? <MKEventsPublic /> : <MKEventsAdmin />;
-
     return (
       <div>
         <h1>
@@ -28,7 +24,7 @@ var EventsPage = React.createClass({
           {__("event::newEvent")}
         </BSButton>
        
-        {MKEventsPage}
+        <MKEventsAdmin />
       </div>
     );
   }

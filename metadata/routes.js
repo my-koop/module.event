@@ -8,8 +8,15 @@ function addRoutes(metaData) {
 
     metaData.addFrontendRoute({
         idPath: ["dashboard", "events", "list"],
-        component: "EventsPage",
-        name: "events",
+        component: "EventsPageAdmin",
+        name: "eventsAdmin",
+        path: "events"
+    });
+
+    metaData.addFrontendRoute({
+        idPath: ["simple", "events", "list"],
+        component: "EventsPagePublic",
+        name: "eventsPublic",
         path: "events"
     });
 }
