@@ -13,31 +13,35 @@ var localSession      = require("session").local;
 var Events = React.createClass({
   getInitialState: function() {
     return {
-      events: []
+      events: [],
+      isClosed : false
     }
   },
 
-  componentWillMount: function() {
+  componentDidMount: function() {
+    this.updateList();
+  },
+
+  updateList: function() {
     var self = this;
+    self.setState({
+      events: []
+    }, function() {
+      actions.event.list(function (err, res) {
+        if (err) {
+          MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
+          console.error(err);
+          return;
+        }
 
-    actions.event.list({
-      data : {
-        isClosed : false
-      }
-    }, function (err, res) {
-      if (err) {
-        MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
-        console.error(err);
-        return;
-      }
+        var events = res.events;
+        _.forEach(events, function(event) {
+          event.startDate = formatDate(new Date(event.startDate));
+          event.endDate = event.endDate != null ? formatDate(new Date(event.endDate)) : "";
+        });
 
-      var events = res.events;
-      _.forEach(events, function(event) {
-        event.startDate = formatDate(new Date(event.startDate));
-        event.endDate = event.endDate != null ? formatDate(new Date(event.endDate)) : "";
+        self.setState({events: events});
       });
-
-      self.setState({events: events});
     });
   },
 
@@ -70,6 +74,14 @@ var Events = React.createClass({
       }
     ];
     return actionDescriptors;
+  },
+
+  switchIsClosedState: function() {
+    var self = this;
+    var newState = !isClosed;
+    self.setState({
+      isClosed: newState
+    }, self.updateList);
   },
 
   render: function() {
@@ -121,6 +133,10 @@ var Events = React.createClass({
     return (
       <BSCol md={12}>
         <div>
+          <BSButton onClick={this.switchIsClosedState}>
+            <MKIcon glyph="exchange" />
+            {__("event::switchEventState", {context: this.state.isClosed})}
+          </BSButton>
           <MKTableSorter
             config={CONFIG}
             items={this.state.events}
