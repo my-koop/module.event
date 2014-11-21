@@ -13,27 +13,39 @@ var localSession      = require("session").local;
 var Events = React.createClass({
   getInitialState: function() {
     return {
-      events: []
+      events: [],
+      isClosed : false
     }
   },
 
-  componentWillMount: function() {
+  componentDidMount: function() {
+    this.updateList();
+  },
+
+  updateList: function() {
     var self = this;
+    self.setState({
+      events: []
+    }, function() {
+      actions.event.list({
+        data: {
+          isClosed : this.state.isClosed
+        }
+      },function (err, res) {
+        if (err) {
+          MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
+          console.error(err);
+          return;
+        }
 
-    actions.event.list(function (err, res) {
-      if (err) {
-        MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
-        console.error(err);
-        return;
-      }
+        var events = res.events;
+        _.forEach(events, function(event) {
+          event.startDate = formatDate(new Date(event.startDate));
+          event.endDate = event.endDate != null ? formatDate(new Date(event.endDate)) : "";
+        });
 
-      var events = res.events;
-      _.forEach(events, function(event) {
-        event.startDate = formatDate(new Date(event.startDate));
-        event.endDate = event.endDate != null ? formatDate(new Date(event.endDate)) : "";
+        self.setState({events: events});
       });
-
-      self.setState({events: events});
     });
   },
 
@@ -65,37 +77,15 @@ var Events = React.createClass({
         }
       }
     ];
-    if(localSession.user) {
-      actionDescriptors.push(
-        {
-          icon: "check",
-          warningMessage: __("areYouSure"),
-          tooltip: {
-            text: __("event::registerToEventPrompt"),
-            overlayProps: {placement: "top"}
-          },
-          callback: function() {
-            actions.event.register(
-            {
-              data: {
-                idEvent : event.id,
-                idUser  : localSession.user.id
-              }
-            }, function(err, res){
-              if (err || !res.success) {
-                console.error(err);
-                MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
-                return;
-              }
-              if(res.success) {
-                MKAlertTrigger.showAlert(__("event::registeredToEventConfirmation") + ": " + event.name);
-              }
-            });
-          }
-        }
-      );
-    }
     return actionDescriptors;
+  },
+
+  switchIsClosedState: function() {
+    var self = this;
+    var newState = !this.state.isClosed;
+    self.setState({
+      isClosed: newState
+    }, self.updateList);
   },
 
   render: function() {
@@ -147,6 +137,10 @@ var Events = React.createClass({
     return (
       <BSCol md={12}>
         <div>
+          <BSButton onClick={this.switchIsClosedState}>
+            <MKIcon glyph="exchange" /> 
+            {__("event::switchEventState_" + (this.state.isClosed ? "true" : "false"))}
+          </BSButton>
           <MKTableSorter
             config={CONFIG}
             items={this.state.events}

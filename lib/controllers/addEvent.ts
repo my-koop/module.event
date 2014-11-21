@@ -10,7 +10,8 @@ function addEvent(req: express.Request, res: express.Response) {
     startDate   : new Date(req.param("startDate")),
     endDate     : new Date(req.param("endDate") || null),
     startAmount : parseFloat(req.param("startAmount")) || null,
-    endAmount   : parseFloat(req.param("endAmount")) || null
+    endAmount   : parseFloat(req.param("endAmount")) || null,
+    isClosed    : Boolean(false)
   };
 
   self.addEvent(data, function(err) {

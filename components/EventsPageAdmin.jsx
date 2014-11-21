@@ -1,9 +1,10 @@
-var React       = require("react/addons");
-var __          = require("language").__;
-var BSButton    = require("react-bootstrap/Button");
-var reactRouter = require("react-router");
-var routeData   = require("dynamic-metadata").routes;
-var MKEvents     = require("./Events");
+var React             = require("react/addons");
+var __                = require("language").__;
+var BSButton          = require("react-bootstrap/Button");
+var reactRouter       = require("react-router");
+var routeData         = require("dynamic-metadata").routes;
+var MKEventsAdmin     = require("./EventsAdmin");
+var localSession      = require("session").local;
 
 var EventsPage = React.createClass({
   goToNewEventPage: function() {
@@ -22,7 +23,8 @@ var EventsPage = React.createClass({
         >
           {__("event::newEvent")}
         </BSButton>
-        <MKEvents />
+       
+        <MKEventsAdmin />
       </div>
     );
   }
