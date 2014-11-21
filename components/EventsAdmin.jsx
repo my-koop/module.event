@@ -27,7 +27,11 @@ var Events = React.createClass({
     self.setState({
       events: []
     }, function() {
-      actions.event.list(function (err, res) {
+      actions.event.list({
+        data: {
+          isClosed : this.state.isClosed
+        }
+      },function (err, res) {
         if (err) {
           MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
           console.error(err);
@@ -78,7 +82,7 @@ var Events = React.createClass({
 
   switchIsClosedState: function() {
     var self = this;
-    var newState = !isClosed;
+    var newState = !this.state.isClosed;
     self.setState({
       isClosed: newState
     }, self.updateList);
@@ -134,8 +138,8 @@ var Events = React.createClass({
       <BSCol md={12}>
         <div>
           <BSButton onClick={this.switchIsClosedState}>
-            <MKIcon glyph="exchange" />
-            {__("event::switchEventState", {context: this.state.isClosed})}
+            <MKIcon glyph="exchange" /> 
+            {__("event::switchEventState_" + (this.state.isClosed ? "true" : "false"))}
           </BSButton>
           <MKTableSorter
             config={CONFIG}
