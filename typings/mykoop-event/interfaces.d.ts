@@ -6,7 +6,6 @@ declare module EventInterfaces {
     endDate         : Date;
     startAmount     : number;
     endAmount       : number;
-    isClosed        : boolean;
   }
 
   export interface RegisterEventData {

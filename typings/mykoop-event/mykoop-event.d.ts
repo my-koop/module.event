@@ -39,7 +39,6 @@ declare module mkevent {
     endDate     : Date;
     startAmount : number;
     endAmount   : number;
-    isClosed    : boolean;
   }
 
 }
