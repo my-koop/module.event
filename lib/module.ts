@@ -17,7 +17,7 @@ class Module extends utils.BaseModule implements mkevent.Module {
     controllerList.attachControllers(new utils.ModuleControllersBinder(this));
   }
 
-  getEvents(callback: (err: Error, result?: Event[]) => void) {
+  getEvents(data: EventInterfaces.GetEventsData, callback: (err: Error, result?: Event[]) => void) {
     var events = [];
 
     this.db.getConnection(function(err, connection, cleanup) {
@@ -25,9 +25,14 @@ class Module extends utils.BaseModule implements mkevent.Module {
         return callback(new DatabaseError(err));
       }
 
+
+      //Event is considered closed when endDate is not null
+      var isNull = data.isClosed ? "NOT" : "";
+
       var query = connection.query(
-        "SELECT ?? FROM ??",
-        [Event.COLUMNS_DB, "event"],
+        "SELECT e.idEvent, e.type, e.startDate, e.endDate, e.startAmount, e.endAmount, name, count(eu.idEvent) as countRegistered " +
+        "FROM event e LEFT JOIN event_user eu ON eu.idEvent = e.idEvent WHERE e.endDate IS " + isNull + " NULL GROUP BY e.idEvent",
+        [],
         function(err, rows) {
           cleanup();
 
@@ -51,7 +56,8 @@ class Module extends utils.BaseModule implements mkevent.Module {
       startDate     : data.startDate,
       endDate       : data.endDate,
       startAmount   : data.startAmount,
-      endAmount     : data.endAmount
+      endAmount     : data.endAmount,
+      isClosed      : data.isClosed
     };
 
     //When textbox is empty, it returns 0 instead of null, which is timestamp  for January 1 1969

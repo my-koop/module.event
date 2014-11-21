@@ -6,6 +6,7 @@ declare module EventDbQueryStruct {
     endDate         : Date;
     startAmount     : number;
     endAmount       : number;
+    isClosed        : boolean;
   }
 
   export interface EventUserData {

@@ -20,7 +20,11 @@ var Events = React.createClass({
   componentWillMount: function() {
     var self = this;
 
-    actions.event.list(function (err, res) {
+    actions.event.list({
+      data : {
+        isClosed : false
+      }
+    }, function (err, res) {
       if (err) {
         MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
         console.error(err);

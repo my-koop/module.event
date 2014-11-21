@@ -8,6 +8,7 @@ class Event implements mkevent.Event {
   public  startAmount         : number;
   public  endAmount           : number;
   public  countRegistered     : number;
+  public  isClosed            : boolean;
 
   constructor(row: any) {
     this.id                  = Number(row.idEvent);
@@ -18,6 +19,7 @@ class Event implements mkevent.Event {
     this.startAmount         = Number(row.startAmount) || 0.00;
     this.endAmount           = Number(row.endAmount) || 0.00;
     this.countRegistered     = Number(row.countRegistered) || 0;
+    this.isClosed            = !!row.isClosed;
   }
 }
 
