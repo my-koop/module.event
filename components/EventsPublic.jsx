@@ -31,7 +31,9 @@ var Events = React.createClass({
         return;
       }
 
-      var events = res.events;
+      var events = _.filter(res.events, function(event) {
+        return event.type === "workshop";
+      });
       _.forEach(events, function(event) {
         event.startDate = formatDate(new Date(event.startDate));
         event.endDate = event.endDate != null ? formatDate(new Date(event.endDate)) : "";
@@ -84,7 +86,9 @@ var Events = React.createClass({
     // TableSorter Config
     var CONFIG = {
       defaultOrdering: [
-        "name", "type", "startDate", "endDate",
+        "name",
+        "type",
+        "startDate",
         "actions"
       ],
       columns: {
@@ -99,9 +103,6 @@ var Events = React.createClass({
         },
         startDate: {
           name: __("event::startDate"),
-        },
-        endDate: {
-          name: __("event::endDate"),
         },
         actions: {
           name: __("actions"),

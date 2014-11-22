@@ -3,21 +3,19 @@ function addRoutes(metaData) {
         idPath: ["dashboard", "events", "createEvent"],
         component: "CreateEventPage",
         name: "createEventPage",
-        path: "event/create"
+        path: "event/create",
     });
-
     metaData.addFrontendRoute({
         idPath: ["dashboard", "events", "list"],
         component: "EventsPageAdmin",
         name: "eventsAdmin",
-        path: "events"
+        path: "events",
     });
-
     metaData.addFrontendRoute({
-        idPath: ["simple", "events", "list"],
+        idPath: ["public", "events", "list"],
         component: "EventsPagePublic",
         name: "eventsPublic",
-        path: "events"
+        path: "events",
     });
 }
 exports.addRoutes = addRoutes;
