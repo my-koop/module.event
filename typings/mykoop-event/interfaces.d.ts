@@ -18,7 +18,7 @@ declare module EventInterfaces {
   }
 
   export interface UpdateEventData {
-  	id				      : number;
+    id              : number;
     name            : string;
     type            : string;
     startDate       : Date;
