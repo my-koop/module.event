@@ -1,5 +1,5 @@
 {
-	editEventTooltip : "Edit event",
+  editEventTooltip : "Edit event",
   eventNew_failed: "The event couldn't be added",
   eventNew_success: "The event was added",
   createEventWelcome: "Creating an event",
