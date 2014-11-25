@@ -12,4 +12,8 @@ declare module EventInterfaces {
     idUser          : number;
     idEvent         : number;
   }
+
+  export interface  GetEventsData {
+    isClosed        : boolean;
+  }
 }

@@ -1,9 +1,11 @@
-var React    = require("react/addons");
-var BSInput  = require("react-bootstrap/Input");
-var BSAlert  = require("react-bootstrap/Alert");
-var actions  = require("actions");
-var _        = require("lodash");
-var __       = require("language").__;
+var React             = require("react/addons");
+var BSInput           = require("react-bootstrap/Input");
+var BSAlert           = require("react-bootstrap/Alert");
+var actions           = require("actions");
+var _                 = require("lodash");
+var __                = require("language").__;
+var localSession      = require("session").local;
+
 
 var EventEditForm = React.createClass({
   // Decided for a one layer linkedState, because much simpler and faster

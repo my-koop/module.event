@@ -20,14 +20,20 @@ var Events = React.createClass({
   componentWillMount: function() {
     var self = this;
 
-    actions.event.list(function (err, res) {
+    actions.event.list({
+      data : {
+        isClosed : false
+      }
+    }, function (err, res) {
       if (err) {
         MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
         console.error(err);
         return;
       }
 
-      var events = res.events;
+      var events = _.filter(res.events, function(event) {
+        return event.type === "workshop";
+      });
       _.forEach(events, function(event) {
         event.startDate = formatDate(new Date(event.startDate));
         event.endDate = event.endDate != null ? formatDate(new Date(event.endDate)) : "";
@@ -39,32 +45,8 @@ var Events = React.createClass({
 
   actionsGenerator: function(event) {
     var actionDescriptors = [
-      {
-        icon: "trash",
-        warningMessage: __("areYouSure"),
-        tooltip: {
-          text: __("remove"),
-          overlayProps: {placement: "top"}
-        },
-        callback: function() {
-          var id = event.id;
-          actions.event.remove(
-          {
-            data: {
-              id : id
-            }
-          }, function(err, res){
-            if (err) {
-              console.error(err);
-              MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
-              return;
-            }
-
-            MKAlertTrigger.showAlert(__("event::removedEventMessage") + ": " + event.name);
-          });
-        }
-      }
     ];
+
     if(localSession.user) {
       actionDescriptors.push(
         {
@@ -104,8 +86,10 @@ var Events = React.createClass({
     // TableSorter Config
     var CONFIG = {
       defaultOrdering: [
-        "name", "type", "startDate", "endDate",
-        "startAmount", "endAmount", "actions"
+        "name",
+        "type",
+        "startDate",
+        "actions"
       ],
       columns: {
         name: {
@@ -119,15 +103,6 @@ var Events = React.createClass({
         },
         startDate: {
           name: __("event::startDate"),
-        },
-        endDate: {
-          name: __("event::endDate"),
-        },
-        startAmount: {
-          name: __("event::startAmount"),
-        },
-        endAmount: {
-          name: __("event::endAmount"),
         },
         actions: {
           name: __("actions"),
