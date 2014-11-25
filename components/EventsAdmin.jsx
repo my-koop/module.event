@@ -10,34 +10,72 @@ var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
 var formatDate        = require("language").formatDate;
 var localSession      = require("session").local;
 
+
+var openColumns = [
+  "name",
+  "type",
+  "registrations",
+  "startDate",
+  "startAmount",
+  "actions"
+];
+var closedColumns = [
+  "name",
+  "type",
+  "startDate",
+  "endDate",
+  "startAmount",
+  "endAmount",
+  "actions"
+];
+var columns = {};
+columns[true] = closedColumns;
+columns[false] = openColumns;
+
 var Events = React.createClass({
   getInitialState: function() {
     return {
-      events: []
+      events: [],
+      isClosed : false
     }
   },
 
-  componentWillMount: function() {
+  componentDidMount: function() {
+    this.updateList();
+  },
+
+  updateList: function() {
     var self = this;
+    self.setState({
+      events: []
+    }, function() {
+      actions.event.list({
+        data: {
+          isClosed : this.state.isClosed
+        }
+      },function (err, res) {
+        if (err) {
+          MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
+          console.error(err);
+          return;
+        }
 
-    actions.event.list(function (err, res) {
-      if (err) {
-        MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
-        console.error(err);
-        return;
-      }
+        var events = res.events;
+        _.forEach(events, function(event) {
+          event.startDate = formatDate(new Date(event.startDate));
+          event.endDate = event.endDate != null ? formatDate(new Date(event.endDate)) : "";
+        });
 
-      var events = res.events;
-      _.forEach(events, function(event) {
-        event.startDate = formatDate(new Date(event.startDate));
-        event.endDate = event.endDate != null ? formatDate(new Date(event.endDate)) : "";
+        self.setState({events: events});
       });
-
-      self.setState({events: events});
     });
   },
 
-  actionsGenerator: function(event) {
+  actionsGenerator: function(event, i) {
+    var self = this;
+    if(this.state.isClosed) {
+      return [];
+    }
     var actionDescriptors = [
       {
         icon: "trash",
@@ -53,13 +91,17 @@ var Events = React.createClass({
             data: {
               id : id
             }
-          }, function(err, res){
+          }, function(err, res) {
             if (err) {
               console.error(err);
               MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
               return;
             }
-
+            var events = self.state.events;
+            events.splice(i, 1);
+            self.setState({
+              events: events
+            });
             MKAlertTrigger.showAlert(__("event::removedEventMessage") + ": " + event.name);
           });
         }
@@ -68,15 +110,20 @@ var Events = React.createClass({
     return actionDescriptors;
   },
 
+  switchIsClosedState: function() {
+    var self = this;
+    var newState = !this.state.isClosed;
+    self.setState({
+      isClosed: newState
+    }, self.updateList);
+  },
+
   render: function() {
     var self = this;
 
     // TableSorter Config
     var CONFIG = {
-      defaultOrdering: [
-        "name", "type", "startDate", "endDate",
-        "startAmount", "endAmount", "actions"
-      ],
+      defaultOrdering: columns[this.state.isClosed],
       columns: {
         name: {
           name: __("name"),
@@ -85,6 +132,13 @@ var Events = React.createClass({
           name: __("event::type"),
           cellGenerator: function(event) {
             return __("event::" + event.type);
+          }
+        },
+        registrations: {
+          // Show the number of people registered to this event
+          name: "#" + __("event::registrations"),
+          cellGenerator: function() {
+            return "TODO";
           }
         },
         startDate: {
@@ -102,11 +156,11 @@ var Events = React.createClass({
         actions: {
           name: __("actions"),
           isStatic: true,
-          cellGenerator: function(event) {
+          cellGenerator: function(event, i) {
             return (
               <MKListModButtons
                 defaultTooltipDelay={500}
-                buttons={self.actionsGenerator(event)}
+                buttons={self.actionsGenerator(event, i)}
               />
             );
           }
@@ -117,6 +171,10 @@ var Events = React.createClass({
     return (
       <BSCol md={12}>
         <div>
+          <BSButton onClick={this.switchIsClosedState}>
+            <MKIcon glyph="exchange" />
+            {__("event::switchEventState", {context: _(this.state.isClosed).toString()})}
+          </BSButton>
           <MKTableSorter
             config={CONFIG}
             items={this.state.events}

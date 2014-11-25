@@ -13,5 +13,7 @@
   newEvent: "Add event",
   eventWelcome : "Events list",
   registeredToEventConfirmation : "You have been registered to the event",
-  registerToEventPrompt : "Do you want to register to this event ?"
+  registerToEventPrompt : "Do you want to register to this event ?",
+  switchEventState_true: "Show open",
+  switchEventState_false: "Show closed",
 }

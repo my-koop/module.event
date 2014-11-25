@@ -20,14 +20,20 @@ var Events = React.createClass({
   componentWillMount: function() {
     var self = this;
 
-    actions.event.list(function (err, res) {
+    actions.event.list({
+      data : {
+        isClosed : false
+      }
+    }, function (err, res) {
       if (err) {
         MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
         console.error(err);
         return;
       }
 
-      var events = res.events;
+      var events = _.filter(res.events, function(event) {
+        return event.type === "workshop";
+      });
       _.forEach(events, function(event) {
         event.startDate = formatDate(new Date(event.startDate));
         event.endDate = event.endDate != null ? formatDate(new Date(event.endDate)) : "";
@@ -80,7 +86,9 @@ var Events = React.createClass({
     // TableSorter Config
     var CONFIG = {
       defaultOrdering: [
-        "name", "type", "startDate", "endDate",
+        "name",
+        "type",
+        "startDate",
         "actions"
       ],
       columns: {
@@ -95,9 +103,6 @@ var Events = React.createClass({
         },
         startDate: {
           name: __("event::startDate"),
-        },
-        endDate: {
-          name: __("event::endDate"),
         },
         actions: {
           name: __("actions"),

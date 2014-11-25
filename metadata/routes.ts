@@ -15,7 +15,7 @@ export function addRoutes(metaData: utils.MetaDataBuilder) {
   });
 
   metaData.addFrontendRoute({
-    idPath: ["simple", "events", "list"],
+    idPath: ["public", "events", "list"],
     component: "EventsPagePublic",
     name: "eventsPublic",
     path: "events",
