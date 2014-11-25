@@ -9,7 +9,8 @@ var actions           = require("actions");
 var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
 var formatDate        = require("language").formatDate;
 var localSession      = require("session").local;
-
+var router            = require("react-router");
+var getRouteName      = require("mykoop-utils/frontend/getRouteName");
 
 var openColumns = [
   "name",
@@ -77,6 +78,18 @@ var Events = React.createClass({
       return [];
     }
     var actionDescriptors = [
+      {
+        icon: "edit",
+        tooltip: {
+          text: __("event::editEventTooltip"),
+          overlayProps: {
+            placement: "top"
+          }
+        },
+        callback: function(){
+          router.transitionTo(getRouteName(["dashboard", "events", "updateEventPage"]), {id : event.id})
+        }
+      },
       {
         icon: "trash",
         warningMessage: __("areYouSure"),
