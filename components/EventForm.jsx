@@ -19,8 +19,8 @@ var EventEditForm = React.createClass({
     return {
       name        : this.state.name,
       type        : this.state.type,
-      startDate   : this.state.startDate,
-      endDate     : this.state.endDate,
+      startDate   : this.state.startDate ? this.state.startDate.toISOString() : "",
+      endDate     : this.state.endDate ? this.state.endDate.toISOString() : "",
       startAmount : this.state.startAmount,
       endAmount   : this.state.endAmount
     }
@@ -29,7 +29,8 @@ var EventEditForm = React.createClass({
   getInitialState: function() {
     return {
       eventObj: null,
-      id: null
+      id: null,
+      type: "cashier"
     }
   },
 
@@ -57,8 +58,9 @@ var EventEditForm = React.createClass({
         console.error(err);
         return;
       }
-
-      self.setState({eventObj: res}); //FIX ME : Not actually assigning in state
+      res.startDate = new Date(res.startDate);
+      res.endDate = res.endDate ? new Date(res.endDate) : null;
+      self.setState(res); //FIX ME : Not actually assigning in state
       console.log(res);
     });
   },
@@ -72,12 +74,10 @@ var EventEditForm = React.createClass({
         <BSInput
           type="text"
           label={__("name")}
-          defaultValue={self.state.eventObj}
           valueLink={self.linkState("name")}
         />
         <BSInput
           type="select"
-          defaultValue="cashier"
           label={__("event::type")}
           valueLink={self.linkState("type")}
         >
@@ -87,9 +87,10 @@ var EventEditForm = React.createClass({
         <label>
           {__("event::startDate")}
           <MKDateTimePicker
+            value={this.state.startDate}
             onChange={function(date, str) {
               self.setState({
-                startDate: str
+                startDate: date
               });
             }}
           />
@@ -97,9 +98,10 @@ var EventEditForm = React.createClass({
         <label>
           {__("event::endDate")}
           <MKDateTimePicker
+            value={this.state.endDate}
             onChange={function(date, str) {
               self.setState({
-                endDate: str
+                endDate: date
               });
             }}
           />
