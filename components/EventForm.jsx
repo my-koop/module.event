@@ -8,8 +8,7 @@ var __                = require("language").__;
 var formatDate        = require("language").formatDate;
 
 var EventEditForm = React.createClass({
-  // Decided for a one layer linkedState, because much simpler and faster
-  // than custom linking and more reliable
+
   mixins: [React.addons.LinkedStateMixin],
 
   propTypes: {
@@ -34,22 +33,16 @@ var EventEditForm = React.createClass({
     }
   },
 
-  componentWillReceiveProps: function(nextProps) {
-    console.log("componentWillReceiveProps");
-    
+  componentWillReceiveProps: function(nextProps) {    
   },
 
   componentWillMount: function() {
-    console.log("componentWillMount");
     if(this.props.id != null){
       this.getEventFromDb();
     }
-    
   },
 
-  componentDidMount: function () {
-    console.log("componentDidMount");
-    
+  componentDidMount: function () {    
   },
 
   getEventFromDb: function() {
@@ -64,29 +57,29 @@ var EventEditForm = React.createClass({
         console.error(err);
         return;
       }
+
       self.setState({eventObj: res}); //FIX ME : Not actually assigning in state
       console.log(res);
     });
   },
 
   render: function () {
-    console.log("render");
     var self = this;
     var others = _.omit(this.props, 'event');
-  
+
     return (
       <div {...others} >
         <BSInput
           type="text"
           label={__("name")}
-          defaultValue={this.state.eventObj}
-          valueLink={this.linkState("name")}
+          defaultValue={self.state.eventObj}
+          valueLink={self.linkState("name")}
         />
         <BSInput
           type="select"
           defaultValue="cashier"
           label={__("event::type")}
-          valueLink={this.linkState("type")}
+          valueLink={self.linkState("type")}
         >
           <option value="workshop">{__("event::workshop")}</option>
           <option value="cashier">{__("event::cashier")}</option>

@@ -10,7 +10,7 @@ var actions         = require("actions");
 var __              = require("language").__;
 
 var MKSpinner        = require("mykoop-core/components/Spinner");
-var MKEventEditForm  = require("./EventEditForm");
+var MKEventForm      = require("./EventForm");
 var MKAlert          = require("mykoop-core/components/Alert");
 
 var CreateEventPage = React.createClass({
@@ -90,7 +90,7 @@ var CreateEventPage = React.createClass({
           <MKAlert bsStyle="danger" permanent>
             {this.state.errorMessage}
           </MKAlert>
-          <MKEventEditForm ref="eventForm" />
+          <MKEventForm ref="eventForm" />
           <BSButton
             onClick={this.onSave}
             className="pull-right"
