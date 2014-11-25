@@ -16,6 +16,7 @@ declare module mkevent {
     );
 
     getEvents(
+      getEventsData: EventInterfaces.GetEventsData,
       callback: (err: Error, result?: Event[]) => void
     );
 
@@ -41,13 +42,13 @@ declare module mkevent {
   }
 
   export interface Event {
-    id: number;
-    name: string;
-    type: string;
-    startDate : Date;
-    endDate : Date;
+    id          : number;
+    name        : string;
+    type        : string;
+    startDate   : Date;
+    endDate     : Date;
     startAmount : number;
-    endAmount : number;
+    endAmount   : number;
   }
 
 }

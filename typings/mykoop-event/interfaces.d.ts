@@ -26,4 +26,8 @@ declare module EventInterfaces {
     startAmount     : number;
     endAmount       : number;
   }
+
+  export interface  GetEventsData {
+    isClosed        : boolean;
+  }
 }
