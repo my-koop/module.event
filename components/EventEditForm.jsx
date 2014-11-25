@@ -41,7 +41,10 @@ var EventEditForm = React.createClass({
 
   componentWillMount: function() {
     console.log("componentWillMount");
-    this.getEventFromDb();
+    if(this.props.id != null){
+      this.getEventFromDb();
+    }
+    
   },
 
   componentDidMount: function () {

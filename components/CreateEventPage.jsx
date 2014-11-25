@@ -90,7 +90,7 @@ var CreateEventPage = React.createClass({
           <MKAlert bsStyle="danger" permanent>
             {this.state.errorMessage}
           </MKAlert>
-          <MKEventEditForm id={this.props.params.id} ref="eventForm" />
+          <MKEventEditForm ref="eventForm" />
           <BSButton
             onClick={this.onSave}
             className="pull-right"

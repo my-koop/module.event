@@ -17,4 +17,5 @@
   registerToEventPrompt : "Do you want to register to this event ?",
   switchEventState_true: "Show open",
   switchEventState_false: "Show closed",
+  updateEventWelcome: "Editing event",
 }
