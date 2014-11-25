@@ -18,4 +18,5 @@
   switchEventState_true: "Show open",
   switchEventState_false: "Show closed",
   updateEventWelcome: "Editing event",
+  countRegistered: "# Registered",
 }

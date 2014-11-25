@@ -6,10 +6,11 @@ var logger        = getLogger(module);
 function updateEvent(req: express.Request, res: express.Response) {
   var self: mkevent.Module = this;
   var data = {
+    id          : Number(req.param("id")),
     name        : req.param("name"),
     type        : req.param("type"),
-    startDate   : new Date(req.param("startDate")),
-    endDate     : new Date(req.param("endDate") || null),
+    startDate   : req.param("startDate") ? new Date(req.param("startDate")) : null,
+    endDate     : req.param("endDate") ? new Date(req.param("endDate")) : null,
     startAmount : parseFloat(req.param("startAmount")) || null,
     endAmount   : parseFloat(req.param("endAmount")) || null
   };

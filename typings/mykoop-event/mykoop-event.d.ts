@@ -21,7 +21,7 @@ declare module mkevent {
     );
 
     updateEvent(
-      updateData: EventInterfaces.AddEventData,
+      updateData: EventInterfaces.UpdateEventData,
       callback: (err: Error, result?: boolean) => void
     );
 

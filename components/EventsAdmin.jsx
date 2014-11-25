@@ -15,7 +15,7 @@ var getRouteName      = require("mykoop-utils/frontend/getRouteName");
 var openColumns = [
   "name",
   "type",
-  "registrations",
+  "countRegistered",
   "startDate",
   "startAmount",
   "actions"
@@ -66,6 +66,7 @@ var Events = React.createClass({
           event.startDate = formatDate(new Date(event.startDate));
           event.endDate = event.endDate != null ? formatDate(new Date(event.endDate)) : "";
         });
+
 
         self.setState({events: events});
       });
@@ -147,12 +148,9 @@ var Events = React.createClass({
             return __("event::" + event.type);
           }
         },
-        registrations: {
+        countRegistered: {
           // Show the number of people registered to this event
-          name: "#" + __("event::registrations"),
-          cellGenerator: function() {
-            return "TODO";
-          }
+          name: __("event::countRegistered")
         },
         startDate: {
           name: __("event::startDate"),

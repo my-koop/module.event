@@ -41,8 +41,9 @@ var UpdateEventPage = React.createClass({
       event: event
     });
 
+    event.id = Number(this.props.params.id);
     MKSpinner.showGlobalSpinner();
-    actions.event.add({
+    actions.event.update({
       data: event
     }, function(err, body) {
       MKSpinner.hideGlobalSpinner();
