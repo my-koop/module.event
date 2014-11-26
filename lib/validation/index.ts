@@ -14,7 +14,6 @@ var dataConstraint = {
     presence: true
   },
   startAmount: {
-    presence: true,
     numericality: {
       greaterThan: 0,
       message: "^error"

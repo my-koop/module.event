@@ -1,16 +1,20 @@
 var React             = require("react");
 var BSCol             = require("react-bootstrap/Col");
 var BSButton          = require("react-bootstrap/Button");
+var router            = require("react-router");
+
+var __                = require("language").__;
+var actions           = require("actions");
+var formatDate        = require("language").formatDate;
+var localSession      = require("session").local;
+
+var getRouteName      = require("mykoop-utils/frontend/getRouteName");
+var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
 var MKIcon            = require("mykoop-core/components/Icon");
 var MKTableSorter     = require("mykoop-core/components/TableSorter");
 var MKListModButtons  = require("mykoop-core/components/ListModButtons");
-var __                = require("language").__;
-var actions           = require("actions");
-var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
-var formatDate        = require("language").formatDate;
-var localSession      = require("session").local;
-var router            = require("react-router");
-var getRouteName      = require("mykoop-utils/frontend/getRouteName");
+var MKStartEventModal = require("./StartEventModal");
+
 
 var openColumns = [
   "name",
@@ -79,6 +83,16 @@ var Events = React.createClass({
       return [];
     }
     var actionDescriptors = [
+      {
+        icon: "circle-thin",
+        tooltip: {
+          text: __("event::startEvent"),
+          overlayProps: {
+            placement: "top"
+          }
+        },
+        modalTrigger: <MKStartEventModal event={{id: event.id, name : event.name}} />
+      },
       {
         icon: "edit",
         tooltip: {

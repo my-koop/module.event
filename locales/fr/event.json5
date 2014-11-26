@@ -19,4 +19,5 @@
   switchEventState_false: "Afficher fermées",
   updateEventWelcome: "Édition de l'événement",
   countRegistered: "# Enregistrés",
+  startEvent: "Commencer l'événement",
 }
