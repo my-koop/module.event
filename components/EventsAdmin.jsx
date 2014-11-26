@@ -9,12 +9,13 @@ var actions           = require("actions");
 var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
 var formatDate        = require("language").formatDate;
 var localSession      = require("session").local;
-
+var router            = require("react-router");
+var getRouteName      = require("mykoop-utils/frontend/getRouteName");
 
 var openColumns = [
   "name",
   "type",
-  "registrations",
+  "countRegistered",
   "startDate",
   "startAmount",
   "actions"
@@ -66,6 +67,7 @@ var Events = React.createClass({
           event.endDate = event.endDate != null ? formatDate(new Date(event.endDate)) : "";
         });
 
+
         self.setState({events: events});
       });
     });
@@ -77,6 +79,18 @@ var Events = React.createClass({
       return [];
     }
     var actionDescriptors = [
+      {
+        icon: "edit",
+        tooltip: {
+          text: __("event::editEventTooltip"),
+          overlayProps: {
+            placement: "top"
+          }
+        },
+        callback: function(){
+          router.transitionTo(getRouteName(["dashboard", "events", "updateEventPage"]), {id : event.id})
+        }
+      },
       {
         icon: "trash",
         warningMessage: __("areYouSure"),
@@ -134,12 +148,9 @@ var Events = React.createClass({
             return __("event::" + event.type);
           }
         },
-        registrations: {
+        countRegistered: {
           // Show the number of people registered to this event
-          name: "#" + __("event::registrations"),
-          cellGenerator: function() {
-            return "TODO";
-          }
+          name: __("event::countRegistered")
         },
         startDate: {
           name: __("event::startDate"),

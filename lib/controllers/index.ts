@@ -6,6 +6,7 @@ import Express    = require("express");
 // Controllers
 import addEvent   = require ("./addEvent");
 import getEvents  = require ("./getEvents");
+import updateEvent  = require ("./updateEvent");
 import deleteEvent  = require ("./deleteEvent");
 
 var endPoints = metaData.endpoints;
@@ -27,6 +28,11 @@ export function attachControllers(
   );
 
   binder.attach(
+    {endPoint: endPoints.event.update},
+    updateEvent
+  );
+
+  binder.attach(
     {endPoint: endPoints.event.remove},
     deleteEvent
   );
@@ -39,6 +45,18 @@ export function attachControllers(
         return {
           idUser : Number(req.param("idUser")),
           idEvent: Number(req.param("idEvent"))
+        };
+      }
+    })
+  );
+
+  binder.attach(
+    {endPoint: endPoints.event.get},
+    binder.makeSimpleController("getEvent",
+    {
+      parseFunc: function(req: Express.Request): EventInterfaces.GetEventData {
+        return {
+          id: Number(req.param("id"))
         };
       }
     })

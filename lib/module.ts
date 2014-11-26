@@ -8,7 +8,6 @@ var logger              = getLogger(module);
 var DatabaseError       = utils.errors.DatabaseError;
 var ApplicationError    = utils.errors.ApplicationError;
 
-
 class Module extends utils.BaseModule implements mkevent.Module {
   private db: mkdatabase.Module;
 
@@ -88,6 +87,38 @@ class Module extends utils.BaseModule implements mkevent.Module {
     });
   }
 
+  updateEvent(data: EventInterfaces.UpdateEventData, callback: (err?: Error) => void) {
+    var queryData: EventDbQueryStruct.EventData = {
+      name          : data.name,
+      type          : data.type,
+      startDate     : data.startDate,
+      endDate       : data.endDate,
+      startAmount   : data.startAmount,
+      endAmount     : data.endAmount
+    };
+
+    var id = data.id;
+
+    this.db.getConnection(function(err, connection, cleanup) {
+      if(err) {
+        return callback(new DatabaseError(err));
+      }
+
+      var query = connection.query(
+        "UPDATE event SET ? WHERE idEvent = ?",
+        [queryData, id],
+        function(err) {
+          cleanup();
+
+          if (err) {
+            return callback(new DatabaseError(err));
+          }
+
+          callback();
+      });
+    });
+  }
+
   deleteEvent(id: Number, callback: (err?: Error, result?: boolean) => void) {
     this.db.getConnection(function(err, connection, cleanup) {
       if(err) {
@@ -147,6 +178,33 @@ class Module extends utils.BaseModule implements mkevent.Module {
         cleanup();
         callback(err, {success: result && result.affectedRows === 1});
       })
+    });
+  }
+
+  getEvent(data: EventInterfaces.GetEventData, callback: (err: Error, result?: Event) => void) {
+    var event = null;
+
+    this.db.getConnection(function(err, connection, cleanup) {
+      if(err) {
+        return callback(new DatabaseError(err));
+      }
+      var query = connection.query(
+        "SELECT * FROM event WHERE idEvent=?",
+        [data.id],
+        function(err, rows) {
+          cleanup();
+
+          if (err) {
+            return callback(new DatabaseError(err));
+          }
+
+          if(rows.length == 1){
+            event = new Event(rows[0]);
+            callback(null, event);
+          }else{
+            return callback(new DatabaseError(err));
+          }
+      });
     });
   }
 

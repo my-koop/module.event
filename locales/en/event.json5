@@ -1,4 +1,5 @@
 {
+  editEventTooltip : "Edit event",
   eventNew_failed: "The event couldn't be added",
   eventNew_success: "The event was added",
   createEventWelcome: "Creating an event",
@@ -16,4 +17,6 @@
   registerToEventPrompt : "Do you want to register to this event ?",
   switchEventState_true: "Show open",
   switchEventState_false: "Show closed",
+  updateEventWelcome: "Editing event",
+  countRegistered: "# Registered",
 }

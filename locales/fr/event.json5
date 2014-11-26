@@ -1,4 +1,5 @@
 {
+  editEventTooltip : "Éditer l'événement",
   eventNew_failed: "L'événement n'a pu être ajouté",
   eventNew_success: "L'événement a été ajouté",
   createEventWelcome: "Ajout d'un evénement",
@@ -16,4 +17,6 @@
   registerToEventPrompt : "Voulez-vous vous enregistrer à cet événement ?",
   switchEventState_true: "Afficher ouvertes",
   switchEventState_false: "Afficher fermées",
+  updateEventWelcome: "Édition de l'événement",
+  countRegistered: "# Enregistrés",
 }

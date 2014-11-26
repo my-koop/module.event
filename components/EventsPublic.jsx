@@ -9,6 +9,8 @@ var actions           = require("actions");
 var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
 var formatDate        = require("language").formatDate;
 var localSession      = require("session").local;
+var router            = require("react-router");
+var getRouteName      = require("mykoop-utils/frontend/getRouteName");
 
 var Events = React.createClass({
   getInitialState: function() {

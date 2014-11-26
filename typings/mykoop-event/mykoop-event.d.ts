@@ -20,6 +20,11 @@ declare module mkevent {
       callback: (err: Error, result?: Event[]) => void
     );
 
+    updateEvent(
+      updateData: EventInterfaces.UpdateEventData,
+      callback: (err: Error, result?: boolean) => void
+    );
+
     deleteEvent(
       idEvent : Number,
       callback: (err: Error, result?: boolean) => void
@@ -28,6 +33,11 @@ declare module mkevent {
     registerToEvent(
       registerData: EventInterfaces.RegisterEventData,
       callback: (err: Error, result?: {success: boolean}) => void
+    );
+
+    getEvent(
+      data: EventInterfaces.GetEventData, 
+      callback: (err: Error, result?: Event) => void
     );
   }
 
