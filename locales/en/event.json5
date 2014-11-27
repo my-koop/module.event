@@ -22,4 +22,6 @@
   startEvent: "Start event",
   endEvent: "End event",
   eventClosed: "Event closed",
+  eventUpdated_success: "Event was updated",
+  eventUpdated_failed: "Event could not be updated",
 }

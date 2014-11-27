@@ -50,13 +50,13 @@ var UpdateEventPage = React.createClass({
       if(err) {
         console.error(err);
         return self.setState({
-          errorMessage: __("event::eventUpdate", {context:"failed"}),
+          errorMessage: __("event::eventUpdated", {context:"failed"}),
           success: null
         });
       }
       return self.setState({
         errorMessage: null,
-        success: __("event::eventUpdate", {context:"success"})
+        success: __("event::eventUpdated", {context:"success"})
       });
     });
   },

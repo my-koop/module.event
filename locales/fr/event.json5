@@ -22,4 +22,6 @@
   startEvent: "Commencer l'événement",
   endEvent: "Fermer l'événement",
   eventClosed: "Événement fermé",
+  eventUpdated_success: "L'événement a été mis à jour",
+  eventUpdated_failed: "L'événement n'a pas pu être mis à jour",
 }
