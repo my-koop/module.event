@@ -24,4 +24,6 @@
   eventClosed: "Événement fermé",
   eventUpdated_success: "L'événement a été mis à jour",
   eventUpdated_failed: "L'événement n'a pas pu être mis à jour",
+  eventStarted: "L'événement à démarrer",
+  eventStartFailed: "L'événement n'a pu être démarrer",
 }
