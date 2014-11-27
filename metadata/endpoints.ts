@@ -8,6 +8,14 @@ var endpoints = {
       path: "/event/update/",
       method: "post"
     },
+    start: {
+        path: "/event/update/start/:id/:startAmount",
+        method: "post",
+    },
+    end: {
+        path: "/event/update/end/:id/:endAmount",
+        method: "post",
+    },
     add: {
       path: "/event/",
       method: "post",

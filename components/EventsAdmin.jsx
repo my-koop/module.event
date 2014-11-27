@@ -82,17 +82,41 @@ var Events = React.createClass({
     if(this.state.isClosed) {
       return [];
     }
-    var actionDescriptors = [
-      {
-        icon: "circle-thin",
-        tooltip: {
-          text: __("event::startEvent"),
-          overlayProps: {
-            placement: "top"
-          }
-        },
-        modalTrigger: <MKStartEventModal event={{id: event.id, name : event.name}} />
-      },
+
+    var actionDescriptors = [];
+
+    if(event.startAmount == null){
+      actionDescriptors.push
+      (
+        {
+          icon: "circle-thin",
+          tooltip: {
+            text: __("event::startEvent"),
+            overlayProps: {
+              placement: "top"
+            }
+          },
+          modalTrigger: <MKStartEventModal event={{id: event.id, name : event.name}} />
+        }
+      )
+    }else{
+      actionDescriptors.push
+      (
+        {
+          icon: "circle",
+          tooltip: {
+            text: __("event::endEvent"),
+            overlayProps: {
+              placement: "top"
+            }
+          },
+          modalTrigger: <MKStartEventModal event={{id: event.id, name : event.name}} />
+        }
+      )
+    }
+
+    actionDescriptors.push
+    (
       {
         icon: "edit",
         tooltip: {
@@ -134,7 +158,7 @@ var Events = React.createClass({
           });
         }
       }
-    ];
+  );
     return actionDescriptors;
   },
 

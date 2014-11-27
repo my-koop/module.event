@@ -6,6 +6,8 @@ var BSAlert  = require("react-bootstrap/Alert");
 var actions  = require("actions");
 var __       = require("language").__;
 var _        = require("lodash");
+var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
+
 
 var StartEventModal = React.createClass({
   // Decided for a one layer linkedState, because much simpler and faster
@@ -27,9 +29,11 @@ var StartEventModal = React.createClass({
 
   onSave: function (hideFnc) {
     var self = this;
-    var data = _.merge(this.refs.itemForm.getItem(), {id: this.props.item.id});
-    actions.inventory.item.update({
-      data: data
+    actions.event.start({
+      data:{
+        id : this.props.event.id,
+        startAmount : this.state.startAmount
+      }
     }, function (err, res) {
       if (err) {
         console.error(err);
@@ -40,6 +44,7 @@ var StartEventModal = React.createClass({
       }
 
       self.setState({errorMessage: null});
+      MKAlertTrigger.showAlert(__("event:eventStarted"));
       hideFnc();
     });
   },

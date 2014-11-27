@@ -30,7 +30,8 @@ class Module extends utils.BaseModule implements mkevent.Module {
       //Event is considered closed when endDate is not null
       var query = connection.query(
         "SELECT e.idEvent, e.type, e.startDate, e.endDate, e.startAmount, e.endAmount, name, count(eu.idEvent) as countRegistered " +
-        "FROM event e LEFT JOIN event_user eu ON eu.idEvent = e.idEvent WHERE e.endDate IS " + isNull + " NULL GROUP BY e.idEvent",
+        "FROM event e LEFT JOIN event_user eu ON eu.idEvent = e.idEvent WHERE e.endDate IS " + isNull + " NULL GROUP BY e.idEvent " +
+        "ORDER BY e.startDate, e.endDate",
         [],
         function(err, rows) {
           cleanup();
@@ -84,6 +85,56 @@ class Module extends utils.BaseModule implements mkevent.Module {
         cleanup();
         callback(err);
       })
+    });
+  }
+
+  endEvent(id: Number, endAmount : Number, callback: (err?: Error) => void) {
+    var queryData = {
+      endAmount : endAmount,
+    };
+
+    this.db.getConnection(function(err, connection, cleanup) {
+      if(err) {
+        return callback(new DatabaseError(err));
+      }
+
+      var query = connection.query(
+        "UPDATE event SET endDate=NOW(), ? WHERE idEvent = ?",
+        [queryData, id],
+        function(err) {
+          cleanup();
+
+          if (err) {
+            return callback(new DatabaseError(err));
+          }
+
+          callback();
+      });
+    });
+  }
+
+  startEvent(id: Number, startAmount : Number, callback: (err?: Error) => void) {
+    var queryData = {
+      startAmount : startAmount,
+    };
+
+    this.db.getConnection(function(err, connection, cleanup) {
+      if(err) {
+        return callback(new DatabaseError(err));
+      }
+
+      var query = connection.query(
+        "UPDATE event SET startDate=NOW(), ? WHERE idEvent = ?",
+        [queryData, id],
+        function(err) {
+          cleanup();
+
+          if (err) {
+            return callback(new DatabaseError(err));
+          }
+
+          callback();
+      });
     });
   }
 

@@ -39,6 +39,18 @@ declare module mkevent {
       data: EventInterfaces.GetEventData, 
       callback: (err: Error, result?: Event) => void
     );
+
+    startEvent(
+      id: Number, 
+      startAmount : Number, 
+      callback: (err?: Error) => void
+    );
+
+    endEvent(
+      id: Number, 
+      endAmount : Number, 
+      callback: (err?: Error) => void
+    );
   }
 
   export interface Event {

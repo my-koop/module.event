@@ -4,10 +4,12 @@ import validation = require("../validation/index");
 import Express    = require("express");
 
 // Controllers
-import addEvent   = require ("./addEvent");
-import getEvents  = require ("./getEvents");
+import addEvent     = require ("./addEvent");
+import getEvents    = require ("./getEvents");
 import updateEvent  = require ("./updateEvent");
 import deleteEvent  = require ("./deleteEvent");
+import startEvent   = require ("./startEvent");
+import endEvent     = require ("./endEvent");
 
 var endPoints = metaData.endpoints;
 
@@ -35,6 +37,30 @@ export function attachControllers(
   binder.attach(
     {endPoint: endPoints.event.remove},
     deleteEvent
+  );
+
+  binder.attach(
+    {endPoint: endPoints.event.start},
+    startEvent
+  );
+
+  binder.attach(
+    {endPoint: endPoints.event.end},
+    endEvent
+  );
+
+
+  binder.attach(
+    {endPoint: endPoints.event.end},
+    binder.makeSimpleController("endEvent",
+    {
+      parseFunc: function(req: Express.Request) {
+        return {
+          id : Number(req.param("id")),
+          startAmount: Number(req.param("endAmount"))
+        };
+      }
+    })
   );
 
   binder.attach(
