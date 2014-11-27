@@ -14,14 +14,13 @@ var MKIcon            = require("mykoop-core/components/Icon");
 var MKTableSorter     = require("mykoop-core/components/TableSorter");
 var MKListModButtons  = require("mykoop-core/components/ListModButtons");
 var MKStartEventModal = require("./StartEventModal");
-
+var MKEndEventModal   = require("./EndEventModal");
 
 var openColumns = [
   "name",
   "type",
   "countRegistered",
   "startDate",
-  "startAmount",
   "actions"
 ];
 var closedColumns = [
@@ -80,7 +79,20 @@ var Events = React.createClass({
   actionsGenerator: function(event, i) {
     var self = this;
     if(this.state.isClosed) {
-      return [];
+      return [
+        {
+          icon: "edit",
+          tooltip: {
+            text: __("event::editEventTooltip"),
+            overlayProps: {
+              placement: "top"
+            }
+          },
+          callback: function(){
+            router.transitionTo(getRouteName(["dashboard", "events", "updateEventPage"]), {id : event.id})
+          }
+        }
+      ];
     }
 
     var actionDescriptors = [];
@@ -110,7 +122,7 @@ var Events = React.createClass({
               placement: "top"
             }
           },
-          modalTrigger: <MKStartEventModal event={{id: event.id, name : event.name}} />
+          modalTrigger: <MKEndEventModal event={{id: event.id, name : event.name}} />
         }
       )
     }
@@ -158,7 +170,7 @@ var Events = React.createClass({
           });
         }
       }
-  );
+    );
     return actionDescriptors;
   },
 
@@ -187,8 +199,10 @@ var Events = React.createClass({
           }
         },
         countRegistered: {
-          // Show the number of people registered to this event
-          name: __("event::countRegistered")
+          name: __("event::countRegistered"),
+          cellGenerator: function(event) {
+            return event.type == "workshop" ? event.countRegistered : "";
+          }
         },
         startDate: {
           name: __("event::startDate"),

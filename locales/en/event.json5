@@ -20,4 +20,6 @@
   updateEventWelcome: "Editing event",
   countRegistered: "# Registered",
   startEvent: "Start event",
+  endEvent: "End event",
+  eventClosed: "Event closed",
 }

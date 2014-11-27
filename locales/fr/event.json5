@@ -20,4 +20,6 @@
   updateEventWelcome: "Édition de l'événement",
   countRegistered: "# Enregistrés",
   startEvent: "Commencer l'événement",
+  endEvent: "Fermer l'événement",
+  eventClosed: "Événement fermé",
 }
