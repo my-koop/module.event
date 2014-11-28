@@ -18,7 +18,8 @@ var EndEventModal = React.createClass({
     event: React.PropTypes.shape({
       id: React.PropTypes.number.isRequired,
       name: React.PropTypes.string.isRequired,
-    }).isRequired
+    }).isRequired,
+    onSave: React.PropTypes.func
   },
 
   getInitialState: function() {
@@ -46,6 +47,7 @@ var EndEventModal = React.createClass({
       self.setState({errorMessage: null});
       MKAlertTrigger.showAlert(__("event:eventClosed"));
       hideFnc();
+      self.props.onSave && self.props.onSave();
     });
   },
 

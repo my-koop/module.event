@@ -76,6 +76,16 @@ var Events = React.createClass({
     });
   },
 
+  onEventRemoved: function(event) {
+    var events = this.state.events;
+    events = _.reject(events, function(_event) {
+      return _event === event;
+    });
+    this.setState({
+      events: events
+    });
+  },
+
   actionsGenerator: function(event, i) {
     var self = this;
     if(this.state.isClosed) {
@@ -108,7 +118,9 @@ var Events = React.createClass({
               placement: "top"
             }
           },
-          modalTrigger: <MKStartEventModal event={{id: event.id, name : event.name}} />
+          modalTrigger: <MKStartEventModal
+            event={{id: event.id, name : event.name}}
+          />
         }
       )
     }else{
@@ -122,7 +134,10 @@ var Events = React.createClass({
               placement: "top"
             }
           },
-          modalTrigger: <MKEndEventModal event={{id: event.id, name : event.name}} />
+          modalTrigger: <MKEndEventModal
+            event={{id: event.id, name : event.name}}
+            onSave={_.bind(this.onEventRemoved, this, event)}
+          />
         }
       )
     }
