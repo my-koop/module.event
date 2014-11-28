@@ -44,7 +44,7 @@ var StartEventModal = React.createClass({
       }
 
       self.setState({errorMessage: null});
-      MKAlertTrigger.showAlert(__("event:eventStarted"));
+      MKAlertTrigger.showAlert(__("event::eventStarted"));
       hideFnc();
     });
   },

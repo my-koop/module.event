@@ -44,7 +44,7 @@ var EndEventModal = React.createClass({
       }
 
       self.setState({errorMessage: null});
-      MKAlertTrigger.showAlert(__("event:eventClosed"));
+      MKAlertTrigger.showAlert(__("event::eventClosed"));
       hideFnc();
     });
   },
