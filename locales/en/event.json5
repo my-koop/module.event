@@ -27,4 +27,5 @@
   eventStarted: "The event was started",
   eventStartFailed: "The event could not be started",
   datesInvalid_failed: "The dates you entered are not valid",
+  eventStartEndExplication: "An event is started when a start amount is entered. An event is ended when an end amount is entered.",
 }

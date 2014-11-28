@@ -110,6 +110,7 @@ var UpdateEventPage = React.createClass({
           <MKAlert bsStyle="danger" permanent>
             {this.state.errorMessage}
           </MKAlert>
+          <p>{__("eventStartEndExplication")}</p>
           <MKEventForm id={Number(this.props.params.id)} ref="eventForm" />
           <BSButton
             onClick={this.onSave}
