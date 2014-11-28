@@ -53,6 +53,14 @@ var CreateEventPage = React.createClass({
 
     var isValidForm = self.isDate(event.startDate) && (!event.endDate || self.isDate(event.endDate));
 
+    if((!event.startAmount && event.startDate) || (event.startAmount && !event.startDate)){
+      isValidForm = false;
+    }
+
+    if((!event.endAmount && event.endDate) || (event.endAmount && !event.endDate)){
+      isValidForm = false;
+    }
+
     if(isValidForm){
       MKSpinner.showGlobalSpinner();
       actions.event.add({
@@ -73,7 +81,7 @@ var CreateEventPage = React.createClass({
       });
     }else{
       return self.setState({
-        errorMessage: __("event::datesInvalid", {context:"failed"}),
+        errorMessage: __("event::invalidValues", {context:"failed"}),
         success: null
       });
     }
@@ -109,7 +117,7 @@ var CreateEventPage = React.createClass({
           <MKAlert bsStyle="danger" permanent>
             {this.state.errorMessage}
           </MKAlert>
-          <p>{__("eventStartEndExplication")}</p>
+          <p>{__("event::eventStartEndExplication")}</p>
           <MKEventForm ref="eventForm" />
           <BSButton
             onClick={this.onSave}

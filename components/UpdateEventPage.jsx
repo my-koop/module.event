@@ -53,6 +53,14 @@ var UpdateEventPage = React.createClass({
 
     var isValidForm = self.isDate(event.startDate) && (!event.endDate || self.isDate(event.endDate));
 
+    if((!event.startAmount && event.startDate) || (event.startAmount && !event.startDate)){
+      isValidForm = false;
+    }
+
+    if((!event.endAmount && event.endDate) || (event.endAmount && !event.endDate)){
+      isValidForm = false;
+    }
+
     if(isValidForm){
       event.id = Number(this.props.params.id);
       MKSpinner.showGlobalSpinner();
@@ -74,7 +82,7 @@ var UpdateEventPage = React.createClass({
       });
     }else{
       return self.setState({
-        errorMessage: __("event::datesInvalid", {context:"failed"}),
+        errorMessage: __("event::invalidValues", {context:"failed"}),
         success: null
       });
     }
@@ -110,7 +118,7 @@ var UpdateEventPage = React.createClass({
           <MKAlert bsStyle="danger" permanent>
             {this.state.errorMessage}
           </MKAlert>
-          <p>{__("eventStartEndExplication")}</p>
+          <p>{__("event::eventStartEndExplication")}</p>
           <MKEventForm id={Number(this.props.params.id)} ref="eventForm" />
           <BSButton
             onClick={this.onSave}
