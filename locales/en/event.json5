@@ -26,4 +26,5 @@
   eventUpdated_failed: "Event could not be updated",
   eventStarted: "The event was started",
   eventStartFailed: "The event could not be started",
+  datesInvalid_failed: "The dates you entered are not valid",
 }

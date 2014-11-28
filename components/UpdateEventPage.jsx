@@ -34,6 +34,16 @@ var UpdateEventPage = React.createClass({
     reactRouter.transitionTo(routeData.dashboard.children.events.children.list.name);
   },
 
+  isDate: function(date){
+    var d = date ? new Date(date) : null;
+
+    if ( Object.prototype.toString.call(d) === "[object Date]" && !(isNaN(d.getTime()))){
+      return true;
+    }
+
+    return false;
+  },
+
   onSave: function() {
     var self = this;
     var event = this.refs.eventForm.getEvent();
@@ -41,24 +51,33 @@ var UpdateEventPage = React.createClass({
       event: event
     });
 
-    event.id = Number(this.props.params.id);
-    MKSpinner.showGlobalSpinner();
-    actions.event.update({
-      data: event
-    }, function(err, body) {
-      MKSpinner.hideGlobalSpinner();
-      if(err) {
-        console.error(err);
+    var isValidForm = self.isDate(event.startDate) && (!event.endDate || self.isDate(event.endDate));
+
+    if(isValidForm){
+      event.id = Number(this.props.params.id);
+      MKSpinner.showGlobalSpinner();
+      actions.event.update({
+        data: event
+      }, function(err, body) {
+        MKSpinner.hideGlobalSpinner();
+        if(err) {
+          console.error(err);
+          return self.setState({
+            errorMessage: __("event::eventUpdated", {context:"failed"}),
+            success: null
+          });
+        }
         return self.setState({
-          errorMessage: __("event::eventUpdated", {context:"failed"}),
-          success: null
+          errorMessage: null,
+          success: __("event::eventUpdated", {context:"success"})
         });
-      }
-      return self.setState({
-        errorMessage: null,
-        success: __("event::eventUpdated", {context:"success"})
       });
-    });
+    }else{
+      return self.setState({
+        errorMessage: __("event::datesInvalid", {context:"failed"}),
+        success: null
+      });
+    }
   },
 
   render: function() {

@@ -55,7 +55,6 @@ var EventEditForm = React.createClass({
       res.startDate = new Date(res.startDate);
       res.endDate = res.endDate ? new Date(res.endDate) : null;
       self.setState(res);
-      console.log(res);
     });
   },
 
