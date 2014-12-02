@@ -39,7 +39,7 @@ var StartEventModal = React.createClass({
       if (err) {
         console.error(err);
         self.setState({
-          errorMessage: __("inventory::eventStartFailed")
+          errorMessage: __("event::eventStartFailed")
         });
         return;
       }

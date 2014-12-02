@@ -27,7 +27,7 @@
   eventStarted: "L'événement à démarrer",
   eventStartFailed: "L'événement n'a pu être démarrer",
   invalidValues_failed: "Les valeurs rentrées ne sont pas valides",
-  eventStartEndExplication: "Un événement est démarré lorsqu'il y a un montant initial d'ouverture de caisse. Un événement est fermé (terminé) lorsqu'un montant de fermeture de  caisse est rentré. S'il y a un montant de ouverture de caisse, il doit y avoir une date de d/but. Idem pour fermerture de caisse avec la date de fin.",
+  eventStartEndExplication: "Un événement est démarré lorsqu'il y a un montant initial d'ouverture de caisse. Un événement est fermé (terminé) lorsqu'un montant de fermeture de  caisse est rentré. S'il y a un montant de ouverture de caisse, il doit y avoir une date de début. Idem pour fermerture de caisse avec la date de fin.",
 
   eventDataErrors: {
     app: {

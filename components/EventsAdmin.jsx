@@ -100,7 +100,7 @@ var Events = React.createClass({
             }
           },
           callback: function(){
-            router.transitionTo(getRouteName(["dashboard", "events", "updateEventPage"]), {id : event.id})
+            router.transitionTo("updateEventPage", {id : event.id})
           }
         }
       ];
