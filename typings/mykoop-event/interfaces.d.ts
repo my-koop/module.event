@@ -28,7 +28,8 @@ declare module EventInterfaces {
   }
 
   export interface  GetEventsData {
-    isClosed        : boolean;
+    isClosed?: boolean;
+    startedOnly?: boolean;
   }
 }
 
