@@ -3,8 +3,10 @@ var __                = require("language").__;
 var BSButton          = require("react-bootstrap/Button");
 var reactRouter       = require("react-router");
 var routeData         = require("dynamic-metadata").routes;
-var MKEventsAdmin     = require("./EventsAdmin");
 var localSession      = require("session").local;
+
+var MKEventsAdmin     = require("./EventsAdmin");
+var MKIcon = require("mykoop-core/components/Icon");
 
 var EventsPage = React.createClass({
   goToNewEventPage: function() {
@@ -14,16 +16,18 @@ var EventsPage = React.createClass({
   render: function() {
     return (
       <div>
-        <h1>
+        <h1 className="pull-left">
           {__("event::eventWelcome")}
         </h1>
-        <BSButton
-          onClick={this.goToNewEventPage}
-          bsStyle="success"
-        >
-          {__("event::newEvent")}
-        </BSButton>
-       
+        <span className="pull-right h1">
+          <BSButton
+            onClick={this.goToNewEventPage}
+            bsStyle="success"
+          >
+            <MKIcon glyph="plus" fixedWidth/>
+            {__("event::newEvent")}
+          </BSButton>
+        </span>
         <MKEventsAdmin />
       </div>
     );

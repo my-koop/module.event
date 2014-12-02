@@ -24,7 +24,7 @@ class Module extends utils.BaseModule implements mkevent.Module {
         return callback(new DatabaseError(err));
       }
 
-      
+
       var isNull = data.isClosed ? "NOT" : "";
 
       //Event is considered closed when endDate is not null
@@ -88,54 +88,54 @@ class Module extends utils.BaseModule implements mkevent.Module {
     });
   }
 
-  endEvent(id: Number, endAmount : Number, callback: (err?: Error) => void) {
-    var queryData = {
-      endAmount : endAmount,
-    };
-
-    this.db.getConnection(function(err, connection, cleanup) {
-      if(err) {
-        return callback(new DatabaseError(err));
-      }
-
-      var query = connection.query(
-        "UPDATE event SET endDate=NOW(), ? WHERE idEvent = ?",
-        [queryData, id],
-        function(err) {
-          cleanup();
-
-          if (err) {
-            return callback(new DatabaseError(err));
-          }
-
-          callback();
-      });
-    });
+  endEvent(
+    params: mkevent.EndEvent.Params,
+    callback: mkevent.EndEvent.Callback
+  ) {
+    this.callWithConnection(this.__endEvent, params, callback);
   }
 
-  startEvent(id: Number, startAmount : Number, callback: (err?: Error) => void) {
+  __endEvent(
+    connection: mysql.IConnection,
+    params: mkevent.EndEvent.Params,
+    callback: mkevent.EndEvent.Callback
+  ) {
     var queryData = {
-      startAmount : startAmount,
+      endAmount : params.endAmount,
     };
 
-    this.db.getConnection(function(err, connection, cleanup) {
-      if(err) {
-        return callback(new DatabaseError(err));
+    connection.query(
+      "UPDATE event SET endDate=NOW(), ? WHERE idEvent = ?",
+      [queryData, params.id],
+      function(err) {
+        callback(err && new DatabaseError(err));
       }
+    );
+  }
 
-      var query = connection.query(
-        "UPDATE event SET startDate=NOW(), ? WHERE idEvent = ?",
-        [queryData, id],
-        function(err) {
-          cleanup();
+  startEvent(
+    params: mkevent.StartEvent.Params,
+    callback: mkevent.StartEvent.Callback
+  ) {
+    this.callWithConnection(this.__startEvent, params, callback);
+  }
 
-          if (err) {
-            return callback(new DatabaseError(err));
-          }
+  __startEvent(
+    connection: mysql.IConnection,
+    params: mkevent.StartEvent.Params,
+    callback: mkevent.StartEvent.Callback
+  ) {
+    var queryData = {
+      startAmount : params.startAmount,
+    };
 
-          callback();
-      });
-    });
+    connection.query(
+      "UPDATE event SET startDate=NOW(), ? WHERE idEvent = ?",
+      [queryData, params.id],
+      function(err) {
+        callback(err && new DatabaseError(err));
+      }
+    );
   }
 
   updateEvent(data: EventInterfaces.UpdateEventData, callback: (err?: Error) => void) {

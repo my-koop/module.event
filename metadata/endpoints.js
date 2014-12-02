@@ -6,7 +6,11 @@ var endpoints = {
         },
         update: {
             path: "/event/update/",
-            method: "post"
+            method: "post",
+            validation: {
+                resolve: "validation",
+                value: "eventObject"
+            }
         },
         start: {
             path: "/event/update/start/:id/:startAmount",
@@ -21,7 +25,7 @@ var endpoints = {
             method: "post",
             validation: {
                 resolve: "validation",
-                value: "addEvent"
+                value: "eventObject"
             }
         },
         get: {

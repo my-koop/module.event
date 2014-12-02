@@ -8,18 +8,18 @@ import addEvent     = require ("./addEvent");
 import getEvents    = require ("./getEvents");
 import updateEvent  = require ("./updateEvent");
 import deleteEvent  = require ("./deleteEvent");
-import startEvent   = require ("./startEvent");
-import endEvent     = require ("./endEvent");
 
 var endPoints = metaData.endpoints;
 
 export function attachControllers(
   binder: utils.ModuleControllersBinder<mkevent.Module>
 ) {
+  var event = binder.moduleInstance;
+
   binder.attach(
     {
       endPoint: endPoints.event.add,
-      validation: validation.addEvent
+      validation: validation.eventObject
     },
     addEvent
   );
@@ -30,7 +30,10 @@ export function attachControllers(
   );
 
   binder.attach(
-    {endPoint: endPoints.event.update},
+    {
+      endPoint: endPoints.event.update,
+      validation: validation.eventObject
+    },
     updateEvent
   );
 
@@ -41,23 +44,22 @@ export function attachControllers(
 
   binder.attach(
     {endPoint: endPoints.event.start},
-    startEvent
+    binder.makeSimpleController(event.startEvent, function(req) {
+      return {
+        idEvent: parseInt(req.param("id")),
+        startAmount: parseInt(req.param("startAmount"))
+      }
+    })
   );
 
   binder.attach(
     {endPoint: endPoints.event.end},
-    endEvent
-  );
-
-
-  binder.attach(
-    {endPoint: endPoints.event.end},
-    binder.makeSimpleController("endEvent",
+    binder.makeSimpleController(event.endEvent,
     {
       parseFunc: function(req: Express.Request) {
         return {
-          id : Number(req.param("id")),
-          startAmount: Number(req.param("endAmount"))
+          id : parseInt(req.param("id")),
+          startAmount: parseInt(req.param("endAmount"))
         };
       }
     })
@@ -65,12 +67,12 @@ export function attachControllers(
 
   binder.attach(
     {endPoint: endPoints.event.register},
-    binder.makeSimpleController("registerToEvent",
+    binder.makeSimpleController(event.registerToEvent,
     {
       parseFunc: function(req: Express.Request): EventInterfaces.RegisterEventData {
         return {
-          idUser : Number(req.param("idUser")),
-          idEvent: Number(req.param("idEvent"))
+          idUser : parseInt(req.param("idUser")),
+          idEvent: parseInt(req.param("idEvent"))
         };
       }
     })
@@ -78,11 +80,11 @@ export function attachControllers(
 
   binder.attach(
     {endPoint: endPoints.event.get},
-    binder.makeSimpleController("getEvent",
+    binder.makeSimpleController(event.getEvent,
     {
       parseFunc: function(req: Express.Request): EventInterfaces.GetEventData {
         return {
-          id: Number(req.param("id"))
+          id: parseInt(req.param("id"))
         };
       }
     })

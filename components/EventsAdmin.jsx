@@ -20,6 +20,7 @@ var openColumns = [
   "name",
   "type",
   "countRegistered",
+  "startAmount",
   "startDate",
   "actions"
 ];

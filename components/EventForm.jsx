@@ -1,14 +1,19 @@
-var React             = require("react/addons");
-var BSInput           = require("react-bootstrap/Input");
-var MKDateTimePicker  = require("mykoop-core/components/DateTimePicker");
-var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
-var actions           = require("actions");
-var _                 = require("lodash");
-var __                = require("language").__;
-var formatDate        = require("language").formatDate;
+var React = require("react/addons");
 
-var EventEditForm = React.createClass({
+var BSInput = require("react-bootstrap/Input");
+var BSButton = require("react-bootstrap/Button");
 
+var MKDateTimePicker = require("mykoop-core/components/DateTimePicker");
+var MKAlertTrigger   = require("mykoop-core/components/AlertTrigger");
+
+var actions    = require("actions");
+var _          = require("lodash");
+var __         = require("language").__;
+var formatDate = require("language").formatDate;
+
+var EventEditState = require("../lib/common/EventEditState");
+
+var EventForm = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
   propTypes: {
@@ -19,8 +24,8 @@ var EventEditForm = React.createClass({
     return {
       name        : this.state.name,
       type        : this.state.type,
-      startDate   : this.state.startDate ? this.state.startDate.toISOString() : "",
-      endDate     : this.state.endDate ? this.state.endDate.toISOString() : "",
+      startDate   : this.state.startDate,
+      endDate     : this.state.endDate,
       startAmount : this.state.startAmount,
       endAmount   : this.state.endAmount
     }
@@ -28,14 +33,20 @@ var EventEditForm = React.createClass({
 
   getInitialState: function() {
     return {
-      eventObj: null,
       id: null,
-      type: "cashier"
+      type: "cashier",
+      name: "",
+      startDate: null,
+      endDate: null,
+      startAmount: null,
+      endAmount: null,
+
+      editState: EventEditState.Created
     }
   },
 
   componentWillMount: function() {
-    if(this.props.id != null){
+    if(_.isNumber(this.props.id) && !isNaN(this.props.id)){
       this.getEventFromDb();
     }
   },
@@ -52,15 +63,23 @@ var EventEditForm = React.createClass({
         console.error(err);
         return;
       }
-      res.startDate = new Date(res.startDate);
+      res.startDate = res.startDate ? new Date(res.startDate) : null;
       res.endDate = res.endDate ? new Date(res.endDate) : null;
-      self.setState(res);
+      if(res.startDate && isNaN(res.startDate.getTime())) {
+        res.startDate = null;
+      }
+      if(res.endDate && isNaN(res.endDate.getTime())) {
+        res.endDate = null;
+      }
+
+      var editState = EventEditState.evaluateState(res);
+      self.setState(_.merge(res, {editState: editState}));
     });
   },
 
   render: function () {
     var self = this;
-    var others = _.omit(this.props, 'event');
+    var others = _.omit(this.props, _.keys(this.propTypes));
 
     return (
       <div {...others} >
@@ -77,41 +96,69 @@ var EventEditForm = React.createClass({
           <option value="workshop">{__("event::workshop")}</option>
           <option value="cashier">{__("event::cashier")}</option>
         </BSInput>
-        <label>
+        <label htmlFor="startDatePicker">
           {__("event::startDate")}
-          <MKDateTimePicker
-            value={this.state.startDate}
-            onChange={function(date, str) {
-              self.setState({
-                startDate: date
-              });
-            }}
-          />
         </label>
-        <label>
-          {__("event::endDate")}
+        <MKDateTimePicker
+          id="startDatePicker"
+          value={this.state.startDate}
+          max={this.state.endDate || undefined}
+          onChange={function(date, str) {
+            self.setState({
+              startDate: date
+            });
+          }}
+        />
+        {this.state.editState >= EventEditState.Started ?
+          <BSInput
+            type="number"
+            label={__("event::startAmount")}
+            valueLink={this.linkState("startAmount")}
+          />
+        : <BSButton
+            bsStyle="primary"
+            key="startEventButton"
+            onClick={function() {
+              self.setState({editState: EventEditState.Started});
+            }}
+          >
+            {__("event::startEvent")}
+          </BSButton>
+        }
+        {this.state.editState >= EventEditState.Ended ? [
+          <label htmlFor="endDatePicker">
+            {__("event::endDate")}
+          </label>,
           <MKDateTimePicker
+            id="endDatePicker"
             value={this.state.endDate}
+            min={this.state.startDate || undefined}
             onChange={function(date, str) {
               self.setState({
                 endDate: date
               });
             }}
+          />,
+          <BSInput
+            type="number"
+            label={__("event::endAmount")}
+            valueLink={this.linkState("endAmount")}
           />
-        </label>
-        <BSInput
-          type="number"
-          label={__("event::startAmount")}
-          valueLink={this.linkState("startAmount")}
-        />
-        <BSInput
-          type="number"
-          label={__("event::endAmount")}
-          valueLink={this.linkState("endAmount")}
-        />
+        ]: this.state.editState === (EventEditState.Ended - 1) ?
+          <BSButton
+            bsStyle="primary"
+            key="endEventButton"
+            onClick={function() {
+              self.setState({editState: EventEditState.Ended});
+            }}
+          >
+            {__("event::endEvent")}
+          </BSButton>
+        : null
+        }
       </div>
     );
   }
 });
 
-module.exports = EventEditForm;
+module.exports = EventForm;

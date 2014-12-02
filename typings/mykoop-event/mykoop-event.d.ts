@@ -36,20 +36,28 @@ declare module mkevent {
     );
 
     getEvent(
-      data: EventInterfaces.GetEventData, 
+      data: EventInterfaces.GetEventData,
       callback: (err: Error, result?: Event) => void
     );
 
     startEvent(
-      id: Number, 
-      startAmount : Number, 
-      callback: (err?: Error) => void
+      params: StartEvent.Params,
+      callback: StartEvent.Callback
+    );
+    __startEvent(
+      connection: mysql.IConnection,
+      params: StartEvent.Params,
+      callback: StartEvent.Callback
     );
 
     endEvent(
-      id: Number, 
-      endAmount : Number, 
-      callback: (err?: Error) => void
+      params: EndEvent.Params,
+      callback: EndEvent.Callback
+    );
+    __endEvent(
+      connection: mysql.IConnection,
+      params: EndEvent.Params,
+      callback: EndEvent.Callback
     );
   }
 
