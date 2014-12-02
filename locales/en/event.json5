@@ -7,9 +7,9 @@
   startDate : "Start date",
   endDate : "End date",
   startAmount : "Start amount",
-  endAmount : "End amount", 
+  endAmount : "End amount",
   workshop : "Workshop",
-  cashier : "Cashier", 
+  cashier : "Cashier",
   removedEventMessage : "Event was removed",
   newEvent: "Add event",
   eventWelcome : "Events list",
@@ -19,4 +19,39 @@
   switchEventState_false: "Show closed",
   updateEventWelcome: "Editing event",
   countRegistered: "# Registered",
+  startEvent: "Start event",
+  endEvent: "End event",
+  eventClosed: "Event closed",
+  eventUpdated_success: "Event was updated",
+  eventUpdated_failed: "Event could not be updated",
+  eventStarted: "The event was started",
+  eventStartFailed: "The event could not be started",
+  invalidValues_failed: "The values you entered are not valid",
+
+  eventDataErrors: {
+    app: {
+      name: {
+        empty: "You must enter a name"
+      },
+      type: {
+        empty: "You must choose a type",
+        invalid: "Valid types are $t(event::workshop) and $t(event::ashier)"
+      },
+      startDate: {
+        empty: "You must enter a start date",
+        invalid: "The start date is not a valid date"
+      },
+      endDate: {
+        invalid: "The end date must be later than the start date"
+      },
+      startAmount: {
+        empty: "$t(event::startAmount) must be entered when closing an event",
+        error: "$t(event::startAmount) must be a positive number"
+      },
+      endAmount: {
+        empty: "$t(event::endAmount) must be entered when closing an event",
+        error: "$t(event::endAmount) must be a positive number"
+      }
+    }
+  }
 }

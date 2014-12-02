@@ -2,7 +2,7 @@ import utils = require("mykoop-utils");
 export function addRoutes(metaData: utils.MetaDataBuilder) {
   metaData.addFrontendRoute({
     idPath: ["dashboard", "events", "createEvent"],
-    component: "CreateEventPage",
+    component: "EventPage",
     name: "createEventPage",
     path: "event/create/",
   });
@@ -23,7 +23,7 @@ export function addRoutes(metaData: utils.MetaDataBuilder) {
 
   metaData.addFrontendRoute({
     idPath: ["dashboard", "events", "updateEventPage"],
-    component: "UpdateEventPage",
+    component: "EventPage",
     name: "updateEventPage",
     path: "event/update/:id",
   });

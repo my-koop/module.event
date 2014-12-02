@@ -24,13 +24,16 @@ class Module extends utils.BaseModule implements mkevent.Module {
         return callback(new DatabaseError(err));
       }
 
-      
+
       var isNull = data.isClosed ? "NOT" : "";
 
       //Event is considered closed when endDate is not null
       var query = connection.query(
         "SELECT e.idEvent, e.type, e.startDate, e.endDate, e.startAmount, e.endAmount, name, count(eu.idEvent) as countRegistered " +
-        "FROM event e LEFT JOIN event_user eu ON eu.idEvent = e.idEvent WHERE e.endDate IS " + isNull + " NULL GROUP BY e.idEvent",
+        "FROM event e LEFT JOIN event_user eu ON eu.idEvent = e.idEvent " +
+        "WHERE e.endDate IS " + isNull + " NULL " + 
+        "GROUP BY e.idEvent " +
+        "ORDER BY e.startDate, e.endDate",
         [],
         function(err, rows) {
           cleanup();
@@ -85,6 +88,56 @@ class Module extends utils.BaseModule implements mkevent.Module {
         callback(err);
       })
     });
+  }
+
+  endEvent(
+    params: mkevent.EndEvent.Params,
+    callback: mkevent.EndEvent.Callback
+  ) {
+    this.callWithConnection(this.__endEvent, params, callback);
+  }
+
+  __endEvent(
+    connection: mysql.IConnection,
+    params: mkevent.EndEvent.Params,
+    callback: mkevent.EndEvent.Callback
+  ) {
+    var queryData = {
+      endAmount : params.endAmount,
+    };
+
+    connection.query(
+      "UPDATE event SET endDate=NOW(), ? WHERE idEvent = ?",
+      [queryData, params.id],
+      function(err) {
+        callback(err && new DatabaseError(err));
+      }
+    );
+  }
+
+  startEvent(
+    params: mkevent.StartEvent.Params,
+    callback: mkevent.StartEvent.Callback
+  ) {
+    this.callWithConnection(this.__startEvent, params, callback);
+  }
+
+  __startEvent(
+    connection: mysql.IConnection,
+    params: mkevent.StartEvent.Params,
+    callback: mkevent.StartEvent.Callback
+  ) {
+    var queryData = {
+      startAmount : params.startAmount,
+    };
+
+    connection.query(
+      "UPDATE event SET startDate=NOW(), ? WHERE idEvent = ?",
+      [queryData, params.id],
+      function(err) {
+        callback(err && new DatabaseError(err));
+      }
+    );
   }
 
   updateEvent(data: EventInterfaces.UpdateEventData, callback: (err?: Error) => void) {

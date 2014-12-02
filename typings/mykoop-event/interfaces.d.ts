@@ -31,3 +31,25 @@ declare module EventInterfaces {
     isClosed        : boolean;
   }
 }
+
+declare module mkevent {
+  module EndEvent {
+    export interface Params {
+      id: number;
+      endAmount: number;
+    }
+    export interface Callback {
+      (err?: Error): void;
+    }
+  }
+
+  module StartEvent {
+    export interface Params {
+      id: number;
+      startAmount : number;
+    }
+    export interface Callback {
+      (err?: Error): void;
+    }
+  }
+}

@@ -9,66 +9,68 @@ var routeData       = require("dynamic-metadata").routes;
 var actions         = require("actions");
 var __              = require("language").__;
 
-var MKSpinner        = require("mykoop-core/components/Spinner");
 var MKEventForm      = require("./EventForm");
 var MKAlert          = require("mykoop-core/components/Alert");
+var MKFeedbacki18nMixin = require("mykoop-core/components/Feedbacki18nMixin");
 
-var UpdateEventPage = React.createClass({
+var CreateEventPage = React.createClass({
+  mixins: [MKFeedbacki18nMixin],
+
+  getDefaultProps: function() {
+    return {
+      params: {}
+    }
+  },
 
   getInitialState: function() {
     return {
-      event: {},
-      errorMessage: null,
-      success: null
+      // 0: editing, 1: select next action
+      editingState: 0
     }
   },
 
   onContinue: function() {
     return this.setState({
-      errorMessage: null,
-      success: null
+      editingState: 0
     });
   },
 
   onFinish: function() {
-    reactRouter.transitionTo(routeData.dashboard.children.events.children.list.name);
+    reactRouter.transitionTo("eventsAdmin");
   },
 
   onSave: function() {
     var self = this;
     var event = this.refs.eventForm.getEvent();
-    this.setState({
-      event: event
-    });
 
-    event.id = Number(this.props.params.id);
-    MKSpinner.showGlobalSpinner();
-    actions.event.update({
+    this.clearFeedback();
+    actions.event.add({
+      i18nErrors: {
+        keys: ["app"],
+        prefix: "event::eventDataErrors"
+      },
       data: event
     }, function(err, body) {
-      MKSpinner.hideGlobalSpinner();
       if(err) {
         console.error(err);
-        return self.setState({
-          errorMessage: __("event::eventUpdate", {context:"failed"}),
-          success: null
-        });
+        return self.setFeedback(err.i18n, "danger");
       }
-      return self.setState({
-        errorMessage: null,
-        success: __("event::eventUpdate", {context:"success"})
+
+      self.setState({
+        editingState: 1
       });
+      self.setFeedback(
+        {key: "event::eventNew_success"},
+        "success"
+      );
     });
   },
 
   render: function() {
     var body;
-    if(this.state.success) {
+    if(this.state.editingState === 1) {
       body = (
         <div>
-          <BSAlert bsStyle="success">
-            {this.state.success}
-          </BSAlert>
           <div className="pull-right">
             <BSButton
               onClick={this.onContinue}
@@ -88,10 +90,10 @@ var UpdateEventPage = React.createClass({
     } else {
       body = (
         <div>
-          <MKAlert bsStyle="danger" permanent>
-            {this.state.errorMessage}
-          </MKAlert>
-          <MKEventForm id={Number(this.props.params.id)} ref="eventForm" />
+          <MKEventForm
+            ref="eventForm"
+            id={Number(this.props.params.id)}
+          />
           <BSButton
             onClick={this.onSave}
             className="pull-right"
@@ -106,9 +108,14 @@ var UpdateEventPage = React.createClass({
     return (
       <div>
         <h1>
-          {__("event::updateEventWelcome")}
+        {
+          this.props.params.id ?
+            __("event::updateEventWelcome")
+          : __("event::createEventWelcome")
+        }
         </h1>
         <BSCol md={4}>
+          {this.renderFeedback()}
           {body}
         </BSCol>
       </div>
@@ -116,4 +123,4 @@ var UpdateEventPage = React.createClass({
   }
 });
 
-module.exports = UpdateEventPage;
+module.exports = CreateEventPage;

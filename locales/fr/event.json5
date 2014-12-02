@@ -7,9 +7,9 @@
   startDate : "Date début",
   endDate : "Date fin",
   startAmount : "Ouverture de caisse",
-  endAmount : "Fermeture de caisse", 
+  endAmount : "Fermeture de caisse",
   workshop : "Atelier",
-  cashier : "Caisse", 
+  cashier : "Caisse",
   removedEventMessage : "L'événement a été supprimé",
   newEvent: "Ajouter un événement",
   eventWelcome : "Liste des événements",
@@ -19,4 +19,38 @@
   switchEventState_false: "Afficher fermées",
   updateEventWelcome: "Édition de l'événement",
   countRegistered: "# Enregistrés",
+  startEvent: "Commencer l'événement",
+  endEvent: "Fermer l'événement",
+  eventClosed: "Événement fermé",
+  eventUpdated_success: "L'événement a été mis à jour",
+  eventUpdated_failed: "L'événement n'a pas pu être mis à jour",
+  eventStarted: "L'événement à démarrer",
+  eventStartFailed: "L'événement n'a pu être démarrer",
+  invalidValues_failed: "Les valeurs rentrées ne sont pas valides",
+
+  eventDataErrors: {
+    app: {
+      name: {
+        empty: "Vous devez entrer un nom"
+      },
+      type: {
+        empty: "Vous devez choisir un type",
+        invalid: "Les types valides sont $t(workshop) and $t(cashier)"
+      },
+      startDate: {
+        empty: "Vous devez entrer une date de début",
+        invalid: "La date de début n'est pas une date valide"
+      },
+      endDate: {
+        invalid: "La date de fin doit arriver plus tard que la date de début"
+      },
+      startAmount: {
+        error: "$t(event::startAmount) doit être un nombre positif"
+      },
+      endAmount: {
+        empty: "$t(event::endAmount) doit être présent lors de la fermeture de l'événement",
+        error: "$t(event::endAmount) doit être un nombre positif"
+      }
+    }
+  }
 }
