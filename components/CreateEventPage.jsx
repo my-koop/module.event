@@ -51,16 +51,8 @@ var CreateEventPage = React.createClass({
       event: event
     });
 
-    var isValidForm = self.isDate(event.startDate) && (!event.endDate || self.isDate(event.endDate));
-
-    if((!event.startAmount && event.startDate) || (event.startAmount && !event.startDate)){
-      isValidForm = false;
-    }
-
-    if((!event.endAmount && event.endDate) || (event.endAmount && !event.endDate)){
-      isValidForm = false;
-    }
-
+    var isValidForm = this.refs.eventForm.isValidForm();
+    
     if(isValidForm){
       MKSpinner.showGlobalSpinner();
       actions.event.add({

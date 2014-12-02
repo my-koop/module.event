@@ -9,11 +9,11 @@ var endpoints = {
             method: "post"
         },
         start: {
-            path: "/event/update/start/:id/:startAmount",
+            path: "/event/update/:id/start/:startAmount",
             method: "post",
         },
         end: {
-            path: "/event/update/end/:id/:endAmount",
+            path: "/event/update/:id/end/:endAmount",
             method: "post",
         },
         add: {

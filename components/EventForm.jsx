@@ -58,6 +58,32 @@ var EventEditForm = React.createClass({
     });
   },
 
+  isDate: function(date){
+    var d = date ? new Date(date) : null;
+
+    if ( Object.prototype.toString.call(d) === "[object Date]" && !(isNaN(d.getTime()))){
+      return true;
+    }
+
+    return false;
+  },
+
+  isValidForm: function(){
+    var self = this;
+    var event = self.getEvent();
+    var isValidForm = self.isDate(event.startDate) && (!event.endDate || self.isDate(event.endDate));
+
+    if(event.startAmount && !event.startDate){
+      isValidForm = false;
+    }
+
+    if((!event.endAmount && event.endDate) || (event.endAmount && !event.endDate)){
+      isValidForm = false;
+    }
+
+    return isValidForm;
+  },
+
   render: function () {
     var self = this;
     var others = _.omit(this.props, 'event');

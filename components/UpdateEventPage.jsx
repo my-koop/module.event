@@ -34,16 +34,6 @@ var UpdateEventPage = React.createClass({
     reactRouter.transitionTo(routeData.dashboard.children.events.children.list.name);
   },
 
-  isDate: function(date){
-    var d = date ? new Date(date) : null;
-
-    if ( Object.prototype.toString.call(d) === "[object Date]" && !(isNaN(d.getTime()))){
-      return true;
-    }
-
-    return false;
-  },
-
   onSave: function() {
     var self = this;
     var event = this.refs.eventForm.getEvent();
@@ -51,16 +41,7 @@ var UpdateEventPage = React.createClass({
       event: event
     });
 
-    var isValidForm = self.isDate(event.startDate) && (!event.endDate || self.isDate(event.endDate));
-
-    if((!event.startAmount && event.startDate) || (event.startAmount && !event.startDate)){
-      isValidForm = false;
-    }
-
-    if((!event.endAmount && event.endDate) || (event.endAmount && !event.endDate)){
-      isValidForm = false;
-    }
-
+    var isValidForm = this.refs.eventForm.isValidForm();
     if(isValidForm){
       event.id = Number(this.props.params.id);
       MKSpinner.showGlobalSpinner();

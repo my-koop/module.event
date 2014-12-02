@@ -49,20 +49,6 @@ export function attachControllers(
     endEvent
   );
 
-
-  binder.attach(
-    {endPoint: endPoints.event.end},
-    binder.makeSimpleController("endEvent",
-    {
-      parseFunc: function(req: Express.Request) {
-        return {
-          id : Number(req.param("id")),
-          startAmount: Number(req.param("endAmount"))
-        };
-      }
-    })
-  );
-
   binder.attach(
     {endPoint: endPoints.event.register},
     binder.makeSimpleController("registerToEvent",
