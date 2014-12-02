@@ -61,7 +61,7 @@ var EventEditForm = React.createClass({
   isDate: function(date){
     var d = date ? new Date(date) : null;
 
-    if ( Object.prototype.toString.call(d) === "[object Date]" && !(isNaN(d.getTime()))){
+    if (Object.prototype.toString.call(d) === "[object Date]" && !(isNaN(d.getTime()))){
       return true;
     }
 
