@@ -24,14 +24,14 @@ class Module extends utils.BaseModule implements mkevent.Module {
         return callback(new DatabaseError(err));
       }
 
-
-      var isNull = data.isClosed ? "NOT" : "";
+      var isEndDateNull = data.isClosed && !data.startedOnly ? "NOT" : "";
+      var isStartAmountNull = data.startedOnly ? "AND e.startAmount IS NOT NULL " : "";
 
       //Event is considered closed when endDate is not null
       var query = connection.query(
         "SELECT e.idEvent, e.type, e.startDate, e.endDate, e.startAmount, e.endAmount, name, count(eu.idEvent) as countRegistered " +
         "FROM event e LEFT JOIN event_user eu ON eu.idEvent = e.idEvent " +
-        "WHERE e.endDate IS " + isNull + " NULL " + 
+        "WHERE e.endDate IS " + isEndDateNull + " NULL " + isStartAmountNull +
         "GROUP BY e.idEvent " +
         "ORDER BY e.startDate, e.endDate",
         [],
