@@ -28,14 +28,14 @@ export function eventObject(obj) {
     startAmount: {
       presence: obj.endDate ? {message: "^empty"} : undefined,
       numericality: {
-        greaterThan: 0,
+        greaterThanOrEqualTo: 0,
         message: "^error"
       }
     },
     endAmount: {
       presence: obj.endDate ? {message: "^empty"} : undefined,
       numericality: {
-        greaterThan: 0,
+        greaterThanOrEqualTo: 0,
         message: "^error"
       }
     }

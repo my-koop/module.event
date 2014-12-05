@@ -27,6 +27,8 @@
   eventStarted: "L'événement à démarrer",
   eventStartFailed: "L'événement n'a pu être démarrer",
   invalidValues_failed: "Les valeurs rentrées ne sont pas valides",
+  removeEndDateWarning: "Afin de préserver la cohérence des données, retirer la date de fin remettra automatiquement l'événement à l'état commencé.",
+  removeStartAmountWarning: "Afin de préserver la cohérence des données, retirer le montant initial dans la caisse remettra automatiquement l'événement à l'état non commencé.",
 
   eventDataErrors: {
     app: {

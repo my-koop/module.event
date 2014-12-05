@@ -8,10 +8,7 @@ var __       = require("language").__;
 var _        = require("lodash");
 var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
 
-
 var StartEventModal = React.createClass({
-  // Decided for a one layer linkedState, because much simpler and faster
-  // than custom linking and more reliable
   mixins: [React.addons.LinkedStateMixin],
 
   propTypes: {

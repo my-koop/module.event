@@ -3,10 +3,13 @@ import controllerList   = require("./controllers/index");
 import getLogger        = require("mykoop-logger");
 import async            = require("async");
 import Event            = require("./classes/Event");
+import _                = require("lodash");
+var logger = getLogger(module);
 
-var logger              = getLogger(module);
-var DatabaseError       = utils.errors.DatabaseError;
-var ApplicationError    = utils.errors.ApplicationError;
+// Errors Type
+var DatabaseError = utils.errors.DatabaseError;
+var ApplicationError = utils.errors.ApplicationError;
+var ResourceNotFoundError = ApplicationError.ResourceNotFoundError;
 
 class Module extends utils.BaseModule implements mkevent.Module {
   private db: mkdatabase.Module;
@@ -16,78 +19,76 @@ class Module extends utils.BaseModule implements mkevent.Module {
     controllerList.attachControllers(new utils.ModuleControllersBinder(this));
   }
 
-  getEvents(data: EventInterfaces.GetEventsData, callback: (err: Error, result?: Event[]) => void) {
-    var events = [];
-
-    this.db.getConnection(function(err, connection, cleanup) {
-      if(err) {
-        return callback(new DatabaseError(err));
-      }
-
-      var isEndDateNull = data.isClosed && !data.startedOnly ? "NOT" : "";
-      var isStartAmountNull = data.startedOnly ? "AND e.startAmount IS NOT NULL " : "";
-
-      //Event is considered closed when endDate is not null
-      var query = connection.query(
-        "SELECT e.idEvent, e.type, e.startDate, e.endDate, e.startAmount, e.endAmount, name, count(eu.idEvent) as countRegistered " +
-        "FROM event e LEFT JOIN event_user eu ON eu.idEvent = e.idEvent " +
-        "WHERE e.endDate IS " + isEndDateNull + " NULL " + isStartAmountNull +
-        "GROUP BY e.idEvent " +
-        "ORDER BY e.startDate, e.endDate",
-        [],
-        function(err, rows) {
-          cleanup();
-
-          if (err) {
-            return callback(new DatabaseError(err));
-          }
-
-          for (var i in rows) {
-             events.push(new Event(rows[i]));
-          }
-
-          callback(null, events);
-      });
-    });
+  getEvents(
+    params: mkevent.GetEvents.Params,
+    callback: mkevent.GetEvents.Callback
+  ) {
+    this.callWithConnection(this.__getEvents, params, callback);
   }
 
-  addEvent(data: EventInterfaces.AddEventData, callback: (err?: Error) => void) {
-    var queryData: EventDbQueryStruct.EventData = {
-      name          : data.name,
-      type          : data.type,
-      startDate     : data.startDate,
-      endDate       : data.endDate,
-      startAmount   : data.startAmount,
-      endAmount     : data.endAmount
+  __getEvents(
+    connection: mysql.IConnection,
+    params: mkevent.GetEvents.Params,
+    callback: mkevent.GetEvents.Callback
+  ) {
+    var isEndDateNull = params.isClosed && !params.startedOnly ? "NOT" : "";
+    var isStartAmountNull = params.startedOnly ? "AND e.startAmount IS NOT NULL " : "";
+
+    //Event is considered closed when endDate is not null
+    connection.query(
+      "SELECT \
+        e.idEvent,\
+        e.type,\
+        e.startDate,\
+        e.endDate,\
+        e.startAmount,\
+        e.endAmount,\
+        name,\
+        count(eu.idEvent) as countRegistered\
+      FROM event e LEFT JOIN event_user eu ON eu.idEvent = e.idEvent\
+      WHERE e.endDate IS " + isEndDateNull + " NULL " + isStartAmountNull +
+      "GROUP BY e.idEvent " +
+      "ORDER BY e.startDate, e.endDate",
+      [],
+      function(err, rows) {
+        if (err) {
+          return callback(new DatabaseError(err));
+        }
+        callback(null, {
+          events: _.map(rows, function(row) {return new Event(row);})}
+        );
+      }
+    );
+  }
+
+  addEvent(
+    params: mkevent.AddEvent.Params,
+    callback: mkevent.AddEvent.Callback
+  ) {
+    this.callWithConnection(this.__addEvent, params, callback);
+  }
+
+  __addEvent(
+    connection: mysql.IConnection,
+    params: mkevent.AddEvent.Params,
+    callback: mkevent.AddEvent.Callback
+  ) {
+    var queryData: EventDbQueryStruct.NewEventData = {
+      name: params.name,
+      type: params.type,
+      startDate: params.startDate,
     };
 
-    //When textbox is empty, it returns 0 instead of null, which is timestamp  for January 1 1969
-    if(queryData.endDate.getFullYear() == 1969){
-      queryData.endDate = null;
-    }
-
-    this.db.getConnection(function(err, connection, cleanup) {
-      if(err) {
-        logger.error("Couldn't add new event");
-        return callback(new DatabaseError(err));
+    connection.query(
+      "INSERT INTO event SET ?",
+      [queryData],
+      function(err, result) {
+        callback(
+          err && new DatabaseError(err),
+          result && {id: result.insertId}
+        );
       }
-
-      async.waterfall([
-        function(callback) {
-          logger.verbose("adding new event", queryData);
-          connection.query(
-            "INSERT INTO event SET ?",
-            [queryData],
-            function(err, result) {
-              callback(err && new DatabaseError(err), result);
-            }
-          );
-        }
-      ], function(err) {
-        cleanup();
-        callback(err);
-      })
-    });
+    );
   }
 
   endEvent(
@@ -109,8 +110,14 @@ class Module extends utils.BaseModule implements mkevent.Module {
     connection.query(
       "UPDATE event SET endDate=NOW(), ? WHERE idEvent = ?",
       [queryData, params.id],
-      function(err) {
-        callback(err && new DatabaseError(err));
+      function(err, res) {
+        if(err) {
+          return callback(new DatabaseError(err));
+        }
+        if(res.affectedRows !== 1) {
+          return callback(new ResourceNotFoundError(null, {id: "notFound"}));
+        }
+        callback();
       }
     );
   }
@@ -129,136 +136,150 @@ class Module extends utils.BaseModule implements mkevent.Module {
   ) {
     var queryData = {
       startAmount : params.startAmount,
+      startDate: new Date()
     };
+    connection.query(
+      "UPDATE event SET ? WHERE idEvent=?",
+      [queryData, params.id],
+      function(err, res) {
+        if(err) {
+          return callback(new DatabaseError(err));
+        }
+        if(res.affectedRows !== 1) {
+          return callback(new ResourceNotFoundError(null, {id: "notFound"}));
+        }
+        callback();
+      }
+    );
+  }
+
+  updateEvent(
+    params: mkevent.UpdateEvent.Params,
+    callback: mkevent.UpdateEvent.Callback
+  ) {
+    this.callWithConnection(this.__updateEvent, params, callback);
+  }
+
+  __updateEvent(
+    connection: mysql.IConnection,
+    params: mkevent.UpdateEvent.Params,
+    callback: mkevent.UpdateEvent.Callback
+  ) {
+    var queryData: EventDbQueryStruct.EventData = {
+      name          : params.name,
+      type          : params.type,
+      startDate     : params.startDate,
+      endDate       : params.endDate,
+      startAmount   : params.startAmount,
+      endAmount     : params.endAmount
+    };
+    var id = params.id;
 
     connection.query(
-      "UPDATE event SET startDate=NOW(), ? WHERE idEvent = ?",
-      [queryData, params.id],
-      function(err) {
+      "UPDATE event SET ? WHERE idEvent = ?",
+      [queryData, id],
+      function(err, res) {
+        if (err) {
+          return callback(new DatabaseError(err));
+        }
+        if(res.affectedRows !== 1) {
+          return callback(new ResourceNotFoundError(null, {id: "notFound"}));
+        }
+        callback();
+      }
+    );
+  }
+
+  deleteEvent(
+      params : mkevent.DeleteEvent.Params,
+      callback: mkevent.DeleteEvent.Callback
+  ) {
+    this.callWithConnection(this.__deleteEvent, params, callback);
+  }
+
+  __deleteEvent(
+      connection: mysql.IConnection,
+      params : mkevent.DeleteEvent.Params,
+      callback: mkevent.DeleteEvent.Callback
+  ) {
+    connection.query(
+      "DELETE from event WHERE idEvent = ?",
+      [params.id],
+      function(err, res) {
+        if (err) {
+          return callback(new DatabaseError(err));
+        }
+        if(res.affectedRows !== 1) {
+          return callback(new ResourceNotFoundError(null, {id: "notFound"}));
+        }
+        callback();
+      }
+    );
+  }
+
+  registerToEvent(
+    params: mkevent.RegisterToEvent.Params,
+    callback: mkevent.RegisterToEvent.Callback
+  ) {
+    this.callWithConnection(this.__registerToEvent, params, callback);
+  }
+
+  __registerToEvent(
+    connection: mysql.IConnection,
+    params: mkevent.RegisterToEvent.Params,
+    callback: mkevent.RegisterToEvent.Callback
+  ) {
+    var queryData: EventDbQueryStruct.EventUserData = {
+      idUser     : params.idUser,
+      idEvent    : params.idEvent,
+    };
+    connection.query(
+      "INSERT INTO event_user SET ?",
+      [queryData],
+      function(err, result) {
+        if(err) {
+          if(err.code === "ER_DUP_ENTRY") {
+            return callback(new ApplicationError(err, {idUser: "duplicate"}));
+          }
+          if(err.code === "ER_NO_REFERENCED_ROW_2" ||
+            err.code === "ER_NO_REFERENCED_ROW_" ||
+            err.code === "ER_NO_REFERENCED_ROW"
+          ) {
+            // We are not sure which is invalid, but it's most likely the event
+            // since users make the request themselves and cannot be deleted
+            return callback(new ResourceNotFoundError(err, {idEvent: "notFound"}));
+          }
+        }
         callback(err && new DatabaseError(err));
       }
     );
   }
 
-  updateEvent(data: EventInterfaces.UpdateEventData, callback: (err?: Error) => void) {
-    var queryData: EventDbQueryStruct.EventData = {
-      name          : data.name,
-      type          : data.type,
-      startDate     : data.startDate,
-      endDate       : data.endDate,
-      startAmount   : data.startAmount,
-      endAmount     : data.endAmount
-    };
-
-    var id = data.id;
-
-    this.db.getConnection(function(err, connection, cleanup) {
-      if(err) {
-        return callback(new DatabaseError(err));
-      }
-
-      var query = connection.query(
-        "UPDATE event SET ? WHERE idEvent = ?",
-        [queryData, id],
-        function(err) {
-          cleanup();
-
-          if (err) {
-            return callback(new DatabaseError(err));
-          }
-
-          callback();
-      });
-    });
-  }
-
-  deleteEvent(id: Number, callback: (err?: Error, result?: boolean) => void) {
-    this.db.getConnection(function(err, connection, cleanup) {
-      if(err) {
-        return callback(err);
-      }
-      var query = connection.query(
-        "DELETE from event WHERE idEvent = ?",
-        [id],
-        function(err, res) {
-          cleanup();
-
-          if (err) {
-            return callback(new DatabaseError(err));
-          }
-
-          callback(null, res.affectedRows !== 0);
-      });
-    });
-  }
-
-  registerToEvent(
-    data: EventInterfaces.RegisterEventData,
-    callback: (err?: Error, result?: {success: boolean}) => void
+  getEvent(
+    params: mkevent.GetEvent.Params,
+    callback: mkevent.GetEvent.Callback
   ) {
-    var queryData: EventDbQueryStruct.EventUserData = {
-      idUser     : data.idUser,
-      idEvent    : data.idEvent,
-      registered : true
-    };
-
-    this.db.getConnection(function(err, connection, cleanup) {
-      if(err) {
-        return callback(new DatabaseError(err));
-      }
-
-      async.waterfall([
-        // FIXME:: make sure idUser and idEvent exists and are valid
-        function(callback) {
-          logger.verbose("Registering to event", queryData);
-          connection.query(
-            "INSERT INTO event_user SET ?",
-            [queryData],
-            function(err, result) {
-              if(err && err.code === "ER_DUP_ENTRY") {
-                return callback(new ApplicationError(
-                  err,
-                  {
-                    name: "duplicate"
-                  }
-                ));
-              }
-              callback(err && new DatabaseError(err));
-            }
-          );
-        }
-      ], function(err, result: any) {
-        cleanup();
-        callback(err, {success: result && result.affectedRows === 1});
-      })
-    });
+    this.callWithConnection(this.__getEvent, params, callback);
   }
-
-  getEvent(data: EventInterfaces.GetEventData, callback: (err: Error, result?: Event) => void) {
+  __getEvent(
+    connection: mysql.IConnection,
+    params: mkevent.GetEvent.Params,
+    callback: mkevent.GetEvent.Callback
+  ) {
     var event = null;
-
-    this.db.getConnection(function(err, connection, cleanup) {
-      if(err) {
-        return callback(new DatabaseError(err));
+    connection.query(
+      "SELECT * FROM event WHERE idEvent=?",
+      [params.id],
+      function(err, rows) {
+        if (err) {
+          return callback(new DatabaseError(err));
+        }
+        if(rows.length !== 1) {
+          return callback(new ResourceNotFoundError(err, {id: "notFound"}));
+        }
+        callback(null, new Event(rows[0]));
       }
-      var query = connection.query(
-        "SELECT * FROM event WHERE idEvent=?",
-        [data.id],
-        function(err, rows) {
-          cleanup();
-
-          if (err) {
-            return callback(new DatabaseError(err));
-          }
-
-          if(rows.length == 1){
-            event = new Event(rows[0]);
-            callback(null, event);
-          }else{
-            return callback(new DatabaseError(err));
-          }
-      });
-    });
+    );
   }
 
 }

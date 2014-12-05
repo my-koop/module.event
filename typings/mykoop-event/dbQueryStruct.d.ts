@@ -1,4 +1,10 @@
 declare module EventDbQueryStruct {
+  export interface NewEventData {
+    name            : string;
+    type            : string;
+    startDate       : Date;
+  }
+
   export interface EventData {
     name            : string;
     type            : string;
@@ -11,6 +17,5 @@ declare module EventDbQueryStruct {
   export interface EventUserData {
     idUser          : number;
     idEvent         : number;
-    registered      : boolean;
   }
 }

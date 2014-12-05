@@ -5,7 +5,6 @@ var BSCol    = require("react-bootstrap/Col");
 var BSButton = require("react-bootstrap/Button");
 
 var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
-var MKIcon            = require("mykoop-core/components/Icon");
 var MKTableSorter     = require("mykoop-core/components/TableSorter");
 var MKListModButtons  = require("mykoop-core/components/ListModButtons");
 var MKStartEventModal = require("./StartEventModal");
@@ -16,6 +15,7 @@ var __          = language.__;
 var actions     = require("actions");
 var formatDate  = language.formatDate;
 var formatMoney = language.formatMoney;
+
 
 var openColumns = [
   "name",
@@ -119,8 +119,7 @@ var Events = React.createClass({
     var actionDescriptors = [];
 
     if(event.startAmount == null) {
-      actionDescriptors.push
-      (
+      actionDescriptors.push(
         {
           icon: "circle-thin",
           tooltip: {
@@ -129,14 +128,11 @@ var Events = React.createClass({
               placement: "top"
             }
           },
-          modalTrigger: <MKStartEventModal
-            event={{id: event.id, name : event.name}}
-          />
+          modalTrigger: <MKStartEventModal event={event} />
         }
       )
-    }else{
-      actionDescriptors.push
-      (
+    } else {
+      actionDescriptors.push(
         {
           icon: "circle",
           tooltip: {
@@ -146,15 +142,14 @@ var Events = React.createClass({
             }
           },
           modalTrigger: <MKEndEventModal
-            event={{id: event.id, name : event.name}}
+            event={event}
             onSave={_.bind(this.onEventRemoved, this, event)}
           />
         }
       )
     }
 
-    actionDescriptors.push
-    (
+    actionDescriptors.push(
       {
         icon: "edit",
         tooltip: {

@@ -1,11 +1,11 @@
 var endpoints = {
   event: {
     list: {
-      path: "/event/list",
+      path: "/events",
       method: "get"
     },
     update: {
-      path: "/event/update/",
+      path: "/events/:id",
       method: "post",
       validation: {
         resolve: "validation",
@@ -13,15 +13,15 @@ var endpoints = {
       }
     },
     start: {
-        path: "/event/update/:id/start/:startAmount",
-        method: "post",
+      path: "/events/:id/start",
+      method: "post",
     },
     end: {
-        path: "/event/update/:id/end/:endAmount",
-        method: "post",
+      path: "/events/:id/end",
+      method: "post",
     },
     add: {
-      path: "/event/",
+      path: "/events",
       method: "post",
       validation: {
         resolve: "validation",
@@ -33,12 +33,12 @@ var endpoints = {
       method: "get"
     },
     remove: {
-      path: "/event/:id",
+      path: "/events/:id",
       method: "delete"
     },
     register: {
-      path: "/event/register/:idEvent/:idUser",
-      method: "put"
+      path: "/events/register/:idEvent/:idUser",
+      method: "post"
     }
   }
 }

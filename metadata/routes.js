@@ -25,6 +25,7 @@ function addRoutes(metaData) {
         name: "updateEventPage",
         path: "update/:id",
     });
+    // Public routes
     metaData.addFrontendRoute({
         idPath: ["public", "events"],
         component: "EventsPagePublic",

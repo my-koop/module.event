@@ -30,6 +30,7 @@ export function addRoutes(metaData: utils.MetaDataBuilder) {
     path: "update/:id",
   });
 
+  // Public routes
   metaData.addFrontendRoute({
     idPath: ["public", "events"],
     component: "EventsPagePublic",
