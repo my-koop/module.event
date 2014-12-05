@@ -45,6 +45,7 @@
         invalid: "La date de fin doit arriver plus tard que la date de début"
       },
       startAmount: {
+        empty: "$t(event::startAmount) doit être présent lors de la fermeture de l'événement",
         error: "$t(event::startAmount) doit être un nombre positif"
       },
       endAmount: {
