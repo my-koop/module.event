@@ -30,7 +30,8 @@ var EventForm = React.createClass({
       startDate   : this.state.startDate,
       endDate     : this.state.endDate,
       startAmount : this.state.startAmount,
-      endAmount   : this.state.endAmount
+      endAmount   : this.state.endAmount,
+      description : this.state.description
     }
   },
 
@@ -43,13 +44,13 @@ var EventForm = React.createClass({
       endDate: null,
       startAmount: null,
       endAmount: null,
-
+      description: "",
       editState: EventEditState.Created
     }
   },
 
   componentWillMount: function() {
-    if(_.isNumber(this.props.id) && !isNaN(this.props.id)){
+    if(_.isNumber(this.props.id) && !isNaN(this.props.id)) {
       this.getEventFromDb();
     }
   },
@@ -174,6 +175,11 @@ var EventForm = React.createClass({
           />
         ]
         : null}
+        <BSInput
+          type="textarea"
+          label={__("description")}
+          valueLink={this.linkState("description")}
+        />
       </div>
     );
   }

@@ -77,6 +77,7 @@ class Module extends utils.BaseModule implements mkevent.Module {
       name: params.name,
       type: params.type,
       startDate: params.startDate,
+      description: params.description
     };
 
     connection.query(
@@ -166,12 +167,13 @@ class Module extends utils.BaseModule implements mkevent.Module {
     callback: mkevent.UpdateEvent.Callback
   ) {
     var queryData: EventDbQueryStruct.EventData = {
-      name          : params.name,
-      type          : params.type,
-      startDate     : params.startDate,
-      endDate       : params.endDate,
-      startAmount   : params.startAmount,
-      endAmount     : params.endAmount
+      name        : params.name,
+      type        : params.type,
+      startDate   : params.startDate,
+      endDate     : params.endDate,
+      startAmount : params.startAmount,
+      endAmount   : params.endAmount,
+      description : params.description
     };
     var id = params.id;
 

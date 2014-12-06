@@ -39,6 +39,16 @@ var endpoints = {
     register: {
       path: "/events/register/:idEvent/:idUser",
       method: "post"
+    },
+    notes: {
+      new: {
+        path: "/events/:id/notes",
+        method: "post"
+      },
+      list: {
+        path: "/events/:id/notes",
+        method: "get"
+      }
     }
   }
 }

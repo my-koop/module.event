@@ -1,14 +1,12 @@
 declare module EventDbQueryStruct {
   export interface NewEventData {
-    name            : string;
-    type            : string;
-    startDate       : Date;
+    name        : string;
+    type        : string;
+    startDate   : Date;
+    description : string;
   }
 
-  export interface EventData {
-    name            : string;
-    type            : string;
-    startDate       : Date;
+  export interface EventData extends NewEventData{
     endDate         : Date;
     startAmount     : number;
     endAmount       : number;

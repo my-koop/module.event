@@ -1,20 +1,20 @@
 declare module mkevent {
-  export interface Event {
-    id: number;
+  export interface NewEvent {
     name: string;
     type: string;
     startDate: Date;
+    description: string;
+  }
+
+  export interface Event extends NewEvent {
+    id: number;
     endDate: Date;
     startAmount: number;
     endAmount: number;
   }
 
   module AddEvent {
-    export interface Params {
-      name: string;
-      type: string;
-      startDate: Date;
-    }
+    export interface Params extends NewEvent {}
     export interface Result {
       id: number;
     }

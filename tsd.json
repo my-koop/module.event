@@ -22,11 +22,15 @@
     },
     "mykoop-database/mykoop-database.d.ts": {
       "commit": "22499b9683686c3d424137d6e395a0106d5a6090"
+    },
+    "mykoop-core/mykoop-core.d.ts": {
+      "commit": "c4e024753d4a3f168ef10b2ebb7282ae41659589"
     }
   },
   "dependencies": {
     "mykoop": {},
-    "mykoop-database": {}
+    "mykoop-database": {},
+    "mykoop-core": {}
   },
   "owned": {
     "mykoop-event": {}

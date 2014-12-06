@@ -1,13 +1,23 @@
 class Event implements mkevent.Event {
-  public static COLUMNS_DB = ["idEvent", "name", "type", "startDate", "endDate", "startAmount", "endAmount"];
-  public  id              : number;
-  public  name            : string;
-  public  type            : string;
-  public  startDate       : Date;
-  public  endDate         : Date;
-  public  startAmount     : number;
-  public  endAmount       : number;
-  public  countRegistered : number;
+  public static COLUMNS_DB = [
+    "idEvent",
+    "name",
+    "type",
+    "startDate",
+    "endDate",
+    "startAmount",
+    "endAmount",
+    "description"
+  ];
+  public id              : number;
+  public name            : string;
+  public type            : string;
+  public startDate       : Date;
+  public endDate         : Date;
+  public startAmount     : number;
+  public endAmount       : number;
+  public countRegistered : number;
+  public description     : string;
 
   constructor(row: any) {
     this.id = parseInt(row.idEvent);
@@ -24,6 +34,7 @@ class Event implements mkevent.Event {
       this.endAmount = null;
     }
     this.countRegistered = parseInt(row.countRegistered) || 0;
+    this.description = row.description;
   }
 }
 

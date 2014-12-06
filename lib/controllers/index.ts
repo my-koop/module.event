@@ -18,7 +18,8 @@ export function attachControllers(
         return  {
           name: req.param("name"),
           startDate: new Date(req.param("startDate")),
-          type: req.param("type")
+          type: req.param("type"),
+          description: req.param("description")
         };
       }
     )
@@ -61,7 +62,8 @@ export function attachControllers(
           startDate: new Date(req.param("startDate")),
           endDate: endDate ? new Date(endDate) : null,
           startAmount: startAmount,
-          endAmount: endAmount
+          endAmount: endAmount,
+          description: req.param("description")
         };
       }
     )
@@ -128,5 +130,16 @@ export function attachControllers(
         };
       }
     })
+  );
+
+  var core = <mkcore.Module>event.getModuleManager().get("core");
+  binder.attach(
+    {endPoint: endPoints.event.notes.new},
+    core.newNoteController.bind(core, "event_notes")
+  );
+
+  binder.attach(
+    {endPoint: endPoints.event.notes.list},
+    core.getNotesController.bind(core, "event_notes")
   );
 }
