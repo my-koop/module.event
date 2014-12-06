@@ -17,7 +17,10 @@ export function addRoutes(metaData: utils.MetaDataBuilder) {
     idPath: ["dashboard", "events", "list"],
     component: "EventsPageAdmin",
     name: "eventsAdmin",
-    path: "list",
+    path: "list/:state",
+    params: {
+      state: ["open", "closed"]
+    }
   });
 
   metaData.addFrontendRoute({
@@ -27,6 +30,14 @@ export function addRoutes(metaData: utils.MetaDataBuilder) {
     path: "update/:id",
   });
 
+  metaData.addFrontendRoute({
+    idPath: ["dashboard", "events", "notes"],
+    component: "EventNotes",
+    name: "eventNotes",
+    path: "notes/:id",
+  });
+
+  // Public routes
   metaData.addFrontendRoute({
     idPath: ["public", "events"],
     component: "EventsPagePublic",

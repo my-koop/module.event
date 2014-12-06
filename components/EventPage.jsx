@@ -35,34 +35,45 @@ var CreateEventPage = React.createClass({
     });
   },
 
-  onFinish: function() {
-    reactRouter.transitionTo("eventsAdmin");
+  onFinish: function(showOpen) {
+    var destination = showOpen ? "open" : "closed";
+    reactRouter.transitionTo("eventsAdmin", {state: destination});
   },
 
   onSave: function() {
     var self = this;
     var event = this.refs.eventForm.getEvent();
+    var isEditing = !!this.props.params.id;
+    var action = isEditing ?
+      actions.event.update
+    : actions.event.add;
+    var data = _.merge({id: this.props.params.id}, event);
 
     this.clearFeedback();
-    actions.event.add({
+    action({
       i18nErrors: {
         keys: ["app"],
         prefix: "event::eventDataErrors"
       },
-      data: event
+      data: data
     }, function(err, body) {
       if(err) {
         console.error(err);
         return self.setFeedback(err.i18n, "danger");
       }
 
-      self.setState({
-        editingState: 1
-      });
+
       self.setFeedback(
         {key: "event::eventNew_success"},
         "success"
       );
+      if(!isEditing) {
+        self.setState({
+          editingState: 1
+        });
+      } else {
+        self.onFinish(!event.endDate);
+      }
     });
   },
 
@@ -70,21 +81,19 @@ var CreateEventPage = React.createClass({
     var body;
     if(this.state.editingState === 1) {
       body = (
-        <div>
-          <div className="pull-right">
-            <BSButton
-              onClick={this.onContinue}
-              bsStyle="success"
-            >
-              {__("continue")}
-            </BSButton>
-            <BSButton
-              onClick={this.onFinish}
-              bsStyle="danger"
-            >
-              {__("finish")}
-            </BSButton>
-          </div>
+        <div className="pull-right">
+          <BSButton
+            onClick={this.onContinue}
+            bsStyle="success"
+          >
+            {__("continue")}
+          </BSButton>
+          <BSButton
+            onClick={_.partial(this.onFinish, true)}
+            bsStyle="danger"
+          >
+            {__("finish")}
+          </BSButton>
         </div>
       );
     } else {
@@ -92,8 +101,10 @@ var CreateEventPage = React.createClass({
         <div>
           <MKEventForm
             ref="eventForm"
-            id={Number(this.props.params.id)}
+            id={parseInt(this.props.params.id)}
+            onWarning={this.setFeedback}
           />
+          <br/>
           <BSButton
             onClick={this.onSave}
             className="pull-right"
@@ -114,8 +125,8 @@ var CreateEventPage = React.createClass({
           : __("event::createEventWelcome")
         }
         </h1>
-        <BSCol md={4}>
-          {this.renderFeedback()}
+        {this.renderFeedback()}
+        <BSCol md={5}>
           {body}
         </BSCol>
       </div>

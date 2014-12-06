@@ -6,10 +6,12 @@ var BSButton = require("react-bootstrap/Button");
 var MKDateTimePicker = require("mykoop-core/components/DateTimePicker");
 var MKAlertTrigger   = require("mykoop-core/components/AlertTrigger");
 
-var actions    = require("actions");
-var _          = require("lodash");
-var __         = require("language").__;
-var formatDate = require("language").formatDate;
+var actions = require("actions");
+var _ = require("lodash");
+var language = require("language");
+var __ = language.__;
+var formatDate = language.formatDate;
+var getCurrencySymbol = language.getCurrencySymbol;
 
 var EventEditState = require("../lib/common/EventEditState");
 
@@ -17,7 +19,8 @@ var EventForm = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
   propTypes: {
-    id : React.PropTypes.number
+    id: React.PropTypes.number,
+    onWarning: React.PropTypes.func.isRequired
   },
 
   getEvent: function() {
@@ -27,7 +30,8 @@ var EventForm = React.createClass({
       startDate   : this.state.startDate,
       endDate     : this.state.endDate,
       startAmount : this.state.startAmount,
-      endAmount   : this.state.endAmount
+      endAmount   : this.state.endAmount,
+      description : this.state.description
     }
   },
 
@@ -40,13 +44,13 @@ var EventForm = React.createClass({
       endDate: null,
       startAmount: null,
       endAmount: null,
-
+      description: "",
       editState: EventEditState.Created
     }
   },
 
   componentWillMount: function() {
-    if(_.isNumber(this.props.id) && !isNaN(this.props.id)){
+    if(_.isNumber(this.props.id) && !isNaN(this.props.id)) {
       this.getEventFromDb();
     }
   },
@@ -77,85 +81,105 @@ var EventForm = React.createClass({
     });
   },
 
+  onStartDateChange: function(date, str) {
+    this.setState({
+      startDate: date
+    });
+  },
+
+  onEndDateChange: function(date, str) {
+    if(!date) {
+      this.props.onWarning({key: "event::removeEndDateWarning"}, "warning");
+    }
+    this.setState({
+      endDate: date,
+      endAmount: date && this.state.endAmount || "",
+      startAmount: this.state.startAmount || date ? this.state.startAmount : "0",
+    });
+  },
+
   render: function () {
     var self = this;
     var others = _.omit(this.props, _.keys(this.propTypes));
-
+    var startAmountLink = {
+      value: this.state.startAmount,
+      requestChange: function(newValue) {
+        if(newValue === "" && !self.state.endDate) {
+          self.props.onWarning({key: "event::removeStartAmountWarning"}, "warning")
+        }
+        self.setState({
+          startAmount: newValue
+        });
+      }
+    };
     return (
       <div {...others} >
         <BSInput
           type="text"
           label={__("name")}
           valueLink={self.linkState("name")}
+          key="name"
         />
         <BSInput
           type="select"
           label={__("event::type")}
           valueLink={self.linkState("type")}
+          key="type"
         >
           <option value="workshop">{__("event::workshop")}</option>
           <option value="cashier">{__("event::cashier")}</option>
         </BSInput>
-        <label htmlFor="startDatePicker">
+        <label
+          htmlFor="startDatePicker"
+          key="startDateLabel"
+        >
           {__("event::startDate")}
         </label>
         <MKDateTimePicker
+          key="startDate"
           id="startDatePicker"
           value={this.state.startDate}
           max={this.state.endDate || undefined}
-          onChange={function(date, str) {
-            self.setState({
-              startDate: date
-            });
-          }}
+          onChange={this.onStartDateChange}
         />
+        {" "}
         {this.state.editState >= EventEditState.Started ?
           <BSInput
             type="number"
             label={__("event::startAmount")}
-            valueLink={this.linkState("startAmount")}
+            valueLink={startAmountLink}
+            addonAfter={getCurrencySymbol()}
+            key="startAmount"
           />
-        : <BSButton
-            bsStyle="primary"
-            key="startEventButton"
-            onClick={function() {
-              self.setState({editState: EventEditState.Started});
-            }}
-          >
-            {__("event::startEvent")}
-          </BSButton>
-        }
+        : null}
         {this.state.editState >= EventEditState.Ended ? [
-          <label htmlFor="endDatePicker">
+          <label
+            htmlFor="endDatePicker"
+            key="endDateLabel"
+          >
             {__("event::endDate")}
           </label>,
           <MKDateTimePicker
+            key="endDate"
             id="endDatePicker"
             value={this.state.endDate}
             min={this.state.startDate || undefined}
-            onChange={function(date, str) {
-              self.setState({
-                endDate: date
-              });
-            }}
+            onChange={this.onEndDateChange}
           />,
           <BSInput
             type="number"
             label={__("event::endAmount")}
             valueLink={this.linkState("endAmount")}
+            addonAfter={getCurrencySymbol()}
+            key="endAmount"
           />
-        ]: this.state.editState === (EventEditState.Ended - 1) ?
-          <BSButton
-            bsStyle="primary"
-            key="endEventButton"
-            onClick={function() {
-              self.setState({editState: EventEditState.Ended});
-            }}
-          >
-            {__("event::endEvent")}
-          </BSButton>
-        : null
-        }
+        ]
+        : null}
+        <BSInput
+          type="textarea"
+          label={__("description")}
+          valueLink={this.linkState("description")}
+        />
       </div>
     );
   }

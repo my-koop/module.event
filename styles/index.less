@@ -5,3 +5,25 @@
 .module-custom-class {
   color: @brand-warning;
 }
+
+.event-popover {
+  @media (min-width: @screen-sm-min) {
+    max-width: 400px;
+  }
+}
+
+.calendar {
+  .calendar-event {
+    background-color: @brand-success;
+    &.rc-Day--current {
+      background-color: @brand-warning;
+      &:hover {
+        background-color: darken(@brand-warning, 10%) !important;
+      }
+    }
+
+    &:hover {
+      background-color: darken(@brand-success, 10%) !important;
+    }
+  }
+}

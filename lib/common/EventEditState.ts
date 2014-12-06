@@ -10,7 +10,7 @@ module EventEditState {
   export function evaluateState(event: Event) {
     if(event.endDate) {
       return EventEditState.Ended;
-    } else if(event.startAmount) {
+    } else if(event.startAmount !== null) {
       return EventEditState.Started;
     }
     return EventEditState.Created;
