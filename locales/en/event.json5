@@ -29,7 +29,9 @@
   invalidValues_failed: "The values you entered are not valid",
   removeEndDateWarning: "To preserve data consistency, removing the end date will automatically set the event to started.",
   removeStartAmountWarning: "To preserve data consistency, removing the start amount will automatically set the event to not started.",
-
+  eventNotesTitle: "Event notes",
+  showNotes: "Show event notes",
+  noteCount: "# Notes",
 
   eventDataErrors: {
     app: {

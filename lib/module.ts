@@ -43,12 +43,19 @@ class Module extends utils.BaseModule implements mkevent.Module {
         e.endDate,\
         e.startAmount,\
         e.endAmount,\
-        name,\
-        count(eu.idEvent) as countRegistered\
-      FROM event e LEFT JOIN event_user eu ON eu.idEvent = e.idEvent\
+        e.name,\
+        count(eu.idEvent) as countRegistered,\
+        en.noteCount\
+      FROM event e \
+      LEFT JOIN event_user eu ON eu.idEvent = e.idEvent\
+      LEFT JOIN (\
+        SELECT targetId, count(targetId) as noteCount\
+          FROM event_notes\
+          GROUP BY targetId\
+      ) en ON en.targetId = e.idEvent\
       WHERE e.endDate IS " + isEndDateNull + " NULL " + isStartAmountNull +
-      "GROUP BY e.idEvent " +
-      "ORDER BY e.startDate, e.endDate",
+      "GROUP BY e.idEvent\
+      ORDER BY e.startDate, e.endDate",
       [],
       function(err, rows) {
         if (err) {

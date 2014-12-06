@@ -17,7 +17,7 @@ var EventNotes = React.createClass({
     return (
       <div>
         <h1>
-          {__("event::EventNotesTitle")}: #{eventId}
+          {__("event::eventNotesTitle")}: #{eventId}
         </h1>
         <MKNotes
           resourceId={eventId}

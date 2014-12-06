@@ -1,14 +1,4 @@
 class Event implements mkevent.Event {
-  public static COLUMNS_DB = [
-    "idEvent",
-    "name",
-    "type",
-    "startDate",
-    "endDate",
-    "startAmount",
-    "endAmount",
-    "description"
-  ];
   public id              : number;
   public name            : string;
   public type            : string;
@@ -18,6 +8,7 @@ class Event implements mkevent.Event {
   public endAmount       : number;
   public countRegistered : number;
   public description     : string;
+  public noteCount       : number;
 
   constructor(row: any) {
     this.id = parseInt(row.idEvent);
@@ -35,6 +26,7 @@ class Event implements mkevent.Event {
     }
     this.countRegistered = parseInt(row.countRegistered) || 0;
     this.description = row.description;
+    this.noteCount = row.noteCount;
   }
 }
 

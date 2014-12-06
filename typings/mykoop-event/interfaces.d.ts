@@ -11,6 +11,8 @@ declare module mkevent {
     endDate: Date;
     startAmount: number;
     endAmount: number;
+    countRegistered: number;
+    noteCount?: number;
   }
 
   module AddEvent {

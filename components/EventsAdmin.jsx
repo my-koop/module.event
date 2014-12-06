@@ -23,6 +23,7 @@ var openColumns = [
   "startDate",
   "startAmount",
   "countRegistered",
+  "noteCount",
   "actions"
 ];
 var closedColumns = [
@@ -32,6 +33,7 @@ var closedColumns = [
   "endDate",
   "startAmount",
   "endAmount",
+  "noteCount",
   "actions"
 ];
 var columns = {};
@@ -46,7 +48,6 @@ var Events = React.createClass({
   getInitialState: function() {
     return {
       events: [],
-      isClosed : false
     }
   },
 
@@ -87,6 +88,14 @@ var Events = React.createClass({
     });
   },
 
+  onEventStarted: function(event, startAmount) {
+    event.startAmount = parseFloat(startAmount);
+    var events = this.state.events;
+    this.setState({
+      events: events
+    });
+  },
+
   onEventRemoved: function(event) {
     var events = this.state.events;
     events = _.reject(events, function(_event) {
@@ -97,110 +106,94 @@ var Events = React.createClass({
     });
   },
 
-  actionsGenerator: function(event, i) {
+  deleteEvent: function(event) {
     var self = this;
-    if(this.props.showClosed) {
-      return [
-        {
-          icon: "edit",
-          tooltip: {
-            text: __("event::editEventTooltip"),
-            overlayProps: {
-              placement: "top"
-            }
-          },
-          callback: function() {
-            Router.transitionTo("updateEventPage", {id : event.id})
-          }
-        }
-      ];
-    }
-
-    var actionDescriptors = [];
-
-    if(event.startAmount == null) {
-      actionDescriptors.push(
-        {
-          icon: "circle-thin",
-          tooltip: {
-            text: __("event::startEvent"),
-            overlayProps: {
-              placement: "top"
-            }
-          },
-          modalTrigger: <MKStartEventModal event={event} />
-        }
-      )
-    } else {
-      actionDescriptors.push(
-        {
-          icon: "circle",
-          tooltip: {
-            text: __("event::endEvent"),
-            overlayProps: {
-              placement: "top"
-            }
-          },
-          modalTrigger: <MKEndEventModal
-            event={event}
-            onSave={_.bind(this.onEventRemoved, this, event)}
-          />
-        }
-      )
-    }
-
-    actionDescriptors.push(
-      {
-        icon: "edit",
-        tooltip: {
-          text: __("event::editEventTooltip"),
-          overlayProps: {
-            placement: "top"
-          }
-        },
-        callback: function() {
-          Router.transitionTo("updateEventPage", {id : event.id})
-        }
-      },
-      {
-        icon: "trash",
-        warningMessage: __("areYouSure"),
-        tooltip: {
-          text: __("remove"),
-          overlayProps: {placement: "top"}
-        },
-        callback: function() {
-          var id = event.id;
-          actions.event.remove(
-          {
-            data: {
-              id : id
-            }
-          }, function(err, res) {
-            if (err) {
-              console.error(err);
-              MKAlertTrigger.showAlert(__("errors::error", {context: err.context}));
-              return;
-            }
-            var events = self.state.events;
-            events.splice(i, 1);
-            self.setState({
-              events: events
-            });
-            MKAlertTrigger.showAlert(__("event::removedEventMessage") + ": " + event.name);
-          });
-        }
+    var id = event.id;
+    actions.event.remove({
+      i18nErrors: {},
+      alertErrors: true,
+      data: {id: id}
+    }, function(err, res) {
+      if (!err) {
+        self.onEventRemoved(event);
+        MKAlertTrigger.showAlert(
+          __("event::removedEventMessage") + ": " + event.name
+        );
       }
-    );
-    return actionDescriptors;
+    });
   },
 
-  switchIsClosedState: function() {
+  actionsGenerator: function(event, i) {
     var self = this;
-    var newState = !this.state.isClosed;
-    self.setState({
-      isClosed: newState
-    }, self.updateList);
+    var showClosed = this.props.showClosed;
+    var editEventButton = {
+      icon: "edit",
+      tooltip: {
+        text: __("event::editEventTooltip"),
+        overlayProps: {
+          placement: "top"
+        }
+      },
+      callback: function() {
+        Router.transitionTo("updateEventPage", {id : event.id})
+      }
+    };
+    var eventStarted = event.startAmount != null;
+    var startEventButton = !showClosed && !eventStarted && {
+      icon: "circle-thin",
+      tooltip: {
+        text: __("event::startEvent"),
+        overlayProps: {
+          placement: "top"
+        }
+      },
+      modalTrigger: <MKStartEventModal
+        event={event}
+        onSave={_.partial(this.onEventStarted, event)}
+      />
+    };
+    var endEventButton = !showClosed && eventStarted && {
+      icon: "circle",
+      tooltip: {
+        text: __("event::endEvent"),
+        overlayProps: {
+          placement: "top"
+        }
+      },
+      modalTrigger: <MKEndEventModal
+        event={event}
+        onSave={_.partial(this.onEventRemoved, event)}
+      />
+    };
+    var showNotesButton = {
+      icon: "file-text-o",
+      tooltip: {
+        text: __("event::showNotes"),
+        overlayProps: {
+          placement: "top"
+        }
+      },
+      callback: function() {
+        Router.transitionTo("eventNotes", {id : event.id})
+      }
+    };
+    var deleteButton = !showClosed && {
+      icon: "trash",
+      warningMessage: __("areYouSure"),
+      tooltip: {
+        text: __("remove"),
+        overlayProps: {placement: "top"}
+      },
+      callback: _.partial(this.deleteEvent, event)
+    }
+    var actions = [
+      startEventButton,
+      endEventButton,
+      editEventButton,
+      showNotesButton,
+      deleteButton
+    ];
+    return _.compact(actions);
   },
 
   render: function() {
@@ -253,11 +246,14 @@ var Events = React.createClass({
             }
           }
         },
+        noteCount: {
+          name: __("event::noteCount")
+        },
         actions: {
           name: __("actions"),
           isStatic: true,
           headerProps: {
-            className: "list-mod-min-width-" + (showClosed ? "1" : "3")
+            className: "list-mod-min-width-" + (showClosed ? "2" : "4")
           },
           cellGenerator: function(event, i) {
             return (
