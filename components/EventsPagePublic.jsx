@@ -11,7 +11,7 @@ var EventsPage = React.createClass({
     return (
       <div>
         <h1>
-          {__("event::eventWelcome")}
+          {__("event::eventPublicWelcome")}
         </h1>
         <MKEventsPublic />
       </div>

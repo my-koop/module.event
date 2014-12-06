@@ -19,6 +19,46 @@ class Module extends utils.BaseModule implements mkevent.Module {
     controllerList.attachControllers(new utils.ModuleControllersBinder(this));
   }
 
+  getPublicEvents(
+    params: mkevent.GetPublicEvents.Params,
+    callback: mkevent.GetPublicEvents.Callback
+  ) {
+    this.callWithConnection(this.__getPublicEvents, params, callback);
+  }
+  __getPublicEvents(
+    connection: mysql.IConnection,
+    params: mkevent.GetPublicEvents.Params,
+    callback: mkevent.GetPublicEvents.Callback
+  ) {
+    if(_.isNumber(params.idUser)) {
+      var userQuery = "LEFT JOIN (\
+        SELECT idEvent, idUser\
+          FROM event_user\
+          WHERE idUser=?\
+      ) eu on e.idEvent=eu.idEvent";
+      var idUserQuery = "idUser";
+    } else {
+      var idUserQuery = "null";
+      var userQuery = "";
+    }
+    connection.query(
+      " SELECT ??, !isnull(" + idUserQuery + ") AS registered\
+        FROM event e " + userQuery +
+        " WHERE endDate IS NULL && type='workshop'\
+        GROUP BY e.idEvent",
+      [
+        ["e.idEvent", "description", "name", "startDate"],
+        params.idUser
+      ],
+      function(err, rows: any[]) {
+        if(err) {
+          return callback(new DatabaseError(err));
+        }
+        callback(null, {events: _.map(rows, function(row) {return row;})});
+      }
+    );
+  }
+
   getEvents(
     params: mkevent.GetEvents.Params,
     callback: mkevent.GetEvents.Callback
@@ -44,6 +84,7 @@ class Module extends utils.BaseModule implements mkevent.Module {
         e.startAmount,\
         e.endAmount,\
         e.name,\
+        e.description,\
         count(eu.idEvent) as countRegistered,\
         en.noteCount\
       FROM event e \
@@ -64,6 +105,33 @@ class Module extends utils.BaseModule implements mkevent.Module {
         callback(null, {
           events: _.map(rows, function(row) {return new Event(row);})}
         );
+      }
+    );
+  }
+
+  getEvent(
+    params: mkevent.GetEvent.Params,
+    callback: mkevent.GetEvent.Callback
+  ) {
+    this.callWithConnection(this.__getEvent, params, callback);
+  }
+  __getEvent(
+    connection: mysql.IConnection,
+    params: mkevent.GetEvent.Params,
+    callback: mkevent.GetEvent.Callback
+  ) {
+    var event = null;
+    connection.query(
+      "SELECT * FROM event WHERE idEvent=?",
+      [params.id],
+      function(err, rows) {
+        if (err) {
+          return callback(new DatabaseError(err));
+        }
+        if(rows.length !== 1) {
+          return callback(new ResourceNotFoundError(err, {id: "notFound"}));
+        }
+        callback(null, new Event(rows[0]));
       }
     );
   }
@@ -264,29 +332,29 @@ class Module extends utils.BaseModule implements mkevent.Module {
     );
   }
 
-  getEvent(
-    params: mkevent.GetEvent.Params,
-    callback: mkevent.GetEvent.Callback
+  unregisterToEvent(
+    params: mkevent.UnregisterToEvent.Params,
+    callback: mkevent.UnregisterToEvent.Callback
   ) {
-    this.callWithConnection(this.__getEvent, params, callback);
+    this.callWithConnection(this.__unregisterToEvent, params, callback);
   }
-  __getEvent(
+
+  __unregisterToEvent(
     connection: mysql.IConnection,
-    params: mkevent.GetEvent.Params,
-    callback: mkevent.GetEvent.Callback
+    params: mkevent.UnregisterToEvent.Params,
+    callback: mkevent.UnregisterToEvent.Callback
   ) {
-    var event = null;
     connection.query(
-      "SELECT * FROM event WHERE idEvent=?",
-      [params.id],
-      function(err, rows) {
-        if (err) {
+      "DELETE FROM event_user WHERE idEvent=? AND idUser=?",
+      [params.idEvent, params.idUser],
+      function(err, res) {
+        if(err) {
           return callback(new DatabaseError(err));
         }
-        if(rows.length !== 1) {
-          return callback(new ResourceNotFoundError(err, {id: "notFound"}));
+        if(res.affectedRows !== 1) {
+          return callback(new ResourceNotFoundError(null, {}));
         }
-        callback(null, new Event(rows[0]));
+        callback();
       }
     );
   }

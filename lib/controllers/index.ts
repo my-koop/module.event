@@ -39,6 +39,18 @@ export function attachControllers(
   );
 
   binder.attach(
+    {endPoint: endPoints.event.public},
+    binder.makeSimpleController<mkevent.GetPublicEvents.Params>(
+      event.getPublicEvents,
+      function(req) {
+        return  {
+          idUser: req.session.user && req.session.user.id || null
+        };
+      }
+    )
+  );
+
+  binder.attach(
     {
       endPoint: endPoints.event.update,
       validation: validation.eventObject
@@ -111,6 +123,19 @@ export function attachControllers(
     {endPoint: endPoints.event.register},
     binder.makeSimpleController<mkevent.RegisterToEvent.Params>(
       event.registerToEvent,
+      function(req) {
+        return {
+          idUser : parseInt(req.param("idUser")),
+          idEvent: parseInt(req.param("idEvent"))
+        };
+      }
+    )
+  );
+
+  binder.attach(
+    {endPoint: endPoints.event.unregister},
+    binder.makeSimpleController<mkevent.UnregisterToEvent.Params>(
+      event.unregisterToEvent,
       function(req) {
         return {
           idUser : parseInt(req.param("idUser")),

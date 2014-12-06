@@ -1,6 +1,10 @@
 var endpoints = {
   event: {
     list: {
+      path: "/events/all/list",
+      method: "get"
+    },
+    public: {
       path: "/events",
       method: "get"
     },
@@ -39,6 +43,10 @@ var endpoints = {
     register: {
       path: "/events/register/:idEvent/:idUser",
       method: "post"
+    },
+    unregister: {
+      path: "/events/register/:idEvent/:idUser",
+      method: "delete"
     },
     notes: {
       new: {

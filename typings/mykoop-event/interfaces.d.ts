@@ -5,12 +5,14 @@ declare module mkevent {
     startDate: Date;
     description: string;
   }
-
-  export interface Event extends NewEvent {
+  export interface UpdateEvent extends NewEvent {
     id: number;
     endDate: Date;
     startAmount: number;
     endAmount: number;
+  }
+
+  export interface Event extends UpdateEvent {
     countRegistered: number;
     noteCount?: number;
   }
@@ -19,6 +21,24 @@ declare module mkevent {
     export interface Params extends NewEvent {}
     export interface Result {
       id: number;
+    }
+    export interface Callback {
+      (err: Error, res?: Result): void;
+    }
+  }
+
+  module GetPublicEvents {
+    export interface Params {
+      idUser?: number;
+    }
+    export interface Result {
+      events: {
+        idEvent: number;
+        name: string;
+        description: string;
+        startDate: Date;
+        registered: number;
+      }[];
     }
     export interface Callback {
       (err: Error, res?: Result): void;
@@ -51,7 +71,7 @@ declare module mkevent {
   }
 
   module UpdateEvent {
-    export interface Params extends Event {}
+    export interface Params extends UpdateEvent {}
     export interface Callback {
       (err?: Error): void;
     }
@@ -87,6 +107,16 @@ declare module mkevent {
   }
 
   module RegisterToEvent {
+    export interface Params {
+      idUser: number;
+      idEvent: number;
+    }
+    export interface Callback {
+      (err?: Error): void;
+    }
+  }
+
+  module UnregisterToEvent {
     export interface Params {
       idUser: number;
       idEvent: number;

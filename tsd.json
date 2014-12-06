@@ -14,6 +14,9 @@
     "express/express.d.ts": {
       "commit": "22499b9683686c3d424137d6e395a0106d5a6090"
     },
+    "express-session/express-session.d.ts": {
+      "commit": "8f28c7a99b8e17055874601b3670f0ae2cd7da79"
+    },
     "mysql/mysql.d.ts": {
       "commit": "22499b9683686c3d424137d6e395a0106d5a6090"
     },

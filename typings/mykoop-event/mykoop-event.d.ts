@@ -19,6 +19,16 @@ declare module mkevent {
       callback: mkevent.AddEvent.Callback
     );
 
+    getPublicEvents(
+      params: mkevent.GetPublicEvents.Params,
+      callback: mkevent.GetPublicEvents.Callback
+    );
+    __getPublicEvents(
+      connection: mysql.IConnection,
+      params: mkevent.GetPublicEvents.Params,
+      callback: mkevent.GetPublicEvents.Callback
+    );
+
     getEvent(
       params: mkevent.GetEvent.Params,
       callback: mkevent.GetEvent.Callback
@@ -67,6 +77,16 @@ declare module mkevent {
       connection: mysql.IConnection,
       params: mkevent.RegisterToEvent.Params,
       callback: mkevent.RegisterToEvent.Callback
+    );
+
+    unregisterToEvent(
+      params: mkevent.UnregisterToEvent.Params,
+      callback: mkevent.UnregisterToEvent.Callback
+    );
+    __unregisterToEvent(
+      connection: mysql.IConnection,
+      params: mkevent.UnregisterToEvent.Params,
+      callback: mkevent.UnregisterToEvent.Callback
     );
 
     startEvent(

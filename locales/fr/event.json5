@@ -12,7 +12,6 @@
   cashier : "Caisse",
   removedEventMessage : "L'événement a été supprimé",
   newEvent: "Ajouter un événement",
-  eventWelcome : "Liste des événements",
   registeredToEventConfirmation : "Vous vous êtes enregistré à l'événement",
   registerToEventPrompt : "Voulez-vous vous enregistrer à cet événement ?",
   switchEventState_closed: "Afficher ouvertes",
@@ -32,6 +31,11 @@
   eventNotesTitle: "Notes de l'événement",
   showNotes: "Voir les notes de l'événement",
   noteCount: "# Notes",
+  eventPublicWelcome : "Calendrier des événements",
+  eventAdminWelcome : "Liste des événements",
+  eventList: "Liste des événements",
+  register: "M'inscrire",
+  unregister: "Me désinscrire",
 
   eventDataErrors: {
     app: {
