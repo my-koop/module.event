@@ -60,7 +60,7 @@ var EventsPublic = React.createClass({
       element != document.body;
       element = element.parentNode
     ) {
-      if (element.classList && element.classList.contains("panel-event")) {
+      if (element.classList && element.classList.contains("event-popover")) {
         // Inside, so don't blur.
         return;
       }
@@ -179,7 +179,7 @@ var EventsPublic = React.createClass({
         .map(function(event) {
 
           return (
-            <BSPanel className="panel-event">
+            <BSPanel>
               <BSRow key="title">
                 <BSCol xs={12}>
                   <strong>{event.name}</strong>
