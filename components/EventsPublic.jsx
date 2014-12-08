@@ -54,6 +54,43 @@ var EventsPublic = React.createClass({
     });
   },
 
+  blurPopoverIfRequired: function(e) {
+    for (
+      var element = e.target;
+      element != document.body;
+      element = element.parentNode
+    ) {
+      if (element.classList && element.classList.contains("panel-event")) {
+        // Inside, so don't blur.
+        return;
+      }
+    }
+
+    // Outside, so blur.
+    this.setState({
+      selectedDate: null,
+      selectedEvents: null
+    });
+  },
+
+  componentDidMount: function() {
+    document.body.addEventListener(
+      "click",
+      this.blurPopoverIfRequired,
+      // MDN recommends explicting useCapture even if optional for better
+      // compatibility with older browsers.
+      false
+    );
+  },
+
+  componentWillUnmount: function() {
+    document.body.removeEventListener(
+      "click",
+      this.blurPopoverIfRequired,
+      false
+    );
+  },
+
   register: function(event) {
     var self = this;
     var id = localSession.user.id;
@@ -142,7 +179,7 @@ var EventsPublic = React.createClass({
         .map(function(event) {
 
           return (
-            <BSPanel>
+            <BSPanel className="panel-event">
               <BSRow key="title">
                 <BSCol xs={12}>
                   <strong>{event.name}</strong>
@@ -204,7 +241,7 @@ var EventsPublic = React.createClass({
             style={{
               position: "absolute",
               left: this.state.popoverLeft,
-              top: this.state.popoverTop
+              top: this.state.popoverTop + document.body.scrollTop
             }}
           ></span>
         </BSOverlayTrigger>
