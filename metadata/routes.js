@@ -6,6 +6,7 @@ function addRoutes(metaData) {
     });
     metaData.addFrontendRoute({
         idPath: ["dashboard", "events", "createEvent"],
+        i18nKey: "event::navbar.quickActions.createEvent",
         component: "EventPage",
         name: "createEvent",
         path: "create",
@@ -17,6 +18,7 @@ function addRoutes(metaData) {
     });
     metaData.addFrontendRoute({
         idPath: ["dashboard", "events", "list"],
+        i18nKey: "event::events",
         component: "EventsPageAdmin",
         name: "eventsAdmin",
         path: "list/:state",
@@ -31,6 +33,7 @@ function addRoutes(metaData) {
     });
     metaData.addFrontendRoute({
         idPath: ["dashboard", "events", "updateEvent"],
+        i18nKey: "event::updateEventWelcome",
         component: "EventPage",
         name: "updateEvent",
         path: "update/:id",
@@ -42,6 +45,7 @@ function addRoutes(metaData) {
     });
     metaData.addFrontendRoute({
         idPath: ["dashboard", "events", "notes"],
+        i18nKey: "event::eventNotesTitle",
         component: "EventNotes",
         name: "eventNotes",
         path: "notes/:id",
@@ -56,6 +60,7 @@ function addRoutes(metaData) {
     // Public routes
     metaData.addFrontendRoute({
         idPath: ["public", "events"],
+        i18nKey: "event::eventPublicWelcome",
         component: "EventsPagePublic",
         name: "eventsPublic",
         path: "events",
