@@ -32,7 +32,7 @@ var uiHooks = {
           createEvent: {
             type: "item",
             content: {
-              icon: "plus",
+              icon: "calendar",
               text: "event::navbar.quickActions.createEvent",
               link: "createEvent"
             },
