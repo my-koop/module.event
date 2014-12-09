@@ -1,0 +1,23 @@
+{
+  events: {
+    __description: "Événements",
+    create: "Créer un nouvel événement",
+    view: "Afficher les événements détaillés",
+    update: "Mettre à jour tout événement",
+    delete: "Supprimer tout événement",
+    control: "Démarrer/terminer tout événement",
+    cancel: "Annuler tout événement",
+    register: "S'inscrire à tout événement",
+    notes: {
+      __description: "Notes",
+      view: "Lister les notes liées à tout événement",
+      create: "Créer une note liée à un événement"
+    },
+    users: {
+      __description: "Opérations sur les utilisateurs",
+      view: "Lister les utilisateurs d'un événement spécifique",
+      add: "Inscrire un utilisateur à un événement",
+      remove: "Désinscrire un utilisateur d'un événement"
+    }
+  }
+}
