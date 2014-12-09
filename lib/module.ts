@@ -359,6 +359,39 @@ class Module extends utils.BaseModule implements mkevent.Module {
     );
   }
 
+  getRegisteredUsers(
+    params: mkevent.GetRegisteredUsers.Params,
+    callback: mkevent.GetRegisteredUsers.Callback
+  ) {
+    this.callWithConnection(this.__getRegisteredUsers, params, callback);
+  }
+  __getRegisteredUsers(
+    connection: mysql.IConnection,
+    params: mkevent.GetRegisteredUsers.Params,
+    callback: mkevent.GetRegisteredUsers.Callback
+  ) {
+    connection.query(
+      "SELECT\
+        email, \
+        idUser AS id, \
+        firstname AS firstName,\
+        lastname AS lastName\
+      FROM event_user\
+      INNER JOIN user on idUser=id\
+      WHERE idEvent=?",
+      [params.id],
+      function(err, rows) {
+        if(err) {
+          return callback(new DatabaseError(err));
+        }
+        var users = _.map(rows, function(row: any) {
+          return row;
+        });
+        callback(null, {users: users});
+      }
+    )
+  }
+
 }
 
 export = Module;

@@ -170,8 +170,8 @@ export function attachControllers(
       event.registerToEvent,
       function(req) {
         return {
-          idUser : parseInt(req.param("idUser")),
-          idEvent: parseInt(req.param("idEvent"))
+          idUser: req.session.user.id,
+          idEvent: parseInt(req.param("id"))
         };
       }
     )
@@ -190,8 +190,8 @@ export function attachControllers(
       event.unregisterToEvent,
       function(req) {
         return {
-          idUser : parseInt(req.param("idUser")),
-          idEvent: parseInt(req.param("idEvent"))
+          idUser: req.session.user.id,
+          idEvent: parseInt(req.param("id"))
         };
       }
     )
@@ -243,5 +243,70 @@ export function attachControllers(
       }
     },
     core.getNotesController.bind(core, "event_notes")
+  );
+
+  binder.attach(
+    {
+      endPoint: endPoints.event.listUsers,
+      permissions: {
+        events: {
+          users: {
+            view: true
+          }
+        }
+      }
+    },
+    binder.makeSimpleController<mkevent.GetRegisteredUsers.Params>(
+      event.getRegisteredUsers,
+      function(req) {
+        return {
+          id: parseInt(req.param("id"))
+        }
+      }
+    )
+  );
+
+  binder.attach(
+    {
+      endPoint: endPoints.event.registerAdmin,
+      permissions: {
+        events: {
+          users: {
+            add: true
+          }
+        }
+      }
+    },
+    binder.makeSimpleController<mkevent.RegisterToEvent.Params>(
+      event.registerToEvent,
+      function(req) {
+        return {
+          idUser: parseInt(req.param("idUser")),
+          idEvent: parseInt(req.param("idEvent"))
+        };
+      }
+    )
+  );
+
+  binder.attach(
+    {
+      endPoint: endPoints.event.unregisterAdmin,
+      permissions: {
+        events: {
+          users: {
+            remove: true
+          }
+        }
+      }
+    },
+    binder.makeSimpleController<mkevent.UnregisterToEvent.Params>(
+      event.unregisterToEvent,
+      function(req) {
+        return {
+          idUser: parseInt(req.param("idUser")),
+          idEvent: parseInt(req.param("idEvent"))
+        };
+      }
+    )
   );
 }

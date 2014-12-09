@@ -96,13 +96,11 @@ var EventsPublic = React.createClass({
 
   register: function(event) {
     var self = this;
-    var id = localSession.user.id;
     actions.event.register({
       i18nErrors: {},
       alertErrors: true,
       data: {
-        idUser: id,
-        idEvent: event.idEvent
+        id: event.idEvent
       }
     }, function(err, res) {
       if(!err) {
@@ -116,13 +114,11 @@ var EventsPublic = React.createClass({
 
   unregister: function(event) {
     var self = this;
-    var id = localSession.user.id;
     actions.event.unregister({
       i18nErrors: {},
       alertErrors: true,
       data: {
-        idUser: id,
-        idEvent: event.idEvent
+        id: event.idEvent
       }
     }, function(err, res) {
       if(!err) {

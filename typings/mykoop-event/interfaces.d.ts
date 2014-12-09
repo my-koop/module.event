@@ -125,4 +125,22 @@ declare module mkevent {
       (err?: Error): void;
     }
   }
+
+  module GetRegisteredUsers {
+    export interface Params {
+      // event id
+      id: number;
+    }
+    export interface Result {
+      users: {
+        id: number;
+        firstName: string;
+        lastName: string;
+        email: string;
+      }[];
+    }
+    export interface Callback {
+      (err: Error, result?: Result): void;
+    }
+  }
 }

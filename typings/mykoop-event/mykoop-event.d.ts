@@ -108,5 +108,15 @@ declare module mkevent {
       params: EndEvent.Params,
       callback: EndEvent.Callback
     );
+
+    getRegisteredUsers(
+      params: mkevent.GetRegisteredUsers.Params,
+      callback: mkevent.GetRegisteredUsers.Callback
+    );
+    __getRegisteredUsers(
+      connection: mysql.IConnection,
+      params: mkevent.GetRegisteredUsers.Params,
+      callback: mkevent.GetRegisteredUsers.Callback
+    );
   }
 }
