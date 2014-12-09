@@ -10,7 +10,12 @@ export function attachControllers(
   binder.attach(
     {
       endPoint: endPoints.event.add,
-      validation: validation.eventObject
+      validation: validation.eventObject,
+      permissions: {
+        events: {
+          create: true
+        }
+      }
     },
     binder.makeSimpleController<mkevent.AddEvent.Params>(
       event.addEvent,
@@ -26,7 +31,14 @@ export function attachControllers(
   );
 
   binder.attach(
-    {endPoint: endPoints.event.list},
+    {
+      endPoint: endPoints.event.list,
+      permissions: {
+        events: {
+          view: true
+        }
+      }
+    },
     binder.makeSimpleController<mkevent.GetEvents.Params>(
       event.getEvents,
       function(req) {
@@ -53,7 +65,12 @@ export function attachControllers(
   binder.attach(
     {
       endPoint: endPoints.event.update,
-      validation: validation.eventObject
+      validation: validation.eventObject,
+      permissions: {
+        events: {
+          update: true
+        }
+      }
     },
     binder.makeSimpleController<mkevent.UpdateEvent.Params>(
       event.updateEvent,
@@ -82,7 +99,14 @@ export function attachControllers(
   );
 
   binder.attach(
-    {endPoint: endPoints.event.remove},
+    {
+      endPoint: endPoints.event.remove,
+      permissions: {
+        events: {
+          delete: true
+        }
+      }
+    },
     binder.makeSimpleController<mkevent.DeleteEvent.Params>(
       event.deleteEvent,
       function(req) {
@@ -94,7 +118,14 @@ export function attachControllers(
   );
 
   binder.attach(
-    {endPoint: endPoints.event.start},
+    {
+      endPoint: endPoints.event.start,
+      permissions: {
+        events: {
+          control: true
+        }
+      }
+    },
     binder.makeSimpleController<mkevent.StartEvent.Params>(
       event.startEvent,
       function(req) {
@@ -107,7 +138,14 @@ export function attachControllers(
   );
 
   binder.attach(
-    {endPoint: endPoints.event.end},
+    {
+      endPoint: endPoints.event.end,
+      permissions: {
+        events: {
+          control: true
+        }
+      }
+    },
     binder.makeSimpleController<mkevent.EndEvent.Params>(
       event.endEvent,
       function(req: Express.Request) {
@@ -120,7 +158,14 @@ export function attachControllers(
   );
 
   binder.attach(
-    {endPoint: endPoints.event.register},
+    {
+      endPoint: endPoints.event.register,
+      permissions: {
+        events: {
+          register: true
+        }
+      }
+    },
     binder.makeSimpleController<mkevent.RegisterToEvent.Params>(
       event.registerToEvent,
       function(req) {
@@ -133,7 +178,14 @@ export function attachControllers(
   );
 
   binder.attach(
-    {endPoint: endPoints.event.unregister},
+    {
+      endPoint: endPoints.event.unregister,
+      permissions: {
+        events: {
+          register: true
+        }
+      }
+    },
     binder.makeSimpleController<mkevent.UnregisterToEvent.Params>(
       event.unregisterToEvent,
       function(req) {
@@ -146,7 +198,14 @@ export function attachControllers(
   );
 
   binder.attach(
-    {endPoint: endPoints.event.get},
+    {
+      endPoint: endPoints.event.get,
+      permissions: {
+        events: {
+          view: true
+        }
+      }
+    },
     binder.makeSimpleController(event.getEvent,
     {
       parseFunc: function(req: Express.Request): mkevent.GetEvent.Params {
@@ -159,12 +218,30 @@ export function attachControllers(
 
   var core = <mkcore.Module>event.getModuleManager().get("core");
   binder.attach(
-    {endPoint: endPoints.event.notes.new},
+    {
+      endPoint: endPoints.event.notes.new,
+      permissions: {
+        events: {
+          notes: {
+            create: true
+          }
+        }
+      }
+    },
     core.newNoteController.bind(core, "event_notes")
   );
 
   binder.attach(
-    {endPoint: endPoints.event.notes.list},
+    {
+      endPoint: endPoints.event.notes.list,
+      permissions: {
+        events: {
+          notes: {
+            view: true
+          }
+        }
+      }
+    },
     core.getNotesController.bind(core, "event_notes")
   );
 }

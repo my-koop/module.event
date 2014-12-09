@@ -1,4 +1,5 @@
 {
+  events: "Événements",
   editEventTooltip : "Éditer l'événement",
   eventNew_failed: "L'événement n'a pu être ajouté",
   eventNew_success: "L'événement a été ajouté",
@@ -62,5 +63,17 @@
         error: "$t(event::endAmount) doit être un nombre positif"
       }
     }
-  }
+  },
+
+  navbar: {
+    events: "$t(event::events)",
+    quickActions: {
+      createEvent: "Nouvel événement"
+    }
+  },
+
+  sidebar: {
+    events: "$t(event::events)",
+    listEvents: "Lister les événements",
+  },
 }

@@ -4,6 +4,7 @@ var Router = require("react-router");
 var BSCol    = require("react-bootstrap/Col");
 var BSButton = require("react-bootstrap/Button");
 
+var MKPermissionMixin = require("mykoop-user/components/PermissionMixin");
 var MKAlertTrigger    = require("mykoop-core/components/AlertTrigger");
 var MKTableSorter     = require("mykoop-core/components/TableSorter");
 var MKListModButtons  = require("mykoop-core/components/ListModButtons");
@@ -41,6 +42,8 @@ columns[true] = closedColumns;
 columns[false] = openColumns;
 
 var Events = React.createClass({
+  mixins: [MKPermissionMixin],
+
   propTypes: {
     showClosed: React.PropTypes.bool
   },
@@ -125,8 +128,37 @@ var Events = React.createClass({
 
   actionsGenerator: function(event, i) {
     var self = this;
+
+    var validatePermissions = this.constructor.validateUserPermissions;
+
+    var canControlEvents = validatePermissions({
+      events: {
+        control: true
+      }
+    });
+
+    var canEditEvents = validatePermissions({
+      events: {
+        edit: true
+      }
+    });
+
+    var canViewEventNotes = validatePermissions({
+      events: {
+        notes: {
+          view: true
+        }
+      }
+    });
+
+    var canDeleteEvents = validatePermissions({
+      events: {
+        delete: true
+      }
+    });
+
     var showClosed = this.props.showClosed;
-    var editEventButton = {
+    var editEventButton = canEditEvents && {
       icon: "edit",
       tooltip: {
         text: __("event::editEventTooltip"),
@@ -135,11 +167,11 @@ var Events = React.createClass({
         }
       },
       callback: function() {
-        Router.transitionTo("updateEventPage", {id : event.id})
+        Router.transitionTo("updateEvent", {id : event.id})
       }
     };
     var eventStarted = event.startAmount != null;
-    var startEventButton = !showClosed && !eventStarted && {
+    var startEventButton = !showClosed && !eventStarted && canControlEvents && {
       icon: "circle-thin",
       tooltip: {
         text: __("event::startEvent"),
@@ -152,7 +184,7 @@ var Events = React.createClass({
         onSave={_.partial(this.onEventStarted, event)}
       />
     };
-    var endEventButton = !showClosed && eventStarted && {
+    var endEventButton = !showClosed && eventStarted && canControlEvents && {
       icon: "circle",
       tooltip: {
         text: __("event::endEvent"),
@@ -165,7 +197,7 @@ var Events = React.createClass({
         onSave={_.partial(this.onEventRemoved, event)}
       />
     };
-    var showNotesButton = {
+    var showNotesButton = canViewEventNotes && {
       icon: "file-text-o",
       tooltip: {
         text: __("event::showNotes"),
@@ -177,7 +209,7 @@ var Events = React.createClass({
         Router.transitionTo("eventNotes", {id : event.id})
       }
     };
-    var deleteButton = !showClosed && {
+    var deleteButton = !showClosed && canDeleteEvents && {
       icon: "trash",
       warningMessage: __("areYouSure"),
       tooltip: {

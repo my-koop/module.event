@@ -13,6 +13,7 @@ var Month = ReactCalendar.Month;
 var Week = ReactCalendar.Week;
 var Day = ReactCalendar.Day;
 
+var MKPermissionMixin = require("mykoop-user/components/PermissionMixin");
 var MKIcon = require("mykoop-core/components/Icon");
 var MKTableSorter = require("mykoop-core/components/TableSorter");
 var MKListModButtons = require("mykoop-core/components/ListModButtons");
@@ -25,6 +26,8 @@ var actions = require("actions");
 var moment = require("moment");
 
 var EventsPublic = React.createClass({
+  mixins: [MKPermissionMixin],
+
   getInitialState: function() {
     return {
       events: [],
@@ -133,7 +136,13 @@ var EventsPublic = React.createClass({
 
   render: function() {
     var self = this;
-    var userId = localSession.user && localSession.user.id || null;
+
+    var canRegisterToEvents = this.constructor.validateUserPermissions({
+      events: {
+        register: true
+      }
+    });
+
     var eventTriggers = _(this.state.events)
       .groupBy(function(event) {
         var startDate = moment(event.startDate);
@@ -177,6 +186,8 @@ var EventsPublic = React.createClass({
       var eventList = _(this.state.selectedEvents)
         .sortBy("startDate")
         .map(function(event) {
+          var canRegisterToThisEvent = canRegisterToEvents &&
+                                       event.startDate >= new Date();
 
           return (
             <BSPanel>
@@ -191,7 +202,7 @@ var EventsPublic = React.createClass({
               <BSRow key="description" className="top-margin-7">
                 <BSCol xs={12}>{event.description}</BSCol>
               </BSRow>
-              {userId !== null ?
+              {canRegisterToThisEvent ?
                 <BSRow key="register" className="top-margin-10">
                   <BSCol xs={12}>
                     {!event.registered ?

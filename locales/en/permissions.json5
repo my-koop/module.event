@@ -1,0 +1,23 @@
+{
+  events: {
+    __description: "Events",
+    create: "Create a new event",
+    view: "View detailed events",
+    update: "Update existing events",
+    delete: "Delete events",
+    control: "Begin/end events",
+    cancel: "Cancel events",
+    register: "Register to events",
+    notes: {
+      __description: "Notes",
+      view: "List the notes linked to any event",
+      create: "Create and link a note to any event"
+    },
+    users: {
+      __description: "Operations on users",
+      view: "List users of a specific event",
+      add: "Register a user to an event",
+      remove: "Unregister a user from an event"
+    }
+  }
+}

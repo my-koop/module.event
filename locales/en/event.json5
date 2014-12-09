@@ -1,4 +1,5 @@
 {
+  events: "Events",
   editEventTooltip : "Edit event",
   eventNew_failed: "The event couldn't be added",
   eventNew_success: "The event was added",
@@ -62,5 +63,17 @@
         error: "$t(event::endAmount) must be a positive number"
       }
     }
-  }
+  },
+
+  navbar: {
+    events: "$t(event::events)",
+    quickActions: {
+      createEvent: "Create a new event"
+    }
+  },
+
+  sidebar: {
+    events: "$t(event::events)",
+    listEvents: "List events",
+  },
 }
