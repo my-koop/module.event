@@ -40,12 +40,24 @@ var endpoints = {
       path: "/events/:id",
       method: "delete"
     },
-    register: {
+    listUsers: {
+      path: "/events/:id/users",
+      method: "get"
+    },
+    registerAdmin: {
       path: "/events/register/:idEvent/:idUser",
       method: "post"
     },
+    unregisterAdmin: {
+      path: "/events/unregister/:idEvent/:idUser",
+      method: "delete"
+    },
+    register: {
+      path: "/events/:id/register",
+      method: "post"
+    },
     unregister: {
-      path: "/events/register/:idEvent/:idUser",
+      path: "/events/:id/register",
       method: "delete"
     },
     notes: {

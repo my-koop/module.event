@@ -37,6 +37,7 @@
   eventList: "Events list",
   register: "Register",
   unregister: "Unregister",
+  editUsersInEvent: "Edit users in event",
 
   eventDataErrors: {
     app: {

@@ -10,6 +10,8 @@ var MKTableSorter     = require("mykoop-core/components/TableSorter");
 var MKListModButtons  = require("mykoop-core/components/ListModButtons");
 var MKStartEventModal = require("./StartEventModal");
 var MKEndEventModal   = require("./EndEventModal");
+var MKUserListWrapper   = require("mykoop-core/components/UserListWrapper");
+var MKAbstractModal     = require("mykoop-core/components/AbstractModal");
 
 var language    = require("language");
 var __          = language.__;
@@ -54,7 +56,63 @@ var Events = React.createClass({
     }
   },
 
+  canControlEvents: false,
+  canEditEvents: false,
+  canViewEventNotes: false,
+  canDeleteEvents: false,
+  canViewUsers: false,
+  canAddUsers: false,
+  canDeleteUsers: false,
   componentWillMount: function() {
+    var validatePermissions = this.constructor.validateUserPermissions;
+
+    this.canControlEvents = validatePermissions({
+      events: {
+        control: true
+      }
+    });
+
+    this.canEditEvents = validatePermissions({
+      events: {
+        edit: true
+      }
+    });
+
+    this.canViewEventNotes = validatePermissions({
+      events: {
+        notes: {
+          view: true
+        }
+      }
+    });
+
+    this.canDeleteEvents = validatePermissions({
+      events: {
+        delete: true
+      }
+    });
+
+    this.canViewUsers = validatePermissions({
+      events: {
+        users: {
+          view: true
+        }
+      }
+    });
+    this.canAddUsers = this.canViewUsers && validatePermissions({
+      events: {
+        users: {
+          add: true
+        }
+      }
+    });
+    this.canDeleteUsers = this.canViewUsers && validatePermissions({
+      events: {
+        users: {
+          remove: true
+        }
+      }
+    });
     this.updateList(this.props.showClosed);
   },
 
@@ -126,39 +184,42 @@ var Events = React.createClass({
     });
   },
 
+  retrieveUsers: function(event, callback) {
+    var self = this;
+    actions.event.listUsers({
+      i18nErrors: {},
+      data: {
+        id: event.id
+      }
+    }, function(err, res) {
+      callback(err, res && res.users);
+    })
+  },
+  onAddUser: function(event, user, callback) {
+    var self = this;
+    actions.event.registerAdmin({
+      i18nErrors: {},
+      data: {
+        idEvent: event.id,
+        idUser: user.id
+      }
+    }, callback);
+  },
+  onDeleteUser: function(event, user, callback) {
+    var self = this;
+    actions.event.unregisterAdmin({
+      i18nErrors: {},
+      data: {
+        idEvent: event.id,
+        idUser: user.id
+      }
+    }, callback);
+  },
+
   actionsGenerator: function(event, i) {
     var self = this;
-
-    var validatePermissions = this.constructor.validateUserPermissions;
-
-    var canControlEvents = validatePermissions({
-      events: {
-        control: true
-      }
-    });
-
-    var canEditEvents = validatePermissions({
-      events: {
-        edit: true
-      }
-    });
-
-    var canViewEventNotes = validatePermissions({
-      events: {
-        notes: {
-          view: true
-        }
-      }
-    });
-
-    var canDeleteEvents = validatePermissions({
-      events: {
-        delete: true
-      }
-    });
-
     var showClosed = this.props.showClosed;
-    var editEventButton = canEditEvents && {
+    var editEventButton = self.canEditEvents && {
       icon: "edit",
       tooltip: {
         text: __("event::editEventTooltip"),
@@ -171,7 +232,7 @@ var Events = React.createClass({
       }
     };
     var eventStarted = event.startAmount != null;
-    var startEventButton = !showClosed && !eventStarted && canControlEvents && {
+    var startEventButton = !showClosed && !eventStarted && self.canControlEvents && {
       icon: "circle-thin",
       tooltip: {
         text: __("event::startEvent"),
@@ -184,7 +245,7 @@ var Events = React.createClass({
         onSave={_.partial(this.onEventStarted, event)}
       />
     };
-    var endEventButton = !showClosed && eventStarted && canControlEvents && {
+    var endEventButton = !showClosed && eventStarted && self.canControlEvents && {
       icon: "circle",
       tooltip: {
         text: __("event::endEvent"),
@@ -197,7 +258,7 @@ var Events = React.createClass({
         onSave={_.partial(this.onEventRemoved, event)}
       />
     };
-    var showNotesButton = canViewEventNotes && {
+    var showNotesButton = self.canViewEventNotes && {
       icon: "file-text-o",
       tooltip: {
         text: __("event::showNotes"),
@@ -209,7 +270,7 @@ var Events = React.createClass({
         Router.transitionTo("eventNotes", {id : event.id})
       }
     };
-    var deleteButton = !showClosed && canDeleteEvents && {
+    var deleteButton = !showClosed && self.canDeleteEvents && {
       icon: "trash",
       warningMessage: __("areYouSure"),
       tooltip: {
@@ -218,15 +279,42 @@ var Events = React.createClass({
       },
       callback: _.partial(this.deleteEvent, event)
     }
+    var userList = null;
+    if(!showClosed && self.canViewUsers) {
+      var userList = (
+        <MKUserListWrapper
+          noAdd={!self.canAddUsers}
+          noDelete={!self.canDeleteUsers}
+          retrieveUsers={_.partial(self.retrieveUsers, event)}
+          onAddUser={_.partial(self.onAddUser, event)}
+          onDeleteUser={_.partial(self.onDeleteUser, event)}
+        />
+      );
+      var editEventUsersButton = {
+        icon: "users",
+        tooltip: {
+          text: __("event::editUsersInEvent"),
+          overlayProps: {placement: "top"}
+        },
+        modalTrigger:<MKAbstractModal
+          title={__("userList")}
+          modalBody={userList}
+        />
+      };
+    }
+
     var actions = [
       startEventButton,
       endEventButton,
       editEventButton,
+      editEventUsersButton,
       showNotesButton,
       deleteButton
     ];
     return _.compact(actions);
   },
+
+
 
   render: function() {
     var self = this;
@@ -240,24 +328,28 @@ var Events = React.createClass({
         },
         type: {
           name: __("event::type"),
+          customFilterData: true,
           cellGenerator: function(event) {
             return __("event::" + event.type);
           }
         },
         countRegistered: {
           name: __("event::countRegistered"),
+          customFilterData: true,
           cellGenerator: function(event) {
             return event.type == "workshop" ? event.countRegistered : "";
           }
         },
         startDate: {
           name: __("event::startDate"),
+          customFilterData: true,
           cellGenerator: function(event) {
             return event.startDate ? formatDate(event.startDate, "LLL"): "";
           }
         },
         endDate: {
           name: __("event::endDate"),
+          customFilterData: true,
           cellGenerator: function(event) {
             return event.endDate ? formatDate(event.endDate, "LLL"): "";
           }
@@ -285,7 +377,7 @@ var Events = React.createClass({
           name: __("actions"),
           isStatic: true,
           headerProps: {
-            className: "list-mod-min-width-" + (showClosed ? "2" : "4")
+            className: "list-mod-min-width-" + (showClosed ? "2" : "5")
           },
           cellGenerator: function(event, i) {
             return (
