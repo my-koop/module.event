@@ -51,7 +51,7 @@ var EventsPage = React.createClass({
     return (
       <div>
         <h1 className="pull-left">
-          {__("event::eventAdminWelcome")}
+          {__("event::eventAdminWelcome", {context: this.props.params.state})}
         </h1>
         <span className="pull-right h1">
           {this.renderSwitchStateButton()}

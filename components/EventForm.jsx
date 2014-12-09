@@ -136,6 +136,7 @@ var EventForm = React.createClass({
           {__("event::startDate")}
         </label>
         <MKDateTimePicker
+          className="form-group"
           key="startDate"
           id="startDatePicker"
           value={this.state.startDate}
