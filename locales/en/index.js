@@ -1,4 +1,5 @@
 module.exports = {
   general: require("./general"),
-  event: require("./event")
+  event: require("./event"),
+  permissions: require("./permissions"),
 };

@@ -8,36 +8,85 @@
 /// <reference path="./interfaces.d.ts" />
 
 declare module mkevent {
-
   export interface Module extends mykoop.IModule {
     addEvent(
-      updateData: EventInterfaces.AddEventData,
-      callback: (err: Error) => void
+      params: mkevent.AddEvent.Params,
+      callback: mkevent.AddEvent.Callback
+    );
+    __addEvent(
+      connection: mysql.IConnection,
+      params: mkevent.AddEvent.Params,
+      callback: mkevent.AddEvent.Callback
     );
 
-    getEvents(
-      getEventsData: EventInterfaces.GetEventsData,
-      callback: (err: Error, result?: Event[]) => void
+    getPublicEvents(
+      params: mkevent.GetPublicEvents.Params,
+      callback: mkevent.GetPublicEvents.Callback
     );
-
-    updateEvent(
-      updateData: EventInterfaces.UpdateEventData,
-      callback: (err: Error, result?: boolean) => void
-    );
-
-    deleteEvent(
-      idEvent : Number,
-      callback: (err: Error, result?: boolean) => void
-    );
-
-    registerToEvent(
-      registerData: EventInterfaces.RegisterEventData,
-      callback: (err: Error, result?: {success: boolean}) => void
+    __getPublicEvents(
+      connection: mysql.IConnection,
+      params: mkevent.GetPublicEvents.Params,
+      callback: mkevent.GetPublicEvents.Callback
     );
 
     getEvent(
-      data: EventInterfaces.GetEventData,
-      callback: (err: Error, result?: Event) => void
+      params: mkevent.GetEvent.Params,
+      callback: mkevent.GetEvent.Callback
+    );
+    __getEvent(
+      connection: mysql.IConnection,
+      params: mkevent.GetEvent.Params,
+      callback: mkevent.GetEvent.Callback
+    );
+
+    getEvents(
+      params: mkevent.GetEvents.Params,
+      callback: mkevent.GetEvents.Callback
+    );
+    __getEvents(
+      connection: mysql.IConnection,
+      params: mkevent.GetEvents.Params,
+      callback: mkevent.GetEvents.Callback
+    );
+
+    updateEvent(
+      params: mkevent.UpdateEvent.Params,
+      callback: mkevent.UpdateEvent.Callback
+    );
+    __updateEvent(
+      connection: mysql.IConnection,
+      params: mkevent.UpdateEvent.Params,
+      callback: mkevent.UpdateEvent.Callback
+    );
+
+    deleteEvent(
+      params : mkevent.DeleteEvent.Params,
+      callback: mkevent.DeleteEvent.Callback
+    );
+    __deleteEvent(
+      connection: mysql.IConnection,
+      params : mkevent.DeleteEvent.Params,
+      callback: mkevent.DeleteEvent.Callback
+    );
+
+    registerToEvent(
+      params: mkevent.RegisterToEvent.Params,
+      callback: mkevent.RegisterToEvent.Callback
+    );
+    __registerToEvent(
+      connection: mysql.IConnection,
+      params: mkevent.RegisterToEvent.Params,
+      callback: mkevent.RegisterToEvent.Callback
+    );
+
+    unregisterToEvent(
+      params: mkevent.UnregisterToEvent.Params,
+      callback: mkevent.UnregisterToEvent.Callback
+    );
+    __unregisterToEvent(
+      connection: mysql.IConnection,
+      params: mkevent.UnregisterToEvent.Params,
+      callback: mkevent.UnregisterToEvent.Callback
     );
 
     startEvent(
@@ -59,16 +108,15 @@ declare module mkevent {
       params: EndEvent.Params,
       callback: EndEvent.Callback
     );
-  }
 
-  export interface Event {
-    id          : number;
-    name        : string;
-    type        : string;
-    startDate   : Date;
-    endDate     : Date;
-    startAmount : number;
-    endAmount   : number;
+    getRegisteredUsers(
+      params: mkevent.GetRegisteredUsers.Params,
+      callback: mkevent.GetRegisteredUsers.Callback
+    );
+    __getRegisteredUsers(
+      connection: mysql.IConnection,
+      params: mkevent.GetRegisteredUsers.Params,
+      callback: mkevent.GetRegisteredUsers.Callback
+    );
   }
-
 }

@@ -1,4 +1,5 @@
 {
+  events: "Événements",
   editEventTooltip : "Éditer l'événement",
   eventNew_failed: "L'événement n'a pu être ajouté",
   eventNew_success: "L'événement a été ajouté",
@@ -12,11 +13,10 @@
   cashier : "Caisse",
   removedEventMessage : "L'événement a été supprimé",
   newEvent: "Ajouter un événement",
-  eventWelcome : "Liste des événements",
   registeredToEventConfirmation : "Vous vous êtes enregistré à l'événement",
   registerToEventPrompt : "Voulez-vous vous enregistrer à cet événement ?",
-  switchEventState_true: "Afficher ouvertes",
-  switchEventState_false: "Afficher fermées",
+  switchEventState_closed: "Afficher ouvertes",
+  switchEventState_open: "Afficher fermées",
   updateEventWelcome: "Édition de l'événement",
   countRegistered: "# Enregistrés",
   startEvent: "Commencer l'événement",
@@ -27,6 +27,18 @@
   eventStarted: "L'événement à démarrer",
   eventStartFailed: "L'événement n'a pu être démarrer",
   invalidValues_failed: "Les valeurs rentrées ne sont pas valides",
+  removeEndDateWarning: "Afin de préserver la cohérence des données, retirer la date de fin remettra automatiquement l'événement à l'état commencé.",
+  removeStartAmountWarning: "Afin de préserver la cohérence des données, retirer le montant initial dans la caisse remettra automatiquement l'événement à l'état non commencé.",
+  eventNotesTitle: "Notes de l'événement",
+  showNotes: "Voir les notes de l'événement",
+  noteCount: "# Notes",
+  eventPublicWelcome : "Calendrier des événements",
+  eventAdminWelcome_open: "Liste des événements ouverts",
+  eventAdminWelcome_closed: "Liste des événements terminés",
+  eventList: "Liste des événements",
+  register: "M'inscrire",
+  unregister: "Me désinscrire",
+  editUsersInEvent: "Modifier les utilisateurs dans l'événement",
 
   eventDataErrors: {
     app: {
@@ -45,6 +57,7 @@
         invalid: "La date de fin doit arriver plus tard que la date de début"
       },
       startAmount: {
+        empty: "$t(event::startAmount) doit être présent lors de la fermeture de l'événement",
         error: "$t(event::startAmount) doit être un nombre positif"
       },
       endAmount: {
@@ -52,5 +65,17 @@
         error: "$t(event::endAmount) doit être un nombre positif"
       }
     }
-  }
+  },
+
+  navbar: {
+    events: "$t(event::events)",
+    quickActions: {
+      createEvent: "Nouvel événement"
+    }
+  },
+
+  sidebar: {
+    events: "$t(event::events)",
+    listEvents: "Lister les événements",
+  },
 }
